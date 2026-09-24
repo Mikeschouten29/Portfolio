@@ -1,0 +1,127 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-bg: #0a0f1a;
+  --color-surface: #101829;
+  --color-surface-2: #16213a;
+  --color-line: #25324f;
+  --color-ink: #eef2f8;
+  --color-muted: #a3b0c7;
+  --color-lime: #c8f542;
+  --color-lime-dark: #1b2408;
+  --color-data: #5ccfee;
+  --color-flame: #ff8a57;
+  --color-danger: #ff6b78;
+  /* Gevalideerde grafiekkleuren (kleurenblind-veilig op de donkere ondergrond) */
+  --color-chart-1: #7ea31a;
+  --color-chart-2: #2e9cc4;
+
+  --font-display: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+}
+
+/* Lichte modus: dezelfde tokens, eigen waarden (alle tekstkleuren halen WCAG AA). */
+:root[data-theme='light'] {
+  --color-bg: #f4f6f1;
+  --color-surface: #ffffff;
+  --color-surface-2: #eceff0;
+  --color-line: #d5dbd2;
+  --color-ink: #0f1720;
+  --color-muted: #525c6a;
+  --color-lime: #437008;
+  --color-lime-dark: #ffffff;
+  --color-data: #0b6a85;
+  --color-flame: #b93d0a;
+  --color-danger: #be123c;
+  --color-chart-1: #6b8c14;
+  --color-chart-2: #2e9cc4;
+  --grid-line: rgb(15 23 32 / 0.05);
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+    --grid-line: rgb(255 255 255 / 0.025);
+  }
+
+  body {
+    @apply bg-bg font-sans text-ink antialiased;
+    min-height: 100dvh;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 85% -10%, rgb(200 245 66 / 0.08), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 0% 10%, rgb(92 207 238 / 0.07), transparent 60%);
+    background-attachment: fixed;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* Subtiel "veld"-raster: sportveldlijnen ontmoeten een datagrid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+  }
+
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-lime-dark);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight;
+  }
+}
+
+@layer components {
+  .kicker {
+    @apply font-mono text-xs font-medium tracking-[0.18em] text-lime uppercase;
+  }
+
+  .field {
+    @apply w-full rounded-lg border border-dashed border-lime/40 bg-bg/70 px-3 py-2 text-ink placeholder:text-muted/70 transition-colors;
+  }
+
+  .field:hover {
+    @apply border-lime/70;
+  }
+
+  .field:focus {
+    @apply border-solid border-lime outline-none;
+  }
+
+  .label {
+    @apply mb-1.5 block font-mono text-[11px] font-medium tracking-[0.14em] text-muted uppercase;
+  }
+
+  /* Diagonale "baan"-streep voor accenten */
+  .lane {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgb(200 245 66 / 0.14) 0 6px,
+      transparent 6px 14px
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
