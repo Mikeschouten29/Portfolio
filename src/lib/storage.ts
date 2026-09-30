@@ -1,8 +1,8 @@
-import { sampleData, sprint1Planning, sprint2Planning, supabasePrompt } from '../data/sampleData'
+import { minorLearningOutcomes, sampleData, sprint1Planning, sprint2Content, sprint2Planning, supabasePrompt, youngOnesStory } from '../data/sampleData'
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 7
+export const DATA_VERSION = 8
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -83,6 +83,29 @@ export function migrate(data: PortfolioData): PortfolioData {
     if (i >= 0 && d.prompts[i].role.startsWith('Je bent een ervaren full-stack developer en een geduldige docent')) {
       d.prompts[i] = structuredClone(supabasePrompt)
     }
+  }
+
+  if (oldVersion < 8) {
+    // v8: sprint 2 volgens het sprintformulier en de echte leeruitkomsten van de minor.
+    // Alleen velden die nog de oude voorbeeldtekst bevatten worden vervangen.
+    const s2 = d.sprints.find((s) => s.number === 2)
+    if (s2) {
+      const c = sprint2Content
+      if (s2.title === 'Prompting in de sport') s2.title = c.title
+      if (s2.goal === 'Een eigen promptbibliotheek bouwen voor sportmarketingvraagstukken.') s2.goal = c.goal
+      if (s2.feedback === 'Energieke pitch. Werk aan minder tekst op je slides.') s2.feedback = c.feedback
+      if (s2.selfEvaluation.startsWith('Het schrijven van prompts gaat steeds beter')) s2.selfEvaluation = c.selfEvaluation
+      if (!s2.reflection.trim()) s2.reflection = c.reflection
+      if (!s2.nextSteps.trim()) s2.nextSteps = c.nextSteps
+      if (s2.showGrow === 'Pitch “Data als twaalfde man”.') s2.showGrow = c.showGrow
+      const oldScores = [55, 50, 20, 25, 45]
+      const ids = ['LU1', 'LU2', 'LU3', 'LU4', 'LU5'] as const
+      if (ids.every((id, i) => s2.learningOutcomes[id]?.score === oldScores[i] && !s2.learningOutcomes[id]?.note)) {
+        s2.learningOutcomes = structuredClone(c.learningOutcomes)
+      }
+      if (!s2.userStories.some((u) => u.id === youngOnesStory.id)) s2.userStories.push(structuredClone(youngOnesStory))
+    }
+    if (d.learningOutcomes[0]?.title === 'AI-geletterdheid') d.learningOutcomes = structuredClone(minorLearningOutcomes)
   }
 
   d.version = DATA_VERSION

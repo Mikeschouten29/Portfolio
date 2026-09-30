@@ -1,4 +1,4 @@
-import type { LuId, LuProgress, PortfolioData, Prompt, Sprint, SprintStatus, UserStory } from '../types'
+import type { LearningOutcome, LuId, LuProgress, PortfolioData, Prompt, Sprint, SprintStatus, UserStory } from '../types'
 
 function lu(scores: [number, number, number, number, number], notes: Partial<Record<LuId, string>> = {}) {
   const ids: LuId[] = ['LU1', 'LU2', 'LU3', 'LU4', 'LU5']
@@ -153,6 +153,77 @@ export const sprint2Planning: UserStory[] = [
   },
 ]
 
+/** De leeruitkomsten van de minor Future-proof met AI!, zoals in het beoordelingsformulier. */
+export const minorLearningOutcomes: LearningOutcome[] = [
+  { id: 'LU1', title: 'AI-impact op de beroepspraktijk', description: 'AI-impact op de beroepspraktijk analyseren en evalueren.' },
+  { id: 'LU2', title: 'Praktijkgerichte AI-oplossing', description: 'Een praktijkgerichte AI-oplossing ontwerpen, realiseren en presenteren.' },
+  { id: 'LU3', title: 'Ethiek & verantwoord AI-gebruik', description: 'Ethiek en verantwoordelijk AI-gebruik beoordelen.' },
+  { id: 'LU4', title: 'AI-tools & technieken', description: 'AI-tools en technieken gebruiken.' },
+  { id: 'LU5', title: 'Zelfstandig & zelfsturend werken', description: 'Zelfstandig en zelfsturend werken.' },
+]
+
+/** Vierde story van sprint 2 (Young Ones-webapp). */
+export const youngOnesStory: UserStory = {
+  id: 's2-plan-us2',
+  type: 'US',
+  story:
+    'Als freelance werkende student via Young Ones wil ik een eigen webapplicatie ontwikkelen, zodat ik mijn inkomsten, facturen en btw-gegevens overzichtelijk kan bijhouden en eenvoudig kan gebruiken voor mijn belastingaangifte.',
+  criteria: [
+    'De website beschikt over een invoerscherm/dashboard waarin ik gewerkte klussen kan invoeren en inzien.',
+    'De ingevoerde gegevens worden correct opgeslagen en berekend.',
+    'De tool levert een helder en overzichtelijk samenvattingsscherm op dat direct bruikbaar is voor het invullen van de btw-aangifte of inkomstenbelasting.',
+  ],
+  qualityCriteria: [
+    'De rekensommen en btw-percentages worden foutloos berekend op basis van de ingevoerde data.',
+    'De applicatie is overzichtelijk, gebruiksvriendelijk en veilig voor eigen gebruik.',
+  ],
+  learned: '',
+  evidence: [{ id: 's2-us2-l1', label: 'Young Ones-webapp (Vercel)', url: 'https://youngones-belasting.vercel.app' }],
+  done: false,
+}
+
+/** Feedback, zelfevaluatie en reflectie van sprint 2, overgenomen uit het sprintformulier. */
+export const sprint2Content = {
+  title: 'Portfolio vernieuwen, Supabase & Claude',
+  goal: 'Mijn portfolio verbeteren en koppelen aan Supabase, zelfstandig leren werken met Claude en een eigen webapp bouwen voor mijn Young Ones-administratie.',
+  feedback: [
+    '17-09-2026 · Thijs Schriel',
+    'Alles is heel goed en precies zoals het hoort. Probeer als je je website gaat aanpassen in Google AI Studio een prompt te maken met chat, zodat je een duidelijke prompt gebruikt. Misschien de acceptatie gebruiken over VS Code en misschien iets zeggen over wat je in VS wilt doen wat je niet in Google AI Studio kan.',
+    '→ Mijn actie: ik heb het acceptatiecriterium van de VS Code-story verduidelijkt met concrete acties, met behulp van Claude. Ook gebruik ik voortaan vaste, gestructureerde prompts en sla ik deze op in mijn Prompt Library.',
+    '',
+    '24-09-2026 · Martijn van Kogelenberg',
+    'Claude gebruiken, inspreken voor het maken van een prompt; dat scheelt typen en helpt je bij het maken van een goede prompt. Laat een AI-tool je vragen stellen, zodat je niks kunt vergeten.',
+    '→ Mijn actie: ik heb een abonnement afgesloten bij Claude, en ik heb de AI-tool gebruikt die me heeft geholpen bij het formuleren van mijn stories.',
+  ].join('\n'),
+  selfEvaluation: [
+    'LU1 · AI-impact op de beroepspraktijk: - (niet in deze sprint)',
+    'LU2 · Praktijkgerichte AI-oplossing: V. Ik heb een werkende website gebouwd om mijn Young Ones-inkomsten en btw te berekenen, en daarnaast de structuur van mijn portfolio vernieuwd. Bewijs: Vercel/GitHub-repository en de werkende website.',
+    'LU3 · Ethiek & verantwoord AI-gebruik: - (niet in deze sprint)',
+    'LU4 · AI-tools & technieken: V. Ik heb Claude gebruikt om gerichte prompts te schrijven, mijn portfolio te vernieuwen en een eigen nieuwe website te bouwen, en ik heb mijn website succesvol gekoppeld aan Supabase. Bewijs: websites, gebruikte prompts in de Prompt Library en het Supabase-dashboard.',
+    'LU5 · Zelfstandig & zelfsturend werken: V. Ik ontwikkel mezelf door AI-gegenereerde oplossingen kritisch te bekijken en feedback van klasgenoten actief om te zetten in verbeteracties. Bewijs: de verwerkte feedback van Thijs en Martijn in mijn sprintplanning.',
+  ].join('\n\n'),
+  reflection: [
+    'Website & huisstijl: ik heb geleerd hoe ik de navigatie en uitstraling van mijn portfolio kan verbeteren met een vaste huisstijl, een licht/donker-modus en een duidelijk menu, zodat een bezoeker snel bij een sprint of bewijsstuk komt. Dit behoud ik: na elke aanpassing mijn website testen op laptop én telefoon.',
+    'Supabase: ik heb geleerd hoe ik mijn portfolio koppel aan een database, zodat iedereen mijn nieuwste versie ziet en alleen ik na het inloggen iets kan aanpassen. Ook weet ik nu dat je alleen de publieke sleutel in een website mag gebruiken en nooit de geheime. Dit behoud ik: zelf controleren of iets echt werkt, bijvoorbeeld in de Table Editor van Supabase of in een privévenster.',
+    'Werken met Claude: ik heb geleerd dat ik betere hulp krijg als ik korte, gerichte vragen stel en een schermafbeelding meestuur van waar ik vastloop. Dit behoud ik: goede prompts direct opslaan in mijn Prompt Library.',
+  ].join('\n\n'),
+  nextSteps: [
+    '• Beter opletten bij elke stap voordat ik doorklik (ik had mijn project per ongeluk drie keer in Vercel geïmporteerd).',
+    '• Eerst zelf begrijpen wat een stap doet voordat ik doorga naar de volgende stap.',
+    '• Mijn logboek en bewijs (schermafbeeldingen) direct tijdens het werken bijhouden in plaats van achteraf.',
+  ].join('\n'),
+  showGrow:
+    'Mijn portfolio is nu een echte webapplicatie: live via Vercel, gekoppeld aan een eigen database in Supabase en volledig zelf te beheren.',
+  /** V = voldoende aangetoond (weergegeven als 60%), - = niet in deze sprint (0%). Pas aan naar eigen inzicht. */
+  learningOutcomes: lu([0, 60, 0, 60, 60], {
+    LU1: 'Niveau: - (niet in deze sprint)',
+    LU2: 'Niveau: V · Young Ones-webapp en vernieuwd portfolio',
+    LU3: 'Niveau: - (niet in deze sprint)',
+    LU4: 'Niveau: V · Claude, Supabase, Vercel en GitHub ingezet',
+    LU5: 'Niveau: V · feedback van Thijs en Martijn verwerkt',
+  }),
+}
+
 /** Prompt waarmee het portfolio aan Supabase is gekoppeld (sprint 2, leerstory Supabase). */
 export const supabasePrompt: Prompt = {
   id: 'p-supabase',
@@ -171,7 +242,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 7,
+  version: 8,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',
@@ -196,13 +267,7 @@ export const sampleData: PortfolioData = {
       'Mijn onderzoek naar AI in sportmarketing publiceren of presenteren',
     ],
   },
-  learningOutcomes: [
-    { id: 'LU1', title: 'AI-geletterdheid', description: 'Je begrijpt hoe generatieve AI werkt, wat het kan en waar de grenzen liggen.' },
-    { id: 'LU2', title: 'Prompting & toepassing', description: 'Je zet AI-tools doelgericht in met sterke prompts binnen je eigen vakgebied.' },
-    { id: 'LU3', title: 'Onderzoek & data', description: 'Je onderzoekt een vraagstuk met bronnen en data en trekt onderbouwde conclusies.' },
-    { id: 'LU4', title: 'Ethiek & verantwoordelijkheid', description: 'Je weegt privacy, bias en betrouwbaarheid af bij het gebruik van AI.' },
-    { id: 'LU5', title: 'Professionele groei', description: 'Je reflecteert, vraagt feedback en stuurt je eigen ontwikkeling in sprints.' },
-  ],
+  learningOutcomes: structuredClone(minorLearningOutcomes),
   prompts: [
     supabasePrompt,
     {
@@ -335,17 +400,10 @@ export const sampleData: PortfolioData = {
     {
       id: 'sprint-2',
       number: 2,
-      title: 'Prompting in de sport',
       period: '14 – 25 sep 2026',
       status: 'Bezig',
-      goal: 'Een eigen promptbibliotheek bouwen voor sportmarketingvraagstukken.',
-      userStories: structuredClone(sprint2Planning),
-      feedback: 'Energieke pitch. Werk aan minder tekst op je slides.',
-      selfEvaluation: 'Het schrijven van prompts gaat steeds beter. Testen en itereren kost meer tijd dan ik dacht.',
-      learningOutcomes: lu([55, 50, 20, 25, 45]),
-      reflection: '',
-      nextSteps: '',
-      showGrow: 'Pitch “Data als twaalfde man”.',
+      ...sprint2Content,
+      userStories: [...structuredClone(sprint2Planning), structuredClone(youngOnesStory)],
       evidence: [],
     },
     plannedSprint(3, 'Onderzoeksopzet', '28 sep – 9 okt 2026', 'Onderzoeksvraag, deelvragen en methode vaststellen.'),
