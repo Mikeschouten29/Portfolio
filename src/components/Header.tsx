@@ -11,8 +11,9 @@ import { NAV_ITEMS } from './navigation'
 import { Button } from './ui'
 
 function EditToggle({ className }: { className?: string }) {
-  const { editMode, setEditMode } = usePortfolio()
+  const { editMode, setEditMode, cloudEnabled, userEmail, setLoginOpen } = usePortfolio()
   const toast = useToast()
+  const where = cloudEnabled ? 'in Supabase' : 'in deze browser'
   return (
     <Button
       variant={editMode ? 'primary' : 'outline'}
@@ -20,8 +21,13 @@ function EditToggle({ className }: { className?: string }) {
       aria-pressed={editMode}
       className={className}
       onClick={() => {
+        // Met Supabase mag alleen de ingelogde eigenaar bewerken.
+        if (!editMode && cloudEnabled && !userEmail) {
+          setLoginOpen(true)
+          return
+        }
         setEditMode(!editMode)
-        toast(editMode ? 'Bewerkmodus uit. Alles is opgeslagen.' : 'Bewerkmodus aan. Wijzigingen worden automatisch opgeslagen.', 'info')
+        toast(editMode ? 'Bewerkmodus uit.' : `Bewerkmodus aan. Wijzigingen worden automatisch opgeslagen ${where}.`, 'info')
       }}
     >
       {editMode ? 'Klaar' : 'Bewerken'}

@@ -2,6 +2,7 @@ import { AnimatePresence, MotionConfig, motion } from 'motion/react'
 import { useEffect } from 'react'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
+import { LoginDialog } from './components/LoginDialog'
 import { NAV_ITEMS } from './components/navigation'
 import { useHashRoute, type Route } from './hooks/useHashRoute'
 import { usePortfolio } from './hooks/usePortfolio'
@@ -70,6 +71,7 @@ export default function App() {
           </AnimatePresence>
         </main>
         <Footer />
+        <LoginDialog />
       </div>
     </MotionConfig>
   )

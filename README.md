@@ -57,21 +57,34 @@ src/
 ├── data/sampleData.ts       # Voorbeelddata (ook gebruikt bij reset)
 ├── context/                 # PortfolioProvider (data + opslag), ToastProvider
 ├── hooks/                   # usePortfolio, useToast, useCopy, useHashRoute
-├── lib/                     # storage (LocalStorage/JSON), clipboard, utils, supabase
+├── lib/                     # storage (LocalStorage/JSON), supabase (online opslag), clipboard, utils
 ├── components/              # Herbruikbare UI: Header, DataMenu, PageHeader, editable-velden, ui
 └── pages/                   # Eén bestand per sectie
 ```
 
-## Supabase
+## Supabase (online opslag)
 
-`src/lib/supabase.ts` bevat een Supabase-client die de waarden uit `.env` leest:
+**Hoe het werkt**
 
-```
-VITE_SUPABASE_URL=https://elmlktpvndqmjnxkpjuz.supabase.co
-VITE_SUPABASE_ANON_KEY=<jouw anon public key>
-```
+- Het hele portfolio staat als één JSON-document in de tabel `portfolio` (rij `main`) in Supabase.
+- **Bezoekers**: de site haalt bij het openen die rij op, dus iedereen ziet jouw nieuwste versie.
+- **Jij**: klik op **Bewerken** en log in. Elke wijziging wordt na 0,8 seconde automatisch opgeslagen in Supabase.
+- **Beveiliging**: iedereen mag lezen, maar alleen het e-mailadres uit `supabase/schema.sql` mag opslaan (Row Level Security).
+- LocalStorage blijft als reservekopie. Zonder anon key werkt de site volledig lokaal, zoals voorheen.
+- De status zie je in het **Data**-menu: *Gelijk met Supabase*, *Opslaan…*, *Alleen in deze browser* of een foutmelding.
 
-Op dit moment slaat de site alles op in LocalStorage. De Supabase-koppeling staat klaar om later bijvoorbeeld online op te slaan.
+**Eenmalig instellen**
+
+1. Supabase → **SQL Editor** → plak de inhoud van `supabase/schema.sql` → **Run**.
+2. Supabase → **Authentication → Users → Add user → Create new user**: je e-mailadres en een wachtwoord, met *Auto Confirm User* aan.
+3. Supabase → **Project Settings → API**: kopieer de **anon public** key.
+4. Lokaal: zet die in `.env` (zie `.env.example`) en herstart `npm run dev`.
+5. Vercel → project → **Settings → Environment Variables**: voeg `VITE_SUPABASE_URL` en `VITE_SUPABASE_ANON_KEY` toe en klik daarna bij **Deployments** op **Redeploy**.
+
+**Zelf controleren**
+
+- Supabase → **Table Editor → portfolio**: na je eerste wijziging verschijnt rij `main`, en `updated_at` verandert bij elke opslag.
+- Open je Vercel-link in een privévenster: je ziet je nieuwste versie zonder in te loggen.
 
 ## Aanpassen
 
