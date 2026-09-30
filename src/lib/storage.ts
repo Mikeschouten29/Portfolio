@@ -1,8 +1,8 @@
-import { minorLearningOutcomes, sampleData, sprint1Planning, sprint2Content, sprint2Planning, supabasePrompt, youngOnesStory } from '../data/sampleData'
+import { minorLearningOutcomes, sampleData, sprint1Planning, sprint2Content, sprint2Planning, storyLearned, supabasePrompt, youngOnesStory } from '../data/sampleData'
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 9
+export const DATA_VERSION = 10
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -112,6 +112,18 @@ export function migrate(data: PortfolioData): PortfolioData {
     // v9: 'Wat ik heb geleerd' bij de Young Ones-story, alleen als het nog leeg is.
     const story = d.sprints.find((s) => s.number === 2)?.userStories.find((u) => u.id === youngOnesStory.id)
     if (story && !story.learned.trim()) story.learned = youngOnesStory.learned
+  }
+
+  if (oldVersion < 10) {
+    // v10: korte, concrete 'Wat ik heb geleerd' per story van sprint 1 en 2.
+    // Vervangt alleen lege velden of de eerdere, lange Young Ones-tekst.
+    const oldLong = 'Ik heb geleerd hoe ik met AI een eigen webapp bouw'
+    for (const sprint of d.sprints) {
+      for (const story of sprint.userStories) {
+        const text = storyLearned[story.id]
+        if (text && (!story.learned.trim() || story.learned.startsWith(oldLong))) story.learned = text
+      }
+    }
   }
 
   d.version = DATA_VERSION

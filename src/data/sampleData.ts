@@ -177,10 +177,33 @@ export const youngOnesStory: UserStory = {
     'De rekensommen en btw-percentages worden foutloos berekend op basis van de ingevoerde data.',
     'De applicatie is overzichtelijk, gebruiksvriendelijk en veilig voor eigen gebruik.',
   ],
-  learned:
-    'Ik heb geleerd hoe ik met AI een eigen webapp bouw die een echt probleem uit mijn eigen werk oplost. Daarvoor moest ik eerst zelf uitzoeken hoe btw en inkomstenbelasting werken als freelancer: wanneer de btw-aangifte per kwartaal moet, welke kosten ik mag meetellen en hoeveel geld ik opzij moet zetten. Ook heb ik geleerd dat ik de berekeningen van de app altijd zelf moet nalopen, omdat een fout in een btw-percentage meteen gevolgen heeft voor mijn aangifte. En ik heb gemerkt dat een app pas echt bruikbaar is als hij simpel is. Daarom werkt mijn app met een vast stappenplan: klus invoeren, kosten invoeren, btw en 10% opzij zetten en op tijd aangifte doen.',
+  learned: '',
   evidence: [{ id: 's2-us2-l1', label: 'Young Ones-webapp (Vercel)', url: 'https://youngones-belasting.vercel.app' }],
   done: false,
+}
+
+/** "Wat ik heb geleerd" per story, kort en concreet (sprint 1 en 2). */
+export const storyLearned: Record<string, string> = {
+  // Sprint 1
+  's1-plan-us1':
+    'Ik heb mijn eerste portfolio-website gebouwd met Google AI Studio en via GitHub en Vercel online gezet. Zo weet ik nu hoe code van GitHub automatisch live komt op een eigen Vercel-link.',
+  's1-plan-rs1':
+    'Uit casussen als Liverpool FC en EDO bleek dat AI in sportmarketing vooral uitvoerende taken overneemt. Menselijk inzicht, merkidentiteit en de privacy van fan-data blijven mijn taak als sportmarketeer.',
+  's1-plan-ls1':
+    'Ik heb Perplexity (bronnenonderzoek), Claude en Google AI Studio naast elkaar gebruikt en geleerd welke tool waar goed in is. Met de vaste opbouw Rol + Context + Taak + Output krijg ik veel bruikbaardere antwoorden.',
+  // Sprint 2
+  's2-plan-us1':
+    'Ik heb mijn portfolio een vaste huisstijl gegeven met licht/donker-modus en een duidelijk menu, zodat elke sprint binnen 2 kliks te vinden is. Na elke aanpassing test ik de site op laptop én telefoon.',
+  's2-plan-ls1':
+    'Ik heb mijn portfolio gekoppeld aan Supabase: tabel en beveiliging aangemaakt met SQL, een inlogaccount ingesteld en de sleutel via Vercel toegevoegd. Belangrijkste les: alleen de publieke sleutel hoort in een website, en ik heb zelf getest dat alleen ik kan opslaan.',
+  's2-plan-ls2':
+    'Ik heb geleerd dat Claude beter helpt als ik korte, gerichte vragen stel met een schermafbeelding erbij. Zo heb ik mijn portfolio stap voor stap aangepast en live gezet, en goede prompts sla ik op in mijn Prompt Library.',
+  's2-plan-us2':
+    'Ik heb een eigen webapp gebouwd voor mijn Young Ones-klussen. Daarvoor moest ik eerst zelf uitzoeken hoe de btw-aangifte per kwartaal en de inkomstenbelasting werken voor freelancers. Les: houd een app simpel met een vast stappenplan, en controleer de berekeningen altijd zelf.',
+}
+
+for (const story of [...sprint1Planning, ...sprint2Planning, youngOnesStory]) {
+  story.learned = storyLearned[story.id] ?? story.learned
 }
 
 /** Feedback, zelfevaluatie en reflectie van sprint 2, overgenomen uit het sprintformulier. */
@@ -243,7 +266,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 9,
+  version: 10,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',
