@@ -177,7 +177,8 @@ export const youngOnesStory: UserStory = {
     'De rekensommen en btw-percentages worden foutloos berekend op basis van de ingevoerde data.',
     'De applicatie is overzichtelijk, gebruiksvriendelijk en veilig voor eigen gebruik.',
   ],
-  learned: '',
+  learned:
+    'Ik heb geleerd hoe ik met AI een eigen webapp bouw die een echt probleem uit mijn eigen werk oplost. Daarvoor moest ik eerst zelf uitzoeken hoe btw en inkomstenbelasting werken als freelancer: wanneer de btw-aangifte per kwartaal moet, welke kosten ik mag meetellen en hoeveel geld ik opzij moet zetten. Ook heb ik geleerd dat ik de berekeningen van de app altijd zelf moet nalopen, omdat een fout in een btw-percentage meteen gevolgen heeft voor mijn aangifte. En ik heb gemerkt dat een app pas echt bruikbaar is als hij simpel is. Daarom werkt mijn app met een vast stappenplan: klus invoeren, kosten invoeren, btw en 10% opzij zetten en op tijd aangifte doen.',
   evidence: [{ id: 's2-us2-l1', label: 'Young Ones-webapp (Vercel)', url: 'https://youngones-belasting.vercel.app' }],
   done: false,
 }
@@ -242,7 +243,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 8,
+  version: 9,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',

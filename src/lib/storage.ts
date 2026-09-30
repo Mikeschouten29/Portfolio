@@ -2,7 +2,7 @@ import { minorLearningOutcomes, sampleData, sprint1Planning, sprint2Content, spr
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 8
+export const DATA_VERSION = 9
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -106,6 +106,12 @@ export function migrate(data: PortfolioData): PortfolioData {
       if (!s2.userStories.some((u) => u.id === youngOnesStory.id)) s2.userStories.push(structuredClone(youngOnesStory))
     }
     if (d.learningOutcomes[0]?.title === 'AI-geletterdheid') d.learningOutcomes = structuredClone(minorLearningOutcomes)
+  }
+
+  if (oldVersion < 9) {
+    // v9: 'Wat ik heb geleerd' bij de Young Ones-story, alleen als het nog leeg is.
+    const story = d.sprints.find((s) => s.number === 2)?.userStories.find((u) => u.id === youngOnesStory.id)
+    if (story && !story.learned.trim()) story.learned = youngOnesStory.learned
   }
 
   d.version = DATA_VERSION
