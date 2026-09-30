@@ -2,7 +2,7 @@ import { sampleData, sprint1Planning, sprint2Planning, supabasePrompt } from '..
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 6
+export const DATA_VERSION = 7
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -75,6 +75,14 @@ export function migrate(data: PortfolioData): PortfolioData {
   if (oldVersion < 6 && !d.prompts.some((p) => p.id === supabasePrompt.id)) {
     // v6: prompt voor de Supabase-koppeling bovenaan de Prompt Library.
     d.prompts.unshift(structuredClone(supabasePrompt))
+  }
+
+  if (oldVersion < 7) {
+    // v7: Supabase-prompt in eenvoudigere, eigen woorden, alleen als de eerste versie nog ongewijzigd is.
+    const i = d.prompts.findIndex((p) => p.id === supabasePrompt.id)
+    if (i >= 0 && d.prompts[i].role.startsWith('Je bent een ervaren full-stack developer en een geduldige docent')) {
+      d.prompts[i] = structuredClone(supabasePrompt)
+    }
   }
 
   d.version = DATA_VERSION
