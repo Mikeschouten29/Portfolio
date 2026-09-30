@@ -1,4 +1,4 @@
-import type { LuId, LuProgress, PortfolioData, Sprint, SprintStatus, UserStory } from '../types'
+import type { LuId, LuProgress, PortfolioData, Prompt, Sprint, SprintStatus, UserStory } from '../types'
 
 function lu(scores: [number, number, number, number, number], notes: Partial<Record<LuId, string>> = {}) {
   const ids: LuId[] = ['LU1', 'LU2', 'LU3', 'LU4', 'LU5']
@@ -153,8 +153,26 @@ export const sprint2Planning: UserStory[] = [
   },
 ]
 
+/** Prompt waarmee het portfolio aan Supabase is gekoppeld (sprint 2, leerstory Supabase). */
+export const supabasePrompt: Prompt = {
+  id: 'p-supabase',
+  title: 'Portfolio koppelen aan Supabase',
+  category: 'Webontwikkeling',
+  learningOutcomes: ['LU2', 'LU4', 'LU5'],
+  role:
+    'Je bent een ervaren full-stack developer en een geduldige docent. Je begeleidt een hbo-student zonder programmeerachtergrond stap voor stap bij React, Supabase en Vercel, en je legt elke stap in eenvoudig Nederlands uit.',
+  context:
+    'Ik heb een portfolio-website gebouwd met React, TypeScript en Vite. De code staat op GitHub en de site draait live op Vercel. Alle gegevens (profiel, prompts, sprints en stories) staan nu alleen in de LocalStorage van mijn browser, waardoor bezoekers mijn aanpassingen niet zien. Ik heb een Supabase-project met URL https://<mijn-project>.supabase.co. Ik wil dat iedereen mijn nieuwste versie kan lezen, maar dat alleen ik, ingelogd met mijn e-mailadres, iets kan wijzigen.',
+  task:
+    'Koppel mijn portfolio aan Supabase. Maak: (1) een SQL-script voor één tabel "portfolio" waarin het hele portfolio als JSON wordt opgeslagen, met Row Level Security: iedereen mag lezen, alleen mijn e-mailadres mag toevoegen en wijzigen; (2) de code die bij het openen de gegevens uit Supabase ophaalt, wijzigingen van de ingelogde eigenaar automatisch opslaat en LocalStorage als reservekopie houdt; (3) een inlogscherm met e-mail en wachtwoord; (4) een stappenplan voor Supabase (SQL uitvoeren, gebruiker aanmaken, publishable key vinden) en Vercel (environment variables en redeploy). Leg bij elke stap uit waarom die nodig is.',
+  output:
+    'Een genummerd stappenplan in eenvoudig Nederlands met: het volledige SQL-script, de codebestanden met per bestand één zin uitleg, precies welke knoppen ik in Supabase en Vercel moet gebruiken, en een testlijst om zelf te controleren dat (a) een bezoeker kan lezen, (b) schrijven zonder login wordt geweigerd en (c) mijn wijzigingen na inloggen in de Table Editor verschijnen. Waarschuw expliciet: gebruik alleen de publishable/anon key en nooit de secret of service_role key.',
+  tools: ['Claude', 'Supabase', 'Vercel', 'GitHub'],
+  tags: ['supabase', 'database', 'vercel', 'beveiliging', 'rls'],
+}
+
 export const sampleData: PortfolioData = {
-  version: 5,
+  version: 6,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',
@@ -187,6 +205,7 @@ export const sampleData: PortfolioData = {
     { id: 'LU5', title: 'Professionele groei', description: 'Je reflecteert, vraagt feedback en stuurt je eigen ontwikkeling in sprints.' },
   ],
   prompts: [
+    supabasePrompt,
     {
       id: 'p1',
       title: 'Doelgroepanalyse voor een sportclub',
