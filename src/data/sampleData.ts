@@ -1,4 +1,4 @@
-import type { LearningOutcome, LuId, LuProgress, PortfolioData, Prompt, Sprint, SprintStatus, UserStory } from '../types'
+import type { LearningOutcome, LuId, LuProgress, PortfolioData, Prompt, Research, Sprint, SprintStatus, UserStory } from '../types'
 
 function lu(scores: [number, number, number, number, number], notes: Partial<Record<LuId, string>> = {}) {
   const ids: LuId[] = ['LU1', 'LU2', 'LU3', 'LU4', 'LU5']
@@ -227,9 +227,24 @@ export const sprint2Content = {
     'LU5 · Zelfstandig & zelfsturend werken: V. Ik ontwikkel mezelf door AI-gegenereerde oplossingen kritisch te bekijken en feedback van klasgenoten actief om te zetten in verbeteracties. Bewijs: de verwerkte feedback van Thijs en Martijn in mijn sprintplanning.',
   ].join('\n\n'),
   reflection: [
-    'Website & huisstijl: ik heb geleerd hoe ik de navigatie en uitstraling van mijn portfolio kan verbeteren met een vaste huisstijl, een licht/donker-modus en een duidelijk menu, zodat een bezoeker snel bij een sprint of bewijsstuk komt. Dit behoud ik: na elke aanpassing mijn website testen op laptop én telefoon.',
-    'Supabase: ik heb geleerd hoe ik mijn portfolio koppel aan een database, zodat iedereen mijn nieuwste versie ziet en alleen ik na het inloggen iets kan aanpassen. Ook weet ik nu dat je alleen de publieke sleutel in een website mag gebruiken en nooit de geheime. Dit behoud ik: zelf controleren of iets echt werkt, bijvoorbeeld in de Table Editor van Supabase of in een privévenster.',
-    'Werken met Claude: ik heb geleerd dat ik betere hulp krijg als ik korte, gerichte vragen stel en een schermafbeelding meestuur van waar ik vastloop. Dit behoud ik: goede prompts direct opslaan in mijn Prompt Library.',
+    [
+      'Website & huisstijl',
+      'Geleerd: hoe ik de navigatie en uitstraling van mijn portfolio kan verbeteren met een vaste huisstijl, een licht/donker-modus en een duidelijk menu, zodat een bezoeker snel bij een sprint of bewijsstuk komt.',
+      'Behoud ik: na elke aanpassing mijn website testen op laptop én telefoon, zodat alles overal goed werkt.',
+      'Doe ik anders: beter opletten bij elke stap voordat ik doorklik. Ik had mijn project per ongeluk drie keer in Vercel geïmporteerd.',
+    ].join('\n'),
+    [
+      'Werken met Claude',
+      'Geleerd: ik krijg betere hulp als ik korte, gerichte vragen stel en een schermafbeelding meestuur van waar ik vastloop.',
+      'Behoud ik: goede prompts direct opslaan in mijn Prompt Library, zoals de prompt voor de Supabase-koppeling.',
+      'Doe ik anders: mijn logboek en bewijs (schermafbeeldingen) direct tijdens het werken bijhouden in plaats van achteraf.',
+    ].join('\n'),
+    [
+      'Supabase',
+      'Geleerd: hoe ik mijn portfolio koppel aan een database, zodat iedereen mijn nieuwste versie ziet en alleen ik na het inloggen iets kan aanpassen. Ook weet ik nu dat je alleen de publieke sleutel in een website mag gebruiken en nooit de geheime.',
+      'Behoud ik: zelf controleren of iets echt werkt, bijvoorbeeld in de Table Editor van Supabase of door mijn site in een privévenster te openen.',
+      'Doe ik anders: eerst zelf begrijpen wat een stap doet voordat ik doorga naar de volgende stap.',
+    ].join('\n'),
   ].join('\n\n'),
   nextSteps: [
     '• Beter opletten bij elke stap voordat ik doorklik (ik had mijn project per ongeluk drie keer in Vercel geïmporteerd).',
@@ -246,6 +261,88 @@ export const sprint2Content = {
     LU4: 'Niveau: V · Claude, Supabase, Vercel en GitHub ingezet',
     LU5: 'Niveau: V · feedback van Thijs en Martijn verwerkt',
   }),
+}
+
+/** Sprint 1, overgenomen uit het sprintformulier. */
+export const sprint1Content = {
+  title: 'Portfolio, AI-onderzoek & prompten',
+  goal: 'Een eerste portfolio-website bouwen en online zetten, onderzoeken hoe AI de sportmarketing verandert en de basis van effectief prompten leren.',
+  feedback: [
+    '10-09-2026 · Thijs Schriel',
+    'Mooi uitgewerkte stories en goed te behalen ook. Bij de kwaliteitscriteria van de user story, punt 3, klinkt het meer als een actie die je moet nemen dan als een kwaliteitscriterium. Misschien de criteria proberen helderder te formuleren als een zichtbaar resultaat, bijvoorbeeld bij acceptatiecriterium 2 van de research story. Voor de rest een goede planning!',
+    '→ Mijn actie: ik heb bij de user story kwaliteitscriterium 3 aangepast van een actie naar een zichtbaar resultaat.',
+  ].join('\n'),
+  selfEvaluation: [
+    'LU1 · AI-impact op de beroepspraktijk: V. Mijn onderzoek toont aan hoe AI het werk van de sportmarketeer transformeert, met de casus van Liverpool FC.',
+    'LU2 · Praktijkgerichte AI-oplossing: - (niet in deze sprint)',
+    'LU3 · Ethiek & verantwoord AI-gebruik: - (niet in deze sprint)',
+    'LU4 · AI-tools & technieken: V. Ik beheers de basisformule van prompt engineering (Rol + Context + Taak + Output) en werk actief met tools zoals ChatGPT, Claude, Perplexity en Google AI Studio.',
+    'LU5 · Zelfstandig & zelfsturend werken: V. Ik heb mijn sprint zelfstandig gepland en uitgevoerd, de feedback van Thijs verwerkt in mijn stories en een complete reflectie geschreven.',
+  ].join('\n\n'),
+  reflection: [
+    [
+      'AI-tools',
+      'Geleerd: hoe ik met diverse tools (Perplexity, Claude en Google AI Studio) efficiënt onderzoek kan doen en een portfolio-website kan opbouwen via GitHub en Vercel.',
+      'Behoud ik: het combineren van verschillende AI-tools op basis van hun kracht (bijv. Perplexity voor bronnenonderzoek).',
+      'Doe ik anders: prompts direct opslaan in een persoonlijke Prompt Library in plaats van ze telkens opnieuw uit te vinden.',
+    ].join('\n'),
+    [
+      'Impact op sportmarketing',
+      'Geleerd: AI neemt vooral uitvoerende taken over.',
+      'Behoud ik: het kritisch analyseren van casussen (zoals Liverpool FC en EDO) en de ethische en privacy-aspecten van fan-data altijd als randvoorwaarde meenemen.',
+      'Doe ik anders: niet alleen focussen op de technische mogelijkheden van AI, maar de uitkomsten ook toetsen aan menselijk inzicht en merkidentiteit.',
+    ].join('\n'),
+    [
+      'Prompt engineering',
+      'Geleerd: een gestructureerde prompt (Rol + Context + Taak + Output) is belangrijk om bruikbare antwoorden en correcte website-code te krijgen.',
+      'Behoud ik: de vaste prompt-opbouw actief blijven toepassen bij elke nieuwe opdracht in de minor.',
+      'Doe ik anders: losse links of vage vragen in prompts vermijden.',
+    ].join('\n'),
+  ].join('\n\n'),
+  nextSteps: [
+    '• Prompts direct opslaan in een persoonlijke Prompt Library.',
+    '• AI-uitkomsten ook toetsen aan menselijk inzicht en merkidentiteit.',
+    '• Losse links of vage vragen in prompts vermijden.',
+  ].join('\n'),
+  showGrow:
+    'AI neemt in de sportmarketing vooral uitvoerende taken over. Met de juiste tools en een goede prompt-opbouw zet ik AI slim in, maar menselijk inzicht en merkidentiteit blijven het verschil maken.',
+  learningOutcomes: lu([60, 0, 0, 60, 60], {
+    LU1: 'Niveau: V · onderzoek met de casus Liverpool FC',
+    LU2: 'Niveau: - (niet in deze sprint)',
+    LU3: 'Niveau: - (niet in deze sprint)',
+    LU4: 'Niveau: V · prompt-basisformule en vier AI-tools',
+    LU5: 'Niveau: V · zelfstandig gepland, feedback verwerkt',
+  }),
+}
+
+/** Onderzoekspagina, gebaseerd op de research story van sprint 1. */
+export const researchContent: Research = {
+  title: 'AI in sportmarketing',
+  question:
+    'Hoe wordt AI effectief ingezet bij marketing, sponsoring en fan-engagement in de sport, en welke AI-skills heb ik als toekomstig sportmarketeer nodig?',
+  subQuestions: [
+    'Hoe verandert AI traditionele marketingtaken in AI-gestuurde processen?',
+    'Hoe zetten sportorganisaties als Liverpool FC en EDO AI in?',
+    'Welke impact en welke privacy-aspecten spelen er bij het gebruik van fan-data?',
+  ],
+  method: 'Deskresearch met AI-tools (onder andere Perplexity voor bronnenonderzoek) en een analyse van twee praktijkcasussen uit de sportsector: Liverpool FC en EDO.',
+  sources: [],
+  results: ['AI neemt in de sportmarketing vooral uitvoerende taken over.'],
+  insights: [
+    'Menselijk inzicht en merkidentiteit blijven het verschil maken: AI ondersteunt de sportmarketeer, maar vervangt die niet.',
+    'De privacy van fan-data is een randvoorwaarde bij elke AI-toepassing.',
+  ],
+}
+
+/** Vervangt het verzonnen voorbeeldproject op de roadmap. */
+export const youngOnesRoadmapItem = {
+  id: 'r3',
+  title: 'Young Ones-webapp doorontwikkelen',
+  type: 'Project' as const,
+  description: 'Gegevens van mijn Young Ones-app online opslaan (net als bij mijn portfolio met Supabase) en de app verder uitbreiden.',
+  planning: 'Sprint 3 en verder',
+  progress: 0,
+  priority: 'Middel' as const,
 }
 
 /** Prompt waarmee het portfolio aan Supabase is gekoppeld (sprint 2, leerstory Supabase). */
@@ -266,7 +363,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 10,
+  version: 11,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',
@@ -343,29 +440,7 @@ export const sampleData: PortfolioData = {
       tags: ['pitch', 'feedback'],
     },
   ],
-  research: {
-    title: 'AI in sportmarketing',
-    question:
-      'Hoe kunnen Nederlandse amateursportclubs generatieve AI inzetten om jonge supporters (16–25 jaar) beter te bereiken?',
-    subQuestions: [
-      'Welke AI-toepassingen gebruiken profclubs nu al in hun marketing?',
-      'Wat verwachten jonge supporters van de online communicatie van hun club?',
-      'Welke drempels ervaren vrijwilligers bij het gebruik van AI-tools?',
-    ],
-    method: 'Deskresearch, vijf interviews met clubvrijwilligers en een korte enquête onder jonge supporters.',
-    sources: [
-      { id: 'src1', title: 'Deloitte Sports Industry Outlook', author: 'Deloitte', year: '2025', url: 'https://www.deloitte.com/' },
-      { id: 'src2', title: 'Sportdeelname-index', author: 'Mulier Instituut', year: '2025', url: 'https://www.mulierinstituut.nl/' },
-    ],
-    results: [
-      'Profclubs gebruiken AI vooral voor gepersonaliseerde content en het automatisch maken van highlights.',
-      'Jonge supporters willen korte video’s en een kijkje achter de schermen.',
-    ],
-    insights: [
-      'Tijd is voor vrijwilligers de grootste drempel, niet kennis: een tool moet binnen tien minuten waarde opleveren.',
-      'Authenticiteit weegt zwaarder dan perfectie. AI moet de club helpen, niet vervangen.',
-    ],
-  },
+  research: structuredClone(researchContent),
   roadmap: [
     {
       id: 'r1',
@@ -373,27 +448,19 @@ export const sampleData: PortfolioData = {
       type: 'Doel',
       description: 'Alle leeruitkomsten aantoonbaar behalen met een sterk sprintportfolio.',
       planning: 'Sep 2026 – Jan 2027',
-      progress: 20,
+      progress: 25,
       priority: 'Hoog',
     },
     {
       id: 'r2',
       title: 'Onderzoek AI in sportmarketing',
       type: 'Project',
-      description: 'Onderzoek afronden en de resultaten presenteren aan een sportclub.',
+      description: 'Mijn onderzoek naar AI in marketing, sponsoring en fan-engagement verder uitwerken en onderbouwen met bronnen.',
       planning: 'Okt – Dec 2026',
       progress: 15,
       priority: 'Hoog',
     },
-    {
-      id: 'r3',
-      title: 'AI-contentplanner doorontwikkelen',
-      type: 'Project',
-      description: 'Van prototype naar een testversie die een echte club gebruikt.',
-      planning: 'Nov 2026 – Jan 2027',
-      progress: 10,
-      priority: 'Middel',
-    },
+    { ...youngOnesRoadmapItem },
     {
       id: 'r4',
       title: 'Netwerk opbouwen in de sportindustrie',
@@ -408,33 +475,26 @@ export const sampleData: PortfolioData = {
     {
       id: 'sprint-1',
       number: 1,
-      title: 'Kick-off & AI-basis',
       period: '31 aug – 11 sep 2026',
       status: 'Afgerond',
-      goal: 'Kennismaken met generatieve AI en een persoonlijk leerplan opstellen.',
-      userStories: structuredClone(sprint1Planning),
-      feedback: 'Goede start. Maak je leerdoelen nog specifieker en meetbaarder.',
-      selfEvaluation: 'Ik heb veel geleerd over hoe AI werkt. Ik merk dat ik snel tools oppak, maar mijn doelen mogen scherper.',
-      learningOutcomes: lu([40, 20, 10, 20, 30], { LU1: 'Basiskennis over LLM’s opgedaan' }),
-      reflection: 'AI is geen zoekmachine: de kwaliteit van mijn vraag bepaalt de kwaliteit van het antwoord.',
-      nextSteps: '',
-      showGrow: 'Leerplan gepresenteerd aan de groep.',
-      evidence: [{ id: 's1-e1', label: 'Persoonlijk leerplan', url: 'https://example.com/leerplan' }],
+      ...sprint1Content,
+      userStories: sprint1Planning.map((u) => ({ ...structuredClone(u), done: true })),
+      evidence: [],
     },
     {
       id: 'sprint-2',
       number: 2,
       period: '14 – 25 sep 2026',
-      status: 'Bezig',
+      status: 'Afgerond',
       ...sprint2Content,
-      userStories: [...structuredClone(sprint2Planning), structuredClone(youngOnesStory)],
+      userStories: [...sprint2Planning, youngOnesStory].map((u) => ({ ...structuredClone(u), done: true })),
       evidence: [],
     },
-    plannedSprint(3, 'Onderzoeksopzet', '28 sep – 9 okt 2026', 'Onderzoeksvraag, deelvragen en methode vaststellen.'),
-    plannedSprint(4, 'Data verzamelen', '12 – 30 okt 2026', 'Interviews en enquête uitvoeren en data verzamelen.'),
-    plannedSprint(5, 'Prototype bouwen', '2 – 13 nov 2026', 'Eerste werkende versie van de AI-contentplanner.'),
-    plannedSprint(6, 'Testen & ethiek', '16 – 27 nov 2026', 'Prototype testen met gebruikers en ethische risico’s analyseren.'),
-    plannedSprint(7, 'Resultaten & advies', '30 nov – 11 dec 2026', 'Onderzoeksresultaten analyseren en een advies schrijven.'),
-    plannedSprint(8, 'Eindpresentatie', '14 dec 2026 – 22 jan 2027', 'Portfolio afronden en eindpresentatie geven.'),
+    plannedSprint(3, 'Nog te plannen', '28 sep – 9 okt 2026', ''),
+    plannedSprint(4, 'Nog te plannen', '12 – 30 okt 2026', ''),
+    plannedSprint(5, 'Nog te plannen', '2 – 13 nov 2026', ''),
+    plannedSprint(6, 'Nog te plannen', '16 – 27 nov 2026', ''),
+    plannedSprint(7, 'Nog te plannen', '30 nov – 11 dec 2026', ''),
+    plannedSprint(8, 'Nog te plannen', '14 dec 2026 – 22 jan 2027', ''),
   ],
 }

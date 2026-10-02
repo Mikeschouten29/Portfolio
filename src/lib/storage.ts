@@ -1,8 +1,20 @@
-import { minorLearningOutcomes, sampleData, sprint1Planning, sprint2Content, sprint2Planning, storyLearned, supabasePrompt, youngOnesStory } from '../data/sampleData'
+import {
+  minorLearningOutcomes,
+  researchContent,
+  sampleData,
+  sprint1Content,
+  sprint1Planning,
+  sprint2Content,
+  sprint2Planning,
+  storyLearned,
+  supabasePrompt,
+  youngOnesRoadmapItem,
+  youngOnesStory,
+} from '../data/sampleData'
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 10
+export const DATA_VERSION = 11
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -124,6 +136,59 @@ export function migrate(data: PortfolioData): PortfolioData {
         if (text && (!story.learned.trim() || story.learned.startsWith(oldLong))) story.learned = text
       }
     }
+  }
+
+  if (oldVersion < 11) {
+    // v11: sprint 1 volgens het sprintformulier, sprint 1 en 2 afgerond, echt onderzoek en roadmap,
+    // en neutrale titels voor de nog niet geplande sprints. Alleen voorbeeldteksten worden vervangen.
+    const s1 = d.sprints.find((s) => s.number === 1)
+    if (s1) {
+      const c = sprint1Content
+      if (s1.title === 'Kick-off & AI-basis') s1.title = c.title
+      if (s1.goal === 'Kennismaken met generatieve AI en een persoonlijk leerplan opstellen.') s1.goal = c.goal
+      if (s1.feedback.startsWith('Goede start. Maak je leerdoelen')) s1.feedback = c.feedback
+      if (s1.selfEvaluation.startsWith('Ik heb veel geleerd over hoe AI werkt')) s1.selfEvaluation = c.selfEvaluation
+      if (s1.reflection.startsWith('AI is geen zoekmachine')) s1.reflection = c.reflection
+      if (!s1.nextSteps.trim()) s1.nextSteps = c.nextSteps
+      if (s1.showGrow === 'Leerplan gepresenteerd aan de groep.') s1.showGrow = c.showGrow
+      if (s1.learningOutcomes.LU1?.score === 40 && s1.learningOutcomes.LU2?.score === 20) s1.learningOutcomes = structuredClone(c.learningOutcomes)
+      s1.evidence = s1.evidence.filter((e) => !e.url.includes('example.com'))
+      s1.status = 'Afgerond'
+      for (const u of s1.userStories) if (u.id.startsWith('s1-plan-')) u.done = true
+    }
+
+    const s2 = d.sprints.find((s) => s.number === 2)
+    if (s2) {
+      if (s2.reflection.startsWith('Website & huisstijl: ik heb geleerd')) s2.reflection = sprint2Content.reflection
+      s2.status = 'Afgerond'
+      for (const u of s2.userStories) if (u.id.startsWith('s2-plan-')) u.done = true
+    }
+
+    const placeholders: Record<number, string> = {
+      3: 'Onderzoeksopzet',
+      4: 'Data verzamelen',
+      5: 'Prototype bouwen',
+      6: 'Testen & ethiek',
+      7: 'Resultaten & advies',
+      8: 'Eindpresentatie',
+    }
+    for (const s of d.sprints) {
+      if (placeholders[s.number] && s.title === placeholders[s.number]) {
+        s.title = 'Nog te plannen'
+        s.goal = ''
+      }
+    }
+
+    if (d.research.question.startsWith('Hoe kunnen Nederlandse amateursportclubs')) d.research = structuredClone(researchContent)
+
+    for (const r of d.roadmap) {
+      if (r.id === 'r1' && r.progress === 20) r.progress = 25
+      if (r.description === 'Onderzoek afronden en de resultaten presenteren aan een sportclub.') {
+        r.description = 'Mijn onderzoek naar AI in marketing, sponsoring en fan-engagement verder uitwerken en onderbouwen met bronnen.'
+      }
+    }
+    const r3 = d.roadmap.findIndex((r) => r.title === 'AI-contentplanner doorontwikkelen')
+    if (r3 >= 0) d.roadmap[r3] = { ...youngOnesRoadmapItem }
   }
 
   d.version = DATA_VERSION
