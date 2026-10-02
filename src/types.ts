@@ -104,6 +104,13 @@ export interface UserStory {
   done: boolean
 }
 
+/** Korte, concrete punten voor de laatste Show & Grow-dia ("Wat neem ik mee?"). */
+export interface SprintTakeaways {
+  learned: string
+  feedback: string
+  next: string
+}
+
 export interface LuProgress {
   score: number
   note: string
@@ -125,6 +132,8 @@ export interface Sprint {
   showGrow: string
   /** Volgende stappen na deze sprint */
   nextSteps: string
+  /** Korte samenvatting voor de laatste Show & Grow-dia */
+  takeaways: SprintTakeaways
   evidence: Link[]
 }
 

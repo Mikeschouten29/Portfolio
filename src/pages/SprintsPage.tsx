@@ -3,6 +3,7 @@ import {
   ArrowLeft,
   ArrowRight,
   CalendarDays,
+  CircleCheck,
   ClipboardCheck,
   Flag,
   Footprints,
@@ -15,12 +16,12 @@ import {
   Sparkles,
   type LucideIcon,
 } from 'lucide-react'
-import { EditableProgress, EditableSelect, EditableText, LinkList } from '../components/editable'
+import { EditableSelect, EditableText, LinkList } from '../components/editable'
 import { PageHeader, SectionTitle } from '../components/PageHeader'
-import { Card, EmptyState, ProgressBar, Reveal, StatusBadge, Button } from '../components/ui'
+import { Badge, Card, EmptyState, ProgressBar, Reveal, StatusBadge, Button } from '../components/ui'
 import { href } from '../hooks/useHashRoute'
 import { usePortfolio } from '../hooks/usePortfolio'
-import { cn, sprintLuAverage, storyProgress, uid } from '../lib/utils'
+import { cn, isAchieved, LU_ACHIEVED, sprintLuAchieved, sprintLuAverage, storyProgress, uid } from '../lib/utils'
 import { UserStoryCard } from '../components/UserStoryCard'
 import { LU_IDS, type Sprint, type SprintStatus } from '../types'
 
@@ -74,10 +75,10 @@ function SprintOverview() {
                 </div>
                 <ProgressBar value={storyProgress(s)} label={`User stories sprint ${s.number}`} tone="data" />
                 <div className="flex justify-between text-xs text-muted">
-                  <span>Leeruitkomsten</span>
-                  <span className="font-mono">{sprintLuAverage(s)}%</span>
+                  <span>Leeruitkomsten behaald</span>
+                  <span className="font-mono">{sprintLuAchieved(s)}/{LU_IDS.length}</span>
                 </div>
-                <ProgressBar value={sprintLuAverage(s)} label={`Leeruitkomsten sprint ${s.number}`} />
+                <ProgressBar value={sprintLuAverage(s)} label={`Leeruitkomsten behaald in sprint ${s.number}`} />
               </div>
             </a>
           </motion.li>
@@ -198,20 +199,37 @@ function SprintDetail({ sprint }: { sprint: Sprint }) {
                 const lo = data.learningOutcomes.find((l) => l.id === id)
                 const progress = sprint.learningOutcomes[id] ?? { score: 0, note: '' }
                 return (
-                  <li key={id}>
-                    <div className="mb-1.5 flex items-baseline justify-between gap-3">
+                  <li
+                    key={id}
+                    className={cn(
+                      'rounded-xl border p-3',
+                      isAchieved(progress.score) ? 'border-lime/40 bg-lime/[0.06]' : 'border-line bg-bg/40',
+                    )}
+                  >
+                    <div className="flex items-start justify-between gap-3">
                       <p className="text-sm">
                         <span className="font-mono text-lime">{id}</span> <span className="text-ink">{lo?.title}</span>
                       </p>
-                      <span className="font-mono text-sm text-muted">{progress.score}%</span>
+                      {editMode ? (
+                        <label className="flex shrink-0 items-center gap-1.5 text-xs text-muted">
+                          <input
+                            type="checkbox"
+                            checked={isAchieved(progress.score)}
+                            onChange={(e) =>
+                              patch((s) => void (s.learningOutcomes[id] = { ...progress, score: e.target.checked ? LU_ACHIEVED : 0 }))
+                            }
+                            className="size-4 accent-lime"
+                          />
+                          Behaald
+                        </label>
+                      ) : isAchieved(progress.score) ? (
+                        <Badge tone="lime">
+                          <CircleCheck className="size-3" aria-hidden /> Behaald
+                        </Badge>
+                      ) : (
+                        <Badge>Niet in deze sprint</Badge>
+                      )}
                     </div>
-                    <EditableProgress
-                      value={progress.score}
-                      label={`Score ${id}`}
-                      onChange={(score) => patch((s) => void (s.learningOutcomes[id] = { ...progress, score }))}
-                    >
-                      <ProgressBar value={progress.score} label={`${id} ${lo?.title ?? ''}`} />
-                    </EditableProgress>
                     <div className="mt-1.5">
                       <EditableText
                         value={progress.note}

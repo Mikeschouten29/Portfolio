@@ -22,6 +22,23 @@ export function luBest(sprints: Sprint[], id: LuId): number {
   return Math.max(0, ...sprints.map((s) => s.learningOutcomes[id]?.score ?? 0))
 }
 
+/** Een leeruitkomst telt als behaald (V) bij score 100. */
+export const LU_ACHIEVED = 100
+
+export function isAchieved(score: number | undefined): boolean {
+  return (score ?? 0) >= LU_ACHIEVED
+}
+
+/** Aantal leeruitkomsten dat in deze sprint is behaald. */
+export function sprintLuAchieved(sprint: Sprint): number {
+  return LU_IDS.filter((id) => isAchieved(sprint.learningOutcomes[id]?.score)).length
+}
+
+/** Sprintnummers waarin een leeruitkomst is behaald. */
+export function luAchievedIn(sprints: Sprint[], id: LuId): number[] {
+  return sprints.filter((s) => isAchieved(s.learningOutcomes[id]?.score)).map((s) => s.number)
+}
+
 export function sprintLuAverage(sprint: Sprint): number {
   return average(LU_IDS.map((id) => sprint.learningOutcomes[id]?.score ?? 0))
 }

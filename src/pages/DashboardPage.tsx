@@ -1,12 +1,12 @@
 import { motion } from 'motion/react'
-import { ChartColumn, ClipboardCheck, Flag, GraduationCap, Grid3x3, LayoutDashboard, Route } from 'lucide-react'
+import { ChartColumn, CircleCheck, ClipboardCheck, Flag, GraduationCap, Grid3x3, LayoutDashboard, Route } from 'lucide-react'
 import { useState } from 'react'
 import { EditableText } from '../components/editable'
 import { PageHeader, SectionTitle } from '../components/PageHeader'
-import { Card, ProgressBar, Reveal } from '../components/ui'
+import { Badge, Card, Reveal } from '../components/ui'
 import { href } from '../hooks/useHashRoute'
 import { usePortfolio } from '../hooks/usePortfolio'
-import { average, luBest, sprintLuAverage, storyProgress } from '../lib/utils'
+import { average, isAchieved, luAchievedIn, sprintLuAchieved, sprintLuAverage, storyProgress } from '../lib/utils'
 import { LU_IDS } from '../types'
 
 function StatTile({ icon: Icon, label, value, sub }: { icon: typeof Flag; label: string; value: string; sub: string }) {
@@ -27,7 +27,7 @@ function SprintChart() {
   const [hover, setHover] = useState<number | null>(null)
   const series = [
     { key: 'stories', label: 'User stories afgerond', color: 'var(--color-chart-2)', get: storyProgress },
-    { key: 'lu', label: 'Gem. leeruitkomsten', color: 'var(--color-chart-1)', get: sprintLuAverage },
+    { key: 'lu', label: 'Leeruitkomsten behaald', color: 'var(--color-chart-1)', get: sprintLuAverage },
   ] as const
 
   return (
@@ -105,7 +105,8 @@ export function DashboardPage() {
   const { sprints } = data
   const allStories = sprints.flatMap((s) => s.userStories)
   const doneStories = allStories.filter((u) => u.done).length
-  const luScores = LU_IDS.map((id) => luBest(sprints, id))
+  const achievedIn = LU_IDS.map((id) => luAchievedIn(sprints, id))
+  const achievedCount = achievedIn.filter((n) => n.length > 0).length
 
   return (
     <>
@@ -114,11 +115,11 @@ export function DashboardPage() {
         kicker="Dashboard"
         title="Voortgang in één oogopslag"
         path="dashboard"
-        description="De voortgang per leeruitkomst is de hoogste score die ik in een sprint heb aangetoond. Pas de scores aan per sprint."
+        description="Welke leeruitkomsten ik heb behaald (V) en in welke sprint. Per sprint vink ik in de bewerkmodus aan welke leeruitkomsten zijn behaald."
       />
 
       <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatTile icon={GraduationCap} label="Leeruitkomsten" value={`${average(luScores)}%`} sub="Gemiddeld aangetoond niveau" />
+        <StatTile icon={GraduationCap} label="Leeruitkomsten" value={`${achievedCount}/${LU_IDS.length}`} sub="Behaald (V)" />
         <StatTile icon={Flag} label="Sprints" value={`${sprints.filter((s) => s.status === 'Afgerond').length}/${sprints.length}`} sub={`${sprints.filter((s) => s.status === 'Bezig').length} sprint(s) bezig`} />
         <StatTile icon={ClipboardCheck} label="User stories" value={`${doneStories}/${allStories.length}`} sub="Afgerond over alle sprints" />
         <StatTile icon={Route} label="Roadmap" value={`${average(data.roadmap.map((r) => r.progress))}%`} sub="Gemiddelde voortgang doelen" />
@@ -136,7 +137,13 @@ export function DashboardPage() {
                       <span className="font-mono text-sm text-lime">{lo.id}</span>
                       {!editMode && <span className="truncate font-medium text-ink">{lo.title}</span>}
                     </p>
-                    <span className="font-mono text-sm text-ink">{luScores[i]}%</span>
+                    {achievedIn[i].length > 0 ? (
+                      <Badge tone="lime">
+                        <CircleCheck className="size-3" aria-hidden /> Behaald
+                      </Badge>
+                    ) : (
+                      <Badge>Nog niet behaald</Badge>
+                    )}
                   </div>
                   {editMode ? (
                     <div className="mb-2 space-y-2">
@@ -146,7 +153,23 @@ export function DashboardPage() {
                   ) : (
                     <p className="mb-2 text-xs text-muted">{lo.description}</p>
                   )}
-                  <ProgressBar value={luScores[i]} label={`${lo.id} ${lo.title}`} />
+                  <p className="text-xs text-muted">
+                    {achievedIn[i].length > 0 ? (
+                      <>
+                        Behaald in{' '}
+                        {achievedIn[i].map((n, j) => (
+                          <span key={n}>
+                            {j > 0 && (j === achievedIn[i].length - 1 ? ' en ' : ', ')}
+                            <a href={href('sprints', n)} className="font-medium text-lime hover:underline">
+                              sprint {n}
+                            </a>
+                          </span>
+                        ))}
+                      </>
+                    ) : (
+                      'Nog in geen enkele sprint behaald.'
+                    )}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -164,10 +187,10 @@ export function DashboardPage() {
       <Reveal className="mt-6">
         <Card>
           <SectionTitle icon={Grid3x3}>Matrix: sprint × leeruitkomst</SectionTitle>
-          <p className="-mt-2 mb-4 text-sm text-muted">Hoe feller de cel, hoe hoger de score. Klik op een sprint om die te openen.</p>
+          <p className="-mt-2 mb-4 text-sm text-muted">Een ✓ betekent: in deze sprint behaald (V). Klik op een sprint om die te openen.</p>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[520px] border-separate border-spacing-0.5 text-sm">
-              <caption className="sr-only">Score per leeruitkomst per sprint, in procenten</caption>
+              <caption className="sr-only">Behaalde leeruitkomsten per sprint</caption>
               <thead>
                 <tr>
                   <th scope="col" className="p-2 text-left font-mono text-[11px] font-medium tracking-wider text-muted uppercase">
@@ -179,7 +202,7 @@ export function DashboardPage() {
                     </th>
                   ))}
                   <th scope="col" className="p-2 text-center font-mono text-xs font-medium text-muted">
-                    Gem.
+                    Behaald
                   </th>
                 </tr>
               </thead>
@@ -196,15 +219,17 @@ export function DashboardPage() {
                       return (
                         <td
                           key={id}
-                          title={`Sprint ${s.number}, ${id}: ${score}%`}
+                          title={`Sprint ${s.number}, ${id}: ${isAchieved(score) ? 'behaald' : 'niet behaald'}`}
                           className="rounded-md p-2 text-center font-mono text-xs text-ink tabular-nums"
-                          style={{ background: score ? `color-mix(in srgb, var(--color-chart-1) ${Math.round(10 + score * 0.75)}%, transparent)` : 'color-mix(in srgb, var(--color-ink) 4%, transparent)' }}
+                          style={{ background: isAchieved(score) ? 'color-mix(in srgb, var(--color-chart-1) 55%, transparent)' : 'color-mix(in srgb, var(--color-ink) 4%, transparent)' }}
                         >
-                          {score || '–'}
+                          {isAchieved(score) ? <span aria-label="behaald">✓</span> : <span aria-label="niet behaald">–</span>}
                         </td>
                       )
                     })}
-                    <td className="p-2 text-center font-mono text-xs text-muted">{sprintLuAverage(s)}%</td>
+                    <td className="p-2 text-center font-mono text-xs text-muted">
+                      {sprintLuAchieved(s)}/{LU_IDS.length}
+                    </td>
                   </tr>
                 ))}
               </tbody>

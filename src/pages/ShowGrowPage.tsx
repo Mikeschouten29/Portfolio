@@ -11,7 +11,6 @@ import {
   Minimize,
   Pencil,
   Presentation,
-  Sparkles,
 } from 'lucide-react'
 import { useEffect, useId, useState, type ReactNode } from 'react'
 import { EditableText, LinkList } from '../components/editable'
@@ -21,7 +20,7 @@ import { Button, IconButton, StatusBadge } from '../components/ui'
 import { href } from '../hooks/useHashRoute'
 import { usePortfolio } from '../hooks/usePortfolio'
 import { cn } from '../lib/utils'
-import { STORY_TYPE_LABELS, STORY_TYPES, type Sprint, type UserStory } from '../types'
+import { STORY_TYPE_LABELS, STORY_TYPES, type Sprint, type SprintTakeaways, type UserStory } from '../types'
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
@@ -164,12 +163,15 @@ function StorySlide({ sprint, story, index }: { sprint: Sprint; story: UserStory
 
 function WrapUpSlide({ sprint }: { sprint: Sprint }) {
   const { update } = usePortfolio()
-  const set = (key: 'reflection' | 'feedback' | 'nextSteps') => (v: string) =>
-    update((d) => void (d.sprints.find((s) => s.id === sprint.id)![key] = v))
+  const set = (key: keyof SprintTakeaways) => (v: string) =>
+    update((d) => {
+      const s = d.sprints.find((x) => x.id === sprint.id)
+      if (s) s.takeaways = { ...s.takeaways, [key]: v }
+    })
   const blocks = [
-    { key: 'reflection' as const, icon: Sparkles, title: 'Reflectie', placeholder: 'Wat neem je mee uit deze sprint?' },
-    { key: 'feedback' as const, icon: MessageSquareQuote, title: 'Feedback', placeholder: 'Welke feedback kreeg je?' },
-    { key: 'nextSteps' as const, icon: Footprints, title: 'Volgende stappen', placeholder: 'Wat ga je hierna doen?' },
+    { key: 'learned' as const, icon: Lightbulb, title: 'Wat ik heb geleerd', placeholder: 'De 2–3 belangrijkste lessen, kort en concreet' },
+    { key: 'feedback' as const, icon: MessageSquareQuote, title: 'Feedback verwerkt', placeholder: 'Van wie → wat heb je ermee gedaan?' },
+    { key: 'next' as const, icon: Footprints, title: 'Volgende stap', placeholder: 'Wat ga je concreet anders doen?' },
   ]
   return (
     <div className="flex h-full flex-col">
@@ -179,7 +181,7 @@ function WrapUpSlide({ sprint }: { sprint: Sprint }) {
         {blocks.map((b) => (
           <div key={b.key} className="rounded-2xl border border-line bg-bg/50 p-5">
             <SlideLabel icon={b.icon}>{b.title}</SlideLabel>
-            <EditableText value={sprint[b.key]} onChange={set(b.key)} label={b.title} placeholder={b.placeholder} multiline rows={5} className="leading-relaxed text-ink/90" emptyText="Nog niet ingevuld." />
+            <EditableText value={sprint.takeaways?.[b.key] ?? ''} onChange={set(b.key)} label={b.title} placeholder={b.placeholder} multiline rows={5} className="leading-relaxed text-ink/90" emptyText="Nog niet ingevuld." />
           </div>
         ))}
       </div>

@@ -14,7 +14,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 11
+export const DATA_VERSION = 12
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -38,6 +38,7 @@ export function migrate(data: PortfolioData): PortfolioData {
 
   for (const sprint of d.sprints) {
     sprint.nextSteps ??= ''
+    sprint.takeaways ??= { learned: '', feedback: '', next: '' }
     sprint.userStories = sprint.userStories.map((u) => {
       const p = u as Partial<UserStory>
       return {
@@ -189,6 +190,19 @@ export function migrate(data: PortfolioData): PortfolioData {
     }
     const r3 = d.roadmap.findIndex((r) => r.title === 'AI-contentplanner doorontwikkelen')
     if (r3 >= 0) d.roadmap[r3] = { ...youngOnesRoadmapItem }
+  }
+
+  if (oldVersion < 12) {
+    // v12: behaalde leeruitkomsten als 'behaald' (100) i.p.v. 60%, en korte 'Wat neem ik mee'-teksten voor de Show & Grow.
+    const same = (s: (typeof d.sprints)[number], scores: number[]) =>
+      (['LU1', 'LU2', 'LU3', 'LU4', 'LU5'] as const).every((id, i) => (s.learningOutcomes[id]?.score ?? 0) === scores[i])
+    const s1 = d.sprints.find((s) => s.number === 1)
+    if (s1 && same(s1, [60, 0, 0, 60, 60])) s1.learningOutcomes = structuredClone(sprint1Content.learningOutcomes)
+    const s2 = d.sprints.find((s) => s.number === 2)
+    if (s2 && same(s2, [0, 60, 0, 60, 60])) s2.learningOutcomes = structuredClone(sprint2Content.learningOutcomes)
+    const empty = (t: { learned: string; feedback: string; next: string }) => !t.learned.trim() && !t.feedback.trim() && !t.next.trim()
+    if (s1 && empty(s1.takeaways)) s1.takeaways = structuredClone(sprint1Content.takeaways)
+    if (s2 && empty(s2.takeaways)) s2.takeaways = structuredClone(sprint2Content.takeaways)
   }
 
   d.version = DATA_VERSION

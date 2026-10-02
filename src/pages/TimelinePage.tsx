@@ -4,7 +4,8 @@ import { PageHeader } from '../components/PageHeader'
 import { ProgressBar, StatusBadge } from '../components/ui'
 import { href } from '../hooks/useHashRoute'
 import { usePortfolio } from '../hooks/usePortfolio'
-import { cn, sprintLuAverage, storyProgress } from '../lib/utils'
+import { cn, sprintLuAchieved, sprintLuAverage, storyProgress } from '../lib/utils'
+import { LU_IDS } from '../types'
 
 export function TimelinePage() {
   const { data } = usePortfolio()
@@ -78,7 +79,7 @@ export function TimelinePage() {
                       <ProgressBar value={storyProgress(s)} label={`User stories sprint ${s.number}`} tone="data" />
                     </div>
                     <div>
-                      <p className="mb-1 text-[11px] text-muted">Leeruitkomsten {sprintLuAverage(s)}%</p>
+                      <p className="mb-1 text-[11px] text-muted">Leeruitkomsten {sprintLuAchieved(s)}/{LU_IDS.length} behaald</p>
                       <ProgressBar value={sprintLuAverage(s)} label={`Leeruitkomsten sprint ${s.number}`} />
                     </div>
                   </div>

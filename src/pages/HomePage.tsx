@@ -22,7 +22,7 @@ import { Card, Reveal } from '../components/ui'
 import { useCopy } from '../hooks/useCopy'
 import { href } from '../hooks/useHashRoute'
 import { usePortfolio } from '../hooks/usePortfolio'
-import { average, luBest } from '../lib/utils'
+import { luAchievedIn } from '../lib/utils'
 import { LU_IDS, type Profile } from '../types'
 
 function LinkedinGlyph({ className }: { className?: string }) {
@@ -109,7 +109,7 @@ export function HomePage() {
   const set = <K extends keyof Profile>(key: K) => (value: Profile[K]) => update((d) => void (d.profile[key] = value))
 
   const doneSprints = sprints.filter((s) => s.status === 'Afgerond').length
-  const luProgress = average(LU_IDS.map((id) => luBest(sprints, id)))
+  const luAchieved = LU_IDS.filter((id) => luAchievedIn(sprints, id).length > 0).length
   const [first, ...rest] = profile.name.split(' ')
 
   return (
@@ -182,7 +182,7 @@ export function HomePage() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Stat value={doneSprints} suffix={`/${sprints.length}`} label="Sprints afgerond" />
-            <Stat value={luProgress} suffix="%" label="Voortgang leeruitkomsten" />
+            <Stat value={luAchieved} suffix={`/${LU_IDS.length}`} label="Leeruitkomsten behaald" />
             <Stat value={data.prompts.length} label="Prompts in bibliotheek" />
             <Stat value={sprints.reduce((n, s) => n + s.userStories.length, 0)} label="Stories gepland" />
           </div>

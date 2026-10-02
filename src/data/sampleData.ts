@@ -33,6 +33,7 @@ function plannedSprint(number: number, title: string, period: string, goal: stri
     reflection: '',
     nextSteps: '',
     showGrow: '',
+    takeaways: { learned: '', feedback: '', next: '' },
     evidence: [],
   }
 }
@@ -253,14 +254,28 @@ export const sprint2Content = {
   ].join('\n'),
   showGrow:
     'Mijn portfolio is nu een echte webapplicatie: live via Vercel, gekoppeld aan een eigen database in Supabase en volledig zelf te beheren.',
-  /** V = voldoende aangetoond (weergegeven als 60%), - = niet in deze sprint (0%). Pas aan naar eigen inzicht. */
-  learningOutcomes: lu([0, 60, 0, 60, 60], {
-    LU1: 'Niveau: - (niet in deze sprint)',
-    LU2: 'Niveau: V · Young Ones-webapp en vernieuwd portfolio',
-    LU3: 'Niveau: - (niet in deze sprint)',
-    LU4: 'Niveau: V · Claude, Supabase, Vercel en GitHub ingezet',
-    LU5: 'Niveau: V · feedback van Thijs en Martijn verwerkt',
+  /** 100 = behaald (V), 0 = niet in deze sprint. */
+  learningOutcomes: lu([0, 100, 0, 100, 100], {
+    LU2: 'V · Young Ones-webapp en vernieuwd portfolio',
+    LU4: 'V · Claude, Supabase, Vercel en GitHub ingezet',
+    LU5: 'V · feedback van Thijs en Martijn verwerkt',
   }),
+  takeaways: {
+    learned: [
+      '• Mijn portfolio is gekoppeld aan Supabase: iedereen kan lezen, alleen ik kan aanpassen.',
+      '• Via GitHub en Vercel staat elke wijziging binnen een minuut live.',
+      '• Korte vraag + schermafbeelding = betere hulp van Claude.',
+    ].join('\n'),
+    feedback: [
+      'Thijs: duidelijkere prompts en criteria → acceptatiecriterium verduidelijkt, vaste prompt-opbouw.',
+      'Martijn: laat AI je vragen stellen → AI gebruikt bij het formuleren van mijn stories.',
+    ].join('\n'),
+    next: [
+      '• Elke stap eerst begrijpen voordat ik doorklik.',
+      '• Bewijs en logboek direct tijdens het werken bijhouden.',
+      '• Young Ones-app ook koppelen aan een online database.',
+    ].join('\n'),
+  },
 }
 
 /** Sprint 1, overgenomen uit het sprintformulier. */
@@ -306,13 +321,24 @@ export const sprint1Content = {
   ].join('\n'),
   showGrow:
     'AI neemt in de sportmarketing vooral uitvoerende taken over. Met de juiste tools en een goede prompt-opbouw zet ik AI slim in, maar menselijk inzicht en merkidentiteit blijven het verschil maken.',
-  learningOutcomes: lu([60, 0, 0, 60, 60], {
-    LU1: 'Niveau: V · onderzoek met de casus Liverpool FC',
-    LU2: 'Niveau: - (niet in deze sprint)',
-    LU3: 'Niveau: - (niet in deze sprint)',
-    LU4: 'Niveau: V · prompt-basisformule en vier AI-tools',
-    LU5: 'Niveau: V · zelfstandig gepland, feedback verwerkt',
+  learningOutcomes: lu([100, 0, 0, 100, 100], {
+    LU1: 'V · onderzoek met de casus Liverpool FC',
+    LU4: 'V · prompt-basisformule en vier AI-tools',
+    LU5: 'V · zelfstandig gepland, feedback verwerkt',
   }),
+  takeaways: {
+    learned: [
+      '• AI neemt in de sportmarketing vooral uitvoerende taken over; menselijk inzicht blijft het verschil maken.',
+      '• Met Rol + Context + Taak + Output krijg ik bruikbare antwoorden en goede code.',
+      '• Elke AI-tool heeft een eigen kracht: Perplexity voor bronnen, Claude voor structuur.',
+    ].join('\n'),
+    feedback: 'Thijs: formuleer criteria als zichtbaar resultaat → kwaliteitscriterium 3 van mijn user story herschreven.',
+    next: [
+      '• Prompts direct opslaan in mijn Prompt Library.',
+      '• Geen vage vragen of losse links meer in prompts.',
+      '• AI-uitkomsten toetsen aan menselijk inzicht en merkidentiteit.',
+    ].join('\n'),
+  },
 }
 
 /** Onderzoekspagina, gebaseerd op de research story van sprint 1. */
@@ -363,7 +389,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 11,
+  version: 12,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',
