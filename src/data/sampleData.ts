@@ -156,11 +156,11 @@ export const sprint2Planning: UserStory[] = [
 
 /** De leeruitkomsten van de minor Future-proof met AI!, zoals in het beoordelingsformulier. */
 export const minorLearningOutcomes: LearningOutcome[] = [
-  { id: 'LU1', title: 'AI-impact op de beroepspraktijk', description: 'AI-impact op de beroepspraktijk analyseren en evalueren.' },
-  { id: 'LU2', title: 'Praktijkgerichte AI-oplossing', description: 'Een praktijkgerichte AI-oplossing ontwerpen, realiseren en presenteren.' },
-  { id: 'LU3', title: 'Ethiek & verantwoord AI-gebruik', description: 'Ethiek en verantwoordelijk AI-gebruik beoordelen.' },
-  { id: 'LU4', title: 'AI-tools & technieken', description: 'AI-tools en technieken gebruiken.' },
-  { id: 'LU5', title: 'Zelfstandig & zelfsturend werken', description: 'Zelfstandig en zelfsturend werken.' },
+  { id: 'LU1', title: 'AI-impact op beroepsrol', description: 'AI-impact op beroepsrol analyseren.', required: 2 },
+  { id: 'LU2', title: 'Praktijkgerichte AI-oplossingen', description: 'Praktijkgerichte AI-oplossingen ontwerpen, realiseren en valideren.', required: 4 },
+  { id: 'LU3', title: 'Verantwoord AI-gebruik', description: 'Verantwoord AI-gebruik toetsen aan ethiek en regelgeving.', required: 2 },
+  { id: 'LU4', title: 'AI-tools & technieken', description: 'AI-tools en technieken toepassen.', required: 4 },
+  { id: 'LU5', title: 'Regie over eigen leerproces', description: 'Regie voeren over je eigen leerproces.', required: 6 },
 ]
 
 /** Vierde story van sprint 2 (Young Ones-webapp). */
@@ -389,7 +389,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 12,
+  version: 13,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',

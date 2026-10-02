@@ -21,7 +21,7 @@ import { PageHeader, SectionTitle } from '../components/PageHeader'
 import { Badge, Card, EmptyState, ProgressBar, Reveal, StatusBadge, Button } from '../components/ui'
 import { href } from '../hooks/useHashRoute'
 import { usePortfolio } from '../hooks/usePortfolio'
-import { cn, isAchieved, LU_ACHIEVED, sprintLuAchieved, sprintLuAverage, storyProgress, uid } from '../lib/utils'
+import { cn, isAchieved, LU_ACHIEVED, luCount, luPct, sprintLuAchieved, sprintLuAverage, storyProgress, uid } from '../lib/utils'
 import { UserStoryCard } from '../components/UserStoryCard'
 import { LU_IDS, type Sprint, type SprintStatus } from '../types'
 
@@ -198,6 +198,9 @@ function SprintDetail({ sprint }: { sprint: Sprint }) {
               {LU_IDS.map((id) => {
                 const lo = data.learningOutcomes.find((l) => l.id === id)
                 const progress = sprint.learningOutcomes[id] ?? { score: 0, note: '' }
+                const required = lo?.required ?? 0
+                const countSoFar = luCount(data.sprints, id, sprint.number)
+                const pctSoFar = luPct(countSoFar, required)
                 return (
                   <li
                     key={id}
@@ -230,6 +233,17 @@ function SprintDetail({ sprint }: { sprint: Sprint }) {
                         <Badge>Niet in deze sprint</Badge>
                       )}
                     </div>
+                    {required > 0 && (
+                      <div className="mt-2.5">
+                        <div className="mb-1 flex justify-between text-[11px] text-muted">
+                          <span>
+                            Na deze sprint: <span className="font-mono text-ink">{countSoFar} van {required}</span> voldoendes
+                          </span>
+                          <span className="font-mono text-ink">{pctSoFar}%</span>
+                        </div>
+                        <ProgressBar value={pctSoFar} label={`${id} na sprint ${sprint.number}: ${countSoFar} van ${required} voldoendes`} />
+                      </div>
+                    )}
                     <div className="mt-1.5">
                       <EditableText
                         value={progress.note}

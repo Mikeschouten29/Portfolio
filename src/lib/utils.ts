@@ -1,4 +1,4 @@
-import { LU_IDS, type LuId, type Sprint } from '../types'
+import { LU_IDS, type LearningOutcome, type LuId, type Sprint } from '../types'
 
 export function uid(prefix = 'id'): string {
   return `${prefix}-${Math.random().toString(36).slice(2, 9)}`
@@ -37,6 +37,23 @@ export function sprintLuAchieved(sprint: Sprint): number {
 /** Sprintnummers waarin een leeruitkomst is behaald. */
 export function luAchievedIn(sprints: Sprint[], id: LuId): number[] {
   return sprints.filter((s) => isAchieved(s.learningOutcomes[id]?.score)).map((s) => s.number)
+}
+
+/** Aantal voldoendes voor een leeruitkomst, optioneel tot en met een bepaalde sprint. */
+export function luCount(sprints: Sprint[], id: LuId, uptoSprint = Infinity): number {
+  return sprints.filter((s) => s.number <= uptoSprint && isAchieved(s.learningOutcomes[id]?.score)).length
+}
+
+/** Voortgang richting het minimum aantal voldoendes, maximaal 100%. */
+export function luPct(count: number, required: number): number {
+  return required > 0 ? Math.min(100, Math.round((count / required) * 100)) : 0
+}
+
+/** Totale voortgang van de minor: behaalde voldoendes (per LU maximaal het minimum) ÷ alle benodigde voldoendes. */
+export function minorProgress(sprints: Sprint[], outcomes: LearningOutcome[]) {
+  const required = outcomes.reduce((n, lo) => n + (lo.required ?? 0), 0)
+  const done = outcomes.reduce((n, lo) => n + Math.min(luCount(sprints, lo.id), lo.required ?? 0), 0)
+  return { done, required, pct: luPct(done, required) }
 }
 
 export function sprintLuAverage(sprint: Sprint): number {

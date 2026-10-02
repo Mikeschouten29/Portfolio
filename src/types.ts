@@ -6,6 +6,8 @@ export interface LearningOutcome {
   id: LuId
   title: string
   description: string
+  /** Minimaal aantal voldoendes dat in de hele minor nodig is */
+  required: number
 }
 
 export interface Link {

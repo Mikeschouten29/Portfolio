@@ -3,10 +3,10 @@ import { ChartColumn, CircleCheck, ClipboardCheck, Flag, GraduationCap, Grid3x3,
 import { useState } from 'react'
 import { EditableText } from '../components/editable'
 import { PageHeader, SectionTitle } from '../components/PageHeader'
-import { Badge, Card, Reveal } from '../components/ui'
+import { Badge, Card, ProgressBar, Reveal } from '../components/ui'
 import { href } from '../hooks/useHashRoute'
 import { usePortfolio } from '../hooks/usePortfolio'
-import { average, isAchieved, luAchievedIn, sprintLuAchieved, sprintLuAverage, storyProgress } from '../lib/utils'
+import { average, isAchieved, luAchievedIn, luCount, luPct, minorProgress, sprintLuAchieved, sprintLuAverage, storyProgress } from '../lib/utils'
 import { LU_IDS } from '../types'
 
 function StatTile({ icon: Icon, label, value, sub }: { icon: typeof Flag; label: string; value: string; sub: string }) {
@@ -106,7 +106,7 @@ export function DashboardPage() {
   const allStories = sprints.flatMap((s) => s.userStories)
   const doneStories = allStories.filter((u) => u.done).length
   const achievedIn = LU_IDS.map((id) => luAchievedIn(sprints, id))
-  const achievedCount = achievedIn.filter((n) => n.length > 0).length
+  const minor = minorProgress(sprints, data.learningOutcomes)
 
   return (
     <>
@@ -115,11 +115,11 @@ export function DashboardPage() {
         kicker="Dashboard"
         title="Voortgang in één oogopslag"
         path="dashboard"
-        description="Welke leeruitkomsten ik heb behaald (V) en in welke sprint. Per sprint vink ik in de bewerkmodus aan welke leeruitkomsten zijn behaald."
+        description="Per leeruitkomst heb ik in de minor een minimum aantal voldoendes nodig. Het percentage laat zien hoe ver ik daarmee ben. Per sprint vink ik in de bewerkmodus aan welke leeruitkomsten zijn behaald."
       />
 
       <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatTile icon={GraduationCap} label="Leeruitkomsten" value={`${achievedCount}/${LU_IDS.length}`} sub="Behaald (V)" />
+        <StatTile icon={GraduationCap} label="Minor-voortgang" value={`${minor.pct}%`} sub={`${minor.done} van ${minor.required} voldoendes`} />
         <StatTile icon={Flag} label="Sprints" value={`${sprints.filter((s) => s.status === 'Afgerond').length}/${sprints.length}`} sub={`${sprints.filter((s) => s.status === 'Bezig').length} sprint(s) bezig`} />
         <StatTile icon={ClipboardCheck} label="User stories" value={`${doneStories}/${allStories.length}`} sub="Afgerond over alle sprints" />
         <StatTile icon={Route} label="Roadmap" value={`${average(data.roadmap.map((r) => r.progress))}%`} sub="Gemiddelde voortgang doelen" />
@@ -130,48 +130,67 @@ export function DashboardPage() {
           <Card className="h-full">
             <SectionTitle icon={GraduationCap}>Per leeruitkomst</SectionTitle>
             <ul className="space-y-5">
-              {data.learningOutcomes.map((lo, i) => (
-                <li key={lo.id}>
-                  <div className="mb-1 flex items-baseline justify-between gap-3">
-                    <p className="flex min-w-0 items-baseline gap-2">
-                      <span className="font-mono text-sm text-lime">{lo.id}</span>
-                      {!editMode && <span className="truncate font-medium text-ink">{lo.title}</span>}
-                    </p>
-                    {achievedIn[i].length > 0 ? (
-                      <Badge tone="lime">
-                        <CircleCheck className="size-3" aria-hidden /> Behaald
-                      </Badge>
-                    ) : (
-                      <Badge>Nog niet behaald</Badge>
-                    )}
-                  </div>
-                  {editMode ? (
-                    <div className="mb-2 space-y-2">
-                      <EditableText value={lo.title} label={`${lo.id} titel`} onChange={(v) => update((d) => void (d.learningOutcomes[i].title = v))} />
-                      <EditableText value={lo.description} label={`${lo.id} omschrijving`} multiline rows={2} onChange={(v) => update((d) => void (d.learningOutcomes[i].description = v))} />
+              {data.learningOutcomes.map((lo, i) => {
+                const required = lo.required ?? 0
+                const count = luCount(sprints, lo.id)
+                const pct = luPct(count, required)
+                return (
+                  <li key={lo.id}>
+                    <div className="mb-1 flex items-baseline justify-between gap-3">
+                      <p className="flex min-w-0 items-baseline gap-2">
+                        <span className="font-mono text-sm text-lime">{lo.id}</span>
+                        {!editMode && <span className="truncate font-medium text-ink">{lo.title}</span>}
+                      </p>
+                      {pct >= 100 ? (
+                        <Badge tone="lime">
+                          <CircleCheck className="size-3" aria-hidden /> Voldaan
+                        </Badge>
+                      ) : (
+                        <span className="font-mono text-sm text-ink">{pct}%</span>
+                      )}
                     </div>
-                  ) : (
-                    <p className="mb-2 text-xs text-muted">{lo.description}</p>
-                  )}
-                  <p className="text-xs text-muted">
-                    {achievedIn[i].length > 0 ? (
-                      <>
-                        Behaald in{' '}
-                        {achievedIn[i].map((n, j) => (
-                          <span key={n}>
-                            {j > 0 && (j === achievedIn[i].length - 1 ? ' en ' : ', ')}
-                            <a href={href('sprints', n)} className="font-medium text-lime hover:underline">
-                              sprint {n}
-                            </a>
-                          </span>
-                        ))}
-                      </>
+                    {editMode ? (
+                      <div className="mb-2 space-y-2">
+                        <EditableText value={lo.title} label={`${lo.id} titel`} onChange={(v) => update((d) => void (d.learningOutcomes[i].title = v))} />
+                        <EditableText value={lo.description} label={`${lo.id} omschrijving`} multiline rows={2} onChange={(v) => update((d) => void (d.learningOutcomes[i].description = v))} />
+                        <label className="flex items-center gap-2 text-xs text-muted">
+                          Minimaal aantal voldoendes
+                          <input
+                            type="number"
+                            min={1}
+                            max={8}
+                            value={required}
+                            onChange={(e) => update((d) => void (d.learningOutcomes[i].required = Math.max(1, Number(e.target.value) || 1)))}
+                            className="field w-16 px-2 py-1 text-right font-mono text-sm"
+                          />
+                        </label>
+                      </div>
                     ) : (
-                      'Nog in geen enkele sprint behaald.'
+                      <p className="mb-2 text-xs text-muted">{lo.description}</p>
                     )}
-                  </p>
-                </li>
-              ))}
+                    <ProgressBar value={pct} label={`${lo.id}: ${count} van ${required} voldoendes`} />
+                    <p className="mt-1.5 text-xs text-muted">
+                      <span className="font-mono text-ink">
+                        {count} van {required}
+                      </span>{' '}
+                      voldoendes
+                      {achievedIn[i].length > 0 && (
+                        <>
+                          {' · '}behaald in{' '}
+                          {achievedIn[i].map((n, j) => (
+                            <span key={n}>
+                              {j > 0 && (j === achievedIn[i].length - 1 ? ' en ' : ', ')}
+                              <a href={href('sprints', n)} className="font-medium text-lime hover:underline">
+                                sprint {n}
+                              </a>
+                            </span>
+                          ))}
+                        </>
+                      )}
+                    </p>
+                  </li>
+                )
+              })}
             </ul>
           </Card>
         </Reveal>
@@ -187,7 +206,7 @@ export function DashboardPage() {
       <Reveal className="mt-6">
         <Card>
           <SectionTitle icon={Grid3x3}>Matrix: sprint × leeruitkomst</SectionTitle>
-          <p className="-mt-2 mb-4 text-sm text-muted">Een ✓ betekent: in deze sprint behaald (V). Klik op een sprint om die te openen.</p>
+          <p className="-mt-2 mb-4 text-sm text-muted">Een ✓ betekent: in deze sprint behaald (V). Onderaan staat hoeveel voldoendes ik per leeruitkomst heb, tegenover het minimum. Klik op een sprint om die te openen.</p>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[520px] border-separate border-spacing-0.5 text-sm">
               <caption className="sr-only">Behaalde leeruitkomsten per sprint</caption>
@@ -233,6 +252,22 @@ export function DashboardPage() {
                   </tr>
                 ))}
               </tbody>
+              <tfoot>
+                <tr>
+                  <th scope="row" className="p-2 text-left text-xs font-medium text-muted">
+                    Voldoendes / minimum
+                  </th>
+                  {data.learningOutcomes.map((lo) => {
+                    const count = luCount(sprints, lo.id)
+                    return (
+                      <td key={lo.id} className="p-2 text-center font-mono text-xs text-ink">
+                        {count}/{lo.required ?? 0}
+                      </td>
+                    )
+                  })}
+                  <td className="p-2 text-center font-mono text-xs font-bold text-lime">{minor.pct}%</td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </Card>

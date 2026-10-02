@@ -14,7 +14,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 12
+export const DATA_VERSION = 13
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -203,6 +203,18 @@ export function migrate(data: PortfolioData): PortfolioData {
     const empty = (t: { learned: string; feedback: string; next: string }) => !t.learned.trim() && !t.feedback.trim() && !t.next.trim()
     if (s1 && empty(s1.takeaways)) s1.takeaways = structuredClone(sprint1Content.takeaways)
     if (s2 && empty(s2.takeaways)) s2.takeaways = structuredClone(sprint2Content.takeaways)
+  }
+
+  if (oldVersion < 13) {
+    // v13: minimaal aantal voldoendes per leeruitkomst en de officiële namen uit de minor.
+    const oldTitles = ['AI-impact op de beroepspraktijk', 'Praktijkgerichte AI-oplossing', 'Ethiek & verantwoord AI-gebruik', 'AI-tools & technieken', 'Zelfstandig & zelfsturend werken']
+    d.learningOutcomes = d.learningOutcomes.map((lo) => {
+      const official = minorLearningOutcomes.find((m) => m.id === lo.id)
+      if (!official) return lo
+      const next = { ...lo, required: lo.required ?? official.required }
+      if (oldTitles.includes(lo.title)) Object.assign(next, { title: official.title, description: official.description })
+      return next
+    })
   }
 
   d.version = DATA_VERSION
