@@ -341,6 +341,120 @@ export const sprint1Content = {
   },
 }
 
+/** Planning sprint 3, overgenomen uit het sprintformulier. */
+export const sprint3Planning: UserStory[] = [
+  {
+    id: 's3-plan-ls1',
+    type: 'LS',
+    story:
+      'Als student van deze minor wil ik leren hoe ik met Claude een AI-hardloopcoach bouw, gebaseerd op betrouwbare bronnen, zodat ik AI verantwoord kan inzetten om beginnende hardlopers te begeleiden met een persoonlijk en veilig trainingsplan.',
+    criteria: [
+      'De app TargetCoach staat online en werkt: een sporter kan met de coach chatten, een doel kiezen en een trainingsplan per week ontvangen.',
+      'De coach stelt eerst een korte gezondheidscheck (PAR-Q+) en past het plan daarna aan op basis van de trainingen die de sporter invult in het logboek.',
+      'De app baseert zijn adviezen op een eigen kennisbank met minimaal 10 relevante en betrouwbare bronnen.',
+    ],
+    qualityCriteria: [
+      'De coach schrijft in eenvoudig Nederlands, met korte berichten en maximaal één vraag per bericht.',
+      "Ik heb de coach getest met vaste testscenario's en heb de fouten die ik vond verbeterd in de instructies van de coach.",
+      'De coach is eerlijk over wat hij niet weet: bij vragen over voeding, schoenen of blessures zegt hij dat zijn bronnen daar niet over gaan.',
+    ],
+    learned:
+      'Ik heb met Claude een AI-hardloopcoach gebouwd die eerst een gezondheidscheck (PAR-Q+) doet en adviseert op basis van een eigen kennisbank met betrouwbare bronnen. Les: een AI-coach is pas verantwoord als hij binnen zijn bronnen blijft en eerlijk zegt wat hij niet weet.',
+    evidence: [],
+    done: true,
+  },
+  {
+    id: 's3-plan-us1',
+    type: 'US',
+    story:
+      'Als student van deze minor wil ik met n8n een geautomatiseerde workflow bouwen die wekelijks AI-nieuws ophaalt, laat samenvatten door AI en naar mijn mail stuurt, zodat ik zonder extra tijd op de hoogte blijf van nieuwe AI-ontwikkelingen, modellen en tools.',
+    criteria: [
+      'De workflow haalt artikelen op uit minimaal 3 actuele nieuwsbronnen en filtert deze op de afgelopen 7 dagen.',
+      'Gemini maakt van de artikelen een Nederlandstalige nieuwsbrief met een vaste indeling (nieuws, nieuwe modellen en tools, tips, weetje en sporthoekje).',
+      'De nieuwsbrief komt elke dinsdag om 10:00 automatisch binnen in mijn Gmail.',
+    ],
+    qualityCriteria: [
+      'De workflow draait volledig gratis, zelf gehost op mijn laptop met gratis versies van de gebruikte diensten.',
+      'De nieuwsbrief bevat alleen informatie uit de opgehaalde artikelen, met bij elk bericht een link naar de bron.',
+      'De workflow probeert het automatisch opnieuw bij een foutmelding van de AI, en ik kan elke stap van de workflow in eigen woorden uitleggen.',
+    ],
+    learned:
+      'Ik heb in n8n een workflow gebouwd die elke week AI-nieuws ophaalt, filtert op de afgelopen 7 dagen, door Gemini laat samenvatten en naar mijn Gmail stuurt. Les: mijn filter stond eerst op een vaste datum in plaats van een expressie, waardoor er geen artikelen overbleven. Elke stap direct testen voorkomt zulke fouten.',
+    evidence: [],
+    done: true,
+  },
+  {
+    id: 's3-plan-ls2',
+    type: 'LS',
+    story:
+      'Als student van deze minor wil ik de basis van automatiseren met AI leren door eerst een workflow uit de les te bouwen in Make, en die kennis daarna toe te passen in n8n voor een eigen workflow, zodat ik niet alleen een voorbeeld kan volgen, maar zelf een automatisering kan bedenken en bouwen.',
+    criteria: [
+      'In Make heb ik de leadbeoordelingsworkflow uit de les gebouwd, waarmee ik de basis heb geleerd.',
+      'In n8n heb ik zelfstandig een eigen workflow bedacht en gebouwd: een wekelijkse AI-nieuwsbrief die nieuws ophaalt, filtert, door AI laat samenvatten en automatisch naar mijn Gmail stuurt.',
+    ],
+    qualityCriteria: [
+      'Beide workflows werken aantoonbaar, van de workflow en het resultaat (de beoordeelde leads en de ontvangen nieuwsbrief).',
+      'Ik kan van mijn workflow in n8n in eigen woorden uitleggen wat elke stap doet.',
+    ],
+    learned:
+      'In Make leerde ik met de leadbeoordelingsworkflow uit de les hoe een workflow werkt: trigger, data ophalen en filteren, een AI-stap en een actie. Die basis heb ik daarna zelf toegepast in n8n. Ook leerde ik dat n8n op mijn laptop alleen draait zolang het venster van de Opdrachtprompt openstaat.',
+    evidence: [],
+    done: true,
+  },
+]
+
+/** Sprint 3, overgenomen uit het sprintformulier. */
+export const sprint3Content = {
+  title: 'TargetCoach & automatiseren met AI',
+  goal: 'Met Claude een AI-hardloopcoach (TargetCoach) bouwen op basis van betrouwbare bronnen, en leren automatiseren met Make en n8n, met een eigen wekelijkse AI-nieuwsbrief.',
+  feedback: '',
+  selfEvaluation: [
+    'LU1 · AI-impact op de beroepspraktijk: - (niet in deze sprint)',
+    'LU2 · Praktijkgerichte AI-oplossing: V. Ik heb TargetCoach gebouwd, een AI-hardloopcoach die beginnende hardlopers een persoonlijk en veilig trainingsplan geeft. Daarnaast heb ik met n8n een workflow gebouwd die mij wekelijks gratis een AI-nieuwsbrief mailt. Bewijs: de TargetCoach-app, de n8n-workflow en de ontvangen nieuwsbrief.',
+    'LU3 · Ethiek & verantwoord AI-gebruik: - (niet in deze sprint)',
+    'LU4 · AI-tools & technieken: V. Ik heb Claude gebruikt voor TargetCoach, en Make en n8n om workflows met AI te automatiseren. Ik ken de beperkingen, zoals een overbelaste AI-server, en heb daar oplossingen voor ingebouwd. Bewijs: de workflows in Make en n8n en de opgeloste foutmeldingen.',
+    'LU5 · Zelfstandig & zelfsturend werken: V. Ik heb de basis van automatiseren geleerd in Make en die kennis zelfstandig toegepast in een eigen workflow in n8n. Problemen heb ik zelf onderzocht en opgelost, met AI als hulp. Bewijs: mijn sprintplanning en beide workflows.',
+  ].join('\n\n'),
+  reflection: [
+    [
+      'Workflows bouwen',
+      'Geleerd: hoe een workflow in elkaar zit: een trigger, stappen die data ophalen en filteren, een AI-stap en een actie aan het eind. De basis leerde ik in Make, en die kon ik daarna zelf toepassen in n8n voor mijn eigen AI-nieuwsbrief.',
+      'Behoud ik: na elk nieuw blokje direct testen met "Execute step", zodat ik meteen zie of die stap werkt.',
+      'Doe ik anders: alles stap voor stap doen, want bij kleine instellingen stond mijn filter eerst op een vaste datum in plaats van een expressie, waardoor er geen artikelen overbleven.',
+    ].join('\n'),
+    [
+      'n8n op mijn eigen laptop',
+      'Geleerd: hoe ik n8n gratis op mijn eigen laptop draai via de Opdrachtprompt, en dat het programma alleen werkt zolang dat venster openstaat.',
+      'Behoud ik: bewust kiezen voor gratis oplossingen en vooraf nadenken over de voor- en nadelen, zoals dat mijn laptop aan moet staan.',
+      'Doe ik anders: niet zomaar vensters sluiten voordat ik weet wat ze doen. Ik had het venster van n8n gesloten, waardoor alles stopte.',
+    ].join('\n'),
+  ].join('\n\n'),
+  nextSteps: [
+    '• Alles stap voor stap doen en kleine instellingen (zoals een vaste datum of een expressie) controleren.',
+    '• Niet zomaar vensters sluiten voordat ik weet wat ze doen.',
+  ].join('\n'),
+  showGrow:
+    'Ik bouw nu niet alleen websites, maar ook AI-toepassingen die zelfstandig werken: een hardloopcoach die veilig adviseert op basis van betrouwbare bronnen, en een workflow die mij elke week automatisch het AI-nieuws mailt.',
+  learningOutcomes: lu([0, 100, 0, 100, 100], {
+    LU2: 'V · TargetCoach-app en n8n-nieuwsbrief',
+    LU4: 'V · Claude, Make en n8n met AI ingezet',
+    LU5: 'V · zelfstandig van Make naar eigen n8n-workflow',
+  }),
+  takeaways: {
+    learned: [
+      '• Een workflow = trigger → data ophalen en filteren → AI-stap → actie.',
+      '• n8n draait gratis op mijn laptop, maar alleen zolang het venster openstaat.',
+      '• Een AI-coach moet binnen betrouwbare bronnen blijven en eerlijk zijn over wat hij niet weet.',
+    ].join('\n'),
+    feedback: '',
+    next: [
+      '• Na elk nieuw blokje direct testen met "Execute step".',
+      '• Instellingen stap voor stap controleren (expressie i.p.v. vaste datum).',
+      '• Geen vensters sluiten voordat ik weet wat ze doen.',
+    ].join('\n'),
+  },
+}
+
 /** Onderzoekspagina, gebaseerd op de research story van sprint 1. */
 export const researchContent: Research = {
   title: 'AI in sportmarketing',
@@ -389,7 +503,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 13,
+  version: 14,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',
@@ -516,7 +630,15 @@ export const sampleData: PortfolioData = {
       userStories: [...sprint2Planning, youngOnesStory].map((u) => ({ ...structuredClone(u), done: true })),
       evidence: [],
     },
-    plannedSprint(3, 'Nog te plannen', '28 sep – 9 okt 2026', ''),
+    {
+      id: 'sprint-3',
+      number: 3,
+      period: '28 sep – 9 okt 2026',
+      status: 'Afgerond',
+      ...sprint3Content,
+      userStories: structuredClone(sprint3Planning),
+      evidence: [],
+    },
     plannedSprint(4, 'Nog te plannen', '12 – 30 okt 2026', ''),
     plannedSprint(5, 'Nog te plannen', '2 – 13 nov 2026', ''),
     plannedSprint(6, 'Nog te plannen', '16 – 27 nov 2026', ''),

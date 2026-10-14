@@ -6,6 +6,8 @@ import {
   sprint1Planning,
   sprint2Content,
   sprint2Planning,
+  sprint3Content,
+  sprint3Planning,
   storyLearned,
   supabasePrompt,
   youngOnesRoadmapItem,
@@ -14,7 +16,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 13
+export const DATA_VERSION = 14
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -215,6 +217,17 @@ export function migrate(data: PortfolioData): PortfolioData {
       if (oldTitles.includes(lo.title)) Object.assign(next, { title: official.title, description: official.description })
       return next
     })
+  }
+
+  if (oldVersion < 14) {
+    // v14: sprint 3 volgens het sprintformulier, alleen als die nog leeg ("Nog te plannen") is.
+    const s3 = d.sprints.find((s) => s.number === 3)
+    const untouched = s3 && s3.title === 'Nog te plannen' && s3.userStories.every((u) => u.id === 's3-us1')
+    if (s3 && untouched) {
+      Object.assign(s3, structuredClone(sprint3Content))
+      s3.status = 'Afgerond'
+      s3.userStories = structuredClone(sprint3Planning)
+    }
   }
 
   d.version = DATA_VERSION
