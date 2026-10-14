@@ -41,7 +41,7 @@ function explain(message: string): string {
     return 'De Supabase-sleutel klopt niet. Controleer VITE_SUPABASE_ANON_KEY.'
   }
   if (/Failed to fetch|NetworkError/i.test(message)) {
-    return 'Geen verbinding met Supabase. Controleer je internet.'
+    return 'Geen verbinding met Supabase. Is je internet in orde? Dan is je gratis Supabase-project waarschijnlijk gepauzeerd: ga naar supabase.com → je project → Restore project.'
   }
   return message
 }
