@@ -344,6 +344,9 @@ export const sprint1Content = {
 /** Bewijslink van de AI-hardloopcoach TargetCoach. */
 export const targetCoachLink = { id: 's3-ls1-l1', label: 'TargetCoach – AI-hardloopcoach', url: 'https://claude.ai/artifact/Le83Bhi3CEXvhKmArKWL1z' }
 
+/** n8n-workflow van de AI-nieuwsbrief; werkt alleen op de eigen laptop zolang n8n draait. */
+export const n8nWorkflowLink = { id: 's3-us1-l1', label: 'n8n-workflow AI-nieuwsbrief (opent alleen op mijn laptop als n8n draait)', url: 'http://localhost:5678/workflow/AbC123xyz' }
+
 /** Planning sprint 3, overgenomen uit het sprintformulier. */
 export const sprint3Planning: UserStory[] = [
   {
@@ -383,7 +386,7 @@ export const sprint3Planning: UserStory[] = [
     ],
     learned:
       'Ik heb in n8n een workflow gebouwd die elke week AI-nieuws ophaalt, filtert op de afgelopen 7 dagen, door Gemini laat samenvatten en naar mijn Gmail stuurt. Les: mijn filter stond eerst op een vaste datum in plaats van een expressie, waardoor er geen artikelen overbleven. Elke stap direct testen voorkomt zulke fouten.',
-    evidence: [],
+    evidence: [n8nWorkflowLink],
     done: true,
   },
   {
@@ -506,7 +509,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 15,
+  version: 16,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',

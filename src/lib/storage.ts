@@ -11,13 +11,14 @@ import {
   storyLearned,
   supabasePrompt,
   targetCoachLink,
+  n8nWorkflowLink,
   youngOnesRoadmapItem,
   youngOnesStory,
 } from '../data/sampleData'
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 15
+export const DATA_VERSION = 16
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -235,6 +236,12 @@ export function migrate(data: PortfolioData): PortfolioData {
     // v15: bewijslink van TargetCoach bij de TargetCoach-story van sprint 3.
     const story = d.sprints.find((s) => s.number === 3)?.userStories.find((u) => u.id === 's3-plan-ls1')
     if (story && !story.evidence.some((e) => e.url === targetCoachLink.url)) story.evidence.push({ ...targetCoachLink })
+  }
+
+  if (oldVersion < 16) {
+    // v16: link naar de n8n-workflow bij de nieuwsbrief-story van sprint 3.
+    const story = d.sprints.find((s) => s.number === 3)?.userStories.find((u) => u.id === 's3-plan-us1')
+    if (story && !story.evidence.some((e) => e.url === n8nWorkflowLink.url)) story.evidence.push({ ...n8nWorkflowLink })
   }
 
   d.version = DATA_VERSION
