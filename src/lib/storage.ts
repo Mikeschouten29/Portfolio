@@ -10,13 +10,14 @@ import {
   sprint3Planning,
   storyLearned,
   supabasePrompt,
+  targetCoachLink,
   youngOnesRoadmapItem,
   youngOnesStory,
 } from '../data/sampleData'
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 14
+export const DATA_VERSION = 15
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -228,6 +229,12 @@ export function migrate(data: PortfolioData): PortfolioData {
       s3.status = 'Afgerond'
       s3.userStories = structuredClone(sprint3Planning)
     }
+  }
+
+  if (oldVersion < 15) {
+    // v15: bewijslink van TargetCoach bij de TargetCoach-story van sprint 3.
+    const story = d.sprints.find((s) => s.number === 3)?.userStories.find((u) => u.id === 's3-plan-ls1')
+    if (story && !story.evidence.some((e) => e.url === targetCoachLink.url)) story.evidence.push({ ...targetCoachLink })
   }
 
   d.version = DATA_VERSION

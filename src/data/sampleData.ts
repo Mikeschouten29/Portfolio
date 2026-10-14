@@ -341,6 +341,9 @@ export const sprint1Content = {
   },
 }
 
+/** Bewijslink van de AI-hardloopcoach TargetCoach. */
+export const targetCoachLink = { id: 's3-ls1-l1', label: 'TargetCoach – AI-hardloopcoach', url: 'https://claude.ai/artifact/Le83Bhi3CEXvhKmArKWL1z' }
+
 /** Planning sprint 3, overgenomen uit het sprintformulier. */
 export const sprint3Planning: UserStory[] = [
   {
@@ -360,7 +363,7 @@ export const sprint3Planning: UserStory[] = [
     ],
     learned:
       'Ik heb met Claude een AI-hardloopcoach gebouwd die eerst een gezondheidscheck (PAR-Q+) doet en adviseert op basis van een eigen kennisbank met betrouwbare bronnen. Les: een AI-coach is pas verantwoord als hij binnen zijn bronnen blijft en eerlijk zegt wat hij niet weet.',
-    evidence: [],
+    evidence: [targetCoachLink],
     done: true,
   },
   {
@@ -503,7 +506,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 14,
+  version: 15,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',
