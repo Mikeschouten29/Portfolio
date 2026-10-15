@@ -88,6 +88,8 @@ export interface Research {
   insightsLabel?: string
   riskLevels?: RiskLevelRow[]
   assessment?: AssessmentRow[]
+  /** Afbeelding bij het onderzoek (pad in public/ of volledige URL) */
+  image?: { src: string; alt: string; caption?: string }
 }
 
 export type Priority = 'Hoog' | 'Middel' | 'Laag'

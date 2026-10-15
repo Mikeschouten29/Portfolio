@@ -127,6 +127,17 @@ export function ResearchPage({ param }: { param?: string }) {
         </section>
       </Reveal>
 
+      {r.image?.src && (
+        <Reveal className="mb-6">
+          <figure className="overflow-hidden rounded-2xl border border-line bg-surface/80 p-3 sm:p-4">
+            <a href={r.image.src} target="_blank" rel="noopener noreferrer" aria-label="Afbeelding groot openen (nieuw tabblad)">
+              <img src={r.image.src} alt={r.image.alt} loading="lazy" className="w-full rounded-xl" />
+            </a>
+            {r.image.caption && <figcaption className="mt-3 px-1 text-xs text-muted">{r.image.caption}</figcaption>}
+          </figure>
+        </Reveal>
+      )}
+
       {r.riskLevels && r.riskLevels.length > 0 && (
         <Reveal className="mb-6">
           <Card>
