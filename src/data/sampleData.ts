@@ -480,6 +480,54 @@ export const researchContent: Research = {
   ],
 }
 
+/** Onderzoek 2: verantwoord AI-gebruik in sportmarketing (LU3), voorlopig als concept. */
+export const aiEthicsResearch: Research = {
+  title: 'Verantwoord AI-gebruik in sportmarketing',
+  status: 'Concept',
+  intro:
+    'Uit mijn onderzoek in sprint 1 bleek dat AI in de sportmarketing vooral uitvoerende taken overneemt, en dat fan-data en privacy daarbij een randvoorwaarde zijn. In dit onderzoek toets ik vier veelgebruikte AI-toepassingen aan de Europese AI-verordening (EU 2024/1689) en de AVG.',
+  question:
+    'Welke ethische en juridische risico’s zijn er bij het gebruik van AI in sportmarketing, en hoe kan een sportorganisatie AI verantwoord inzetten volgens de AI-verordening en de AVG?',
+  subQuestions: [
+    'In welke risicocategorie van de AI-verordening vallen veelgebruikte AI-toepassingen in de sportmarketing?',
+    'Welke AVG-regels gelden bij het gebruik van fan-data, biometrische gegevens en gegevens van minderjarige fans?',
+    'Welke aanbevelingen zorgen voor verantwoord AI-gebruik op het gebied van privacy, bias en transparantie?',
+  ],
+  method:
+    'Literatuuronderzoek naar de Europese AI-verordening en de AVG, en een toetsing van vier AI-toepassingen uit de sportmarketing aan beide wetten en aan de ethische thema’s privacy, bias en transparantie.',
+  riskLevels: [
+    { level: 'Onaanvaardbaar risico', article: 'Verboden (art. 5)', example: 'Gokreclame die jonge fans uitbuit', note: 'Misbruik van kwetsbaarheid', tone: 'red' },
+    { level: 'Hoog risico', article: 'Strenge eisen (bijlage III)', example: 'Gezichts- of emotieherkenning', note: 'In het stadion, ook AVG art. 9', tone: 'amber' },
+    { level: 'Beperkt risico', article: 'Transparantie (art. 50)', example: 'Fan-chatbot en AI-spelerscontent', note: 'Melden: dit is AI', tone: 'teal' },
+    { level: 'Minimaal risico', article: 'Geen extra eisen', example: 'Fan-personalisatie, dynamische prijzen', note: 'Wel AVG: profilering', tone: 'gray' },
+  ],
+  assessment: [
+    { application: 'Fan-personalisatie en dynamische prijzen', aiAct: 'Minimaal risico', avg: 'Profilering: grondslag (art. 6), informeren (art. 13), bezwaar (art. 21)', ethics: 'Bias, oneerlijke prijzen voor trouwe fans' },
+    { application: 'Fan-chatbot en AI-content van spelers', aiAct: 'Beperkt risico (art. 50)', avg: 'Toestemming van de speler voor stem en gezicht', ethics: 'Transparantie, authenticiteit' },
+    { application: 'Gezichts- en emotieherkenning in het stadion', aiAct: 'Hoog risico (bijlage III)', avg: 'Biometrische gegevens (art. 9)', ethics: 'Privacy, bias in herkenning' },
+    { application: 'Gokreclame gericht op jonge fans', aiAct: 'Verboden (art. 5)', avg: 'Minderjarigen (art. 8, NL: 16 jaar)', ethics: 'Manipulatie van een kwetsbare groep' },
+  ],
+  results: [
+    'Fan-personalisatie en dynamische ticketprijzen vallen onder minimaal risico, maar zijn wel profilering onder de AVG. De club heeft een grondslag nodig (art. 6), moet fans informeren (art. 13) en fans mogen bezwaar maken tegen direct marketing (art. 21). Ethisch risico: trouwe fans met minder geld kunnen worden uitgesloten.',
+    'Een fan-chatbot en AI-gegenereerde content van spelers vallen onder beperkt risico met een transparantieplicht (art. 50): fans moeten weten dat ze met AI praten en deepfakes moeten herkenbaar zijn. Voor de stem en het gezicht van een speler is toestemming nodig.',
+    'Gezichts- of emotieherkenning in het stadion is hoog risico (bijlage III) met strenge eisen. Biometrische gegevens zijn bijzondere persoonsgegevens (AVG art. 9) en in principe verboden. Grote privacy-impact en risico op bias in de herkenning.',
+    'AI die gokreclame richt op jonge of kwetsbare fans is verboden (art. 5) als de AI de kwetsbaarheid van mensen door leeftijd of sociale situatie uitbuit en daarmee ernstige schade veroorzaakt.',
+  ],
+  insightsLabel: 'Aanbevelingen',
+  insights: [
+    'Transparantie: meld altijd duidelijk wanneer fans met AI praten of AI-content zien.',
+    'Privacy by design: verzamel alleen fan-data die echt nodig is, en laat fans zelf kiezen of ze gepersonaliseerde aanbiedingen willen (AVG art. 25).',
+    'Geen biometrie zonder noodzaak: gebruik geen gezichts- of emotieherkenning voor marketing. Is het toch nodig, doe dan eerst een DPIA (AVG art. 35).',
+    'Bias controleren: test of AI-modellen bepaalde groepen fans niet benadelen, bijvoorbeeld bij prijzen of aanbiedingen.',
+    'Bescherm jonge fans: geen gerichte AI-marketing voor gokken of andere risicovolle producten richting minderjarigen.',
+  ],
+  sources: [
+    { id: 'src-ai-act', title: 'Verordening (EU) 2024/1689 (AI-verordening)', author: 'Europese Unie', year: '2024', url: 'https://eur-lex.europa.eu/eli/reg/2024/1689/oj' },
+    { id: 'src-avg', title: 'Verordening (EU) 2016/679 (Algemene verordening gegevensbescherming)', author: 'Europese Unie', year: '2016', url: 'https://eur-lex.europa.eu/eli/reg/2016/679/oj' },
+    { id: 'src-ap', title: 'Informatie over AI, algoritmes en privacy', author: 'Autoriteit Persoonsgegevens', year: 'z.d.', url: 'https://www.autoriteitpersoonsgegevens.nl/' },
+  ],
+}
+
 /** Vervangt het verzonnen voorbeeldproject op de roadmap. */
 export const youngOnesRoadmapItem = {
   id: 'r3',
@@ -509,7 +557,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 16,
+  version: 17,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',
@@ -587,6 +635,7 @@ export const sampleData: PortfolioData = {
     },
   ],
   research: structuredClone(researchContent),
+  extraResearch: [structuredClone(aiEthicsResearch)],
   roadmap: [
     {
       id: 'r1',

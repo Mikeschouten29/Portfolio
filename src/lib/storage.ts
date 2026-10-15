@@ -1,4 +1,5 @@
 import {
+  aiEthicsResearch,
   minorLearningOutcomes,
   researchContent,
   sampleData,
@@ -18,7 +19,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 16
+export const DATA_VERSION = 17
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -39,6 +40,8 @@ export function isPortfolioData(value: unknown): value is PortfolioData {
 export function migrate(data: PortfolioData): PortfolioData {
   const d = structuredClone(data) as PortfolioData & { showGrow?: unknown }
   const oldVersion = d.version ?? 1
+
+  d.extraResearch ??= []
 
   for (const sprint of d.sprints) {
     sprint.nextSteps ??= ''
@@ -242,6 +245,11 @@ export function migrate(data: PortfolioData): PortfolioData {
     // v16: link naar de n8n-workflow bij de nieuwsbrief-story van sprint 3.
     const story = d.sprints.find((s) => s.number === 3)?.userStories.find((u) => u.id === 's3-plan-us1')
     if (story && !story.evidence.some((e) => e.url === n8nWorkflowLink.url)) story.evidence.push({ ...n8nWorkflowLink })
+  }
+
+  if (oldVersion < 17 && !d.extraResearch.some((r) => r.title === aiEthicsResearch.title)) {
+    // v17: Onderzoek 2 (verantwoord AI-gebruik in sportmarketing) als concept op de onderzoekspagina.
+    d.extraResearch.push(structuredClone(aiEthicsResearch))
   }
 
   d.version = DATA_VERSION

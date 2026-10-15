@@ -55,6 +55,23 @@ export interface Source {
   url: string
 }
 
+/** Eén regel in een risicofiguur (bijv. de risiconiveaus van de AI-verordening). */
+export interface RiskLevelRow {
+  level: string
+  article: string
+  example: string
+  note: string
+  tone: 'red' | 'amber' | 'teal' | 'gray'
+}
+
+/** Eén regel in een toetsingstabel. */
+export interface AssessmentRow {
+  application: string
+  aiAct: string
+  avg: string
+  ethics: string
+}
+
 export interface Research {
   title: string
   question: string
@@ -63,6 +80,14 @@ export interface Research {
   sources: Source[]
   results: string[]
   insights: string[]
+  /** Korte aanleiding boven de hoofdvraag */
+  intro?: string
+  /** Label zoals "Concept" */
+  status?: string
+  /** Kopje boven de inzichten (standaard "Inzichten") */
+  insightsLabel?: string
+  riskLevels?: RiskLevelRow[]
+  assessment?: AssessmentRow[]
 }
 
 export type Priority = 'Hoog' | 'Middel' | 'Laag'
@@ -145,6 +170,8 @@ export interface PortfolioData {
   learningOutcomes: LearningOutcome[]
   prompts: Prompt[]
   research: Research
+  /** Extra onderzoeken (Onderzoek 2, 3, …) */
+  extraResearch: Research[]
   roadmap: RoadmapItem[]
   sprints: Sprint[]
 }

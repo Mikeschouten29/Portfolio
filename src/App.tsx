@@ -22,7 +22,7 @@ function Page({ route }: { route: Route }) {
     case 'show-grow':
       return <ShowGrowPage param={route.param} />
     case 'onderzoek':
-      return <ResearchPage />
+      return <ResearchPage param={route.param} />
     case 'roadmap':
       return <RoadmapPage />
     case 'sprints':
@@ -45,7 +45,7 @@ export default function App() {
   useEffect(() => {
     if (!(route.page === 'prompts' && route.param)) window.scrollTo({ top: 0 })
     const label = NAV_ITEMS.find((i) => i.id === route.page)?.label ?? 'Home'
-    const suffix = (route.page === 'sprints' || route.page === 'show-grow') && route.param ? ` ${route.param}` : ''
+    const suffix = (route.page === 'sprints' || route.page === 'show-grow' || route.page === 'onderzoek') && route.param ? ` ${route.param}` : ''
     document.title = route.page === 'home' ? `${data.profile.name} | Portfolio` : `${label}${suffix} | ${data.profile.name}`
   }, [route.page, route.param, data.profile.name])
 
