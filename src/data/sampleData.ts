@@ -480,50 +480,79 @@ export const researchContent: Research = {
   ],
 }
 
-/** Onderzoek 2: verantwoord AI-gebruik in sportmarketing (LU3), voorlopig als concept. */
+/** Onderzoek 2: verantwoord AI-gebruik in de sport (LU3), voorlopig als concept. */
 export const aiEthicsResearch: Research = {
-  title: 'Verantwoord AI-gebruik in sportmarketing',
+  title: 'Verantwoord AI-gebruik in de sport',
   status: 'Concept',
   intro:
-    'Uit mijn onderzoek in sprint 1 bleek dat AI in de sportmarketing vooral uitvoerende taken overneemt, en dat fan-data en privacy daarbij een randvoorwaarde zijn. In dit onderzoek toets ik vier veelgebruikte AI-toepassingen aan de Europese AI-verordening (EU 2024/1689) en de AVG.',
+    'AI wordt in steeds meer werkvelden van de sport gebruikt: door trainers, scouts, sportartsen, marketeers en organisatoren van evenementen. Uit mijn onderzoek in sprint 1 bleek al dat privacy daarbij een randvoorwaarde is. In dit onderzoek toets ik per werkveld een veelgebruikte AI-toepassing aan de Europese AI-verordening (EU 2024/1689) en de AVG, en kijk ik naar de ethische thema’s privacy, bias en transparantie.',
   question:
-    'Welke ethische en juridische risico’s zijn er bij het gebruik van AI in sportmarketing, en hoe kan een sportorganisatie AI verantwoord inzetten volgens de AI-verordening en de AVG?',
+    'Welke ethische en juridische risico’s brengt AI met zich mee in verschillende werkvelden van de sport, en hoe kunnen sportprofessionals AI verantwoord inzetten volgens de AI-verordening en de AVG?',
   subQuestions: [
-    'In welke risicocategorie van de AI-verordening vallen veelgebruikte AI-toepassingen in de sportmarketing?',
-    'Welke AVG-regels gelden bij het gebruik van fan-data, biometrische gegevens en gegevens van minderjarige fans?',
-    'Welke aanbevelingen zorgen voor verantwoord AI-gebruik op het gebied van privacy, bias en transparantie?',
+    'Welke AI-toepassingen worden gebruikt in prestatiesport, talentontwikkeling, sportgezondheid, sportmarketing en sportevenementen?',
+    'In welke risicocategorie van de AI-verordening vallen deze toepassingen, en welke AVG-regels gelden voor de gegevens van sporters, fans en bezoekers?',
+    'Welke aanbevelingen zorgen voor verantwoord AI-gebruik in de sport op het gebied van privacy, bias en transparantie?',
   ],
   method:
-    'Literatuuronderzoek naar de Europese AI-verordening en de AVG, en een toetsing van vier AI-toepassingen uit de sportmarketing aan beide wetten en aan de ethische thema’s privacy, bias en transparantie.',
+    'Literatuuronderzoek naar de Europese AI-verordening, de AVG en de Nederlandse Uitvoeringswet AVG. Daarna een toetsing van vijf AI-toepassingen uit vijf werkvelden van de sport aan beide wetten en aan de ethische thema’s privacy, bias en transparantie.',
   riskLevels: [
-    { level: 'Onaanvaardbaar risico', article: 'Verboden (art. 5)', example: 'Gokreclame die jonge fans uitbuit', note: 'Misbruik van kwetsbaarheid', tone: 'red' },
-    { level: 'Hoog risico', article: 'Strenge eisen (bijlage III)', example: 'Gezichts- of emotieherkenning', note: 'In het stadion, ook AVG art. 9', tone: 'amber' },
-    { level: 'Beperkt risico', article: 'Transparantie (art. 50)', example: 'Fan-chatbot en AI-spelerscontent', note: 'Melden: dit is AI', tone: 'teal' },
-    { level: 'Minimaal risico', article: 'Geen extra eisen', example: 'Fan-personalisatie, dynamische prijzen', note: 'Wel AVG: profilering', tone: 'gray' },
+    { level: 'Onaanvaardbaar risico', article: 'Verboden (art. 5)', example: 'AI die jonge sporters of fans manipuleert', note: 'Bijv. gerichte gokreclame', tone: 'red' },
+    { level: 'Hoog risico', article: 'Strenge eisen (bijlage I en III)', example: 'Spelersbeoordeling, gezichtsherkenning, medische AI', note: 'Werk, biometrie, medisch hulpmiddel', tone: 'amber' },
+    { level: 'Beperkt risico', article: 'Transparantie (art. 50)', example: 'Sportchatbots en AI-content', note: 'Melden: dit is AI', tone: 'teal' },
+    { level: 'Minimaal risico', article: 'Geen extra eisen', example: 'Trainingsplanning, fan-personalisatie', note: 'Wel AVG bij persoonsgegevens', tone: 'gray' },
   ],
   assessment: [
-    { application: 'Fan-personalisatie en dynamische prijzen', aiAct: 'Minimaal risico', avg: 'Profilering: grondslag (art. 6), informeren (art. 13), bezwaar (art. 21)', ethics: 'Bias, oneerlijke prijzen voor trouwe fans' },
-    { application: 'Fan-chatbot en AI-content van spelers', aiAct: 'Beperkt risico (art. 50)', avg: 'Toestemming van de speler voor stem en gezicht', ethics: 'Transparantie, authenticiteit' },
-    { application: 'Gezichts- en emotieherkenning in het stadion', aiAct: 'Hoog risico (bijlage III)', avg: 'Biometrische gegevens (art. 9)', ethics: 'Privacy, bias in herkenning' },
-    { application: 'Gokreclame gericht op jonge fans', aiAct: 'Verboden (art. 5)', avg: 'Minderjarigen (art. 8, NL: 16 jaar)', ethics: 'Manipulatie van een kwetsbare groep' },
+    {
+      application: 'Prestatiesport en coaching: blessurevoorspelling met wearables',
+      aiAct: 'Minimaal risico; hoog risico (bijlage III-4) als het meeweegt in beoordeling of contract van spelers in loondienst',
+      avg: 'Hartslag en blessuredata zijn gezondheidsgegevens (art. 9); toestemming van een werknemer is zelden vrij',
+      ethics: 'Privacy, gevoel van controle, autonomie van de sporter',
+    },
+    {
+      application: 'Talentontwikkeling: AI-selectie van jeugdspelers',
+      aiAct: 'Minimaal risico, tenzij het gaat om toelating tot een opleiding (bijlage III-3)',
+      avg: 'Gegevens van kinderen (art. 8); recht op menselijke beoordeling bij een geautomatiseerd besluit (art. 22)',
+      ethics: 'Bias: het relatieve-leeftijdseffect wordt overgenomen uit oude selecties',
+    },
+    {
+      application: 'Sportgezondheid: AI-app die blessures beoordeelt',
+      aiAct: 'Hoog risico als de app een medisch hulpmiddel is (bijlage I, MDR)',
+      avg: 'Gezondheidsgegevens (art. 9): uitdrukkelijke toestemming nodig',
+      ethics: 'Veiligheid, verantwoordelijkheid bij een fout advies',
+    },
+    {
+      application: 'Sportmarketing: fan-personalisatie, chatbots en gokreclame',
+      aiAct: 'Minimaal tot beperkt (art. 50); verboden als kwetsbare fans worden uitgebuit (art. 5)',
+      avg: 'Profilering: grondslag (art. 6), informeren (art. 13), bezwaar (art. 21), minderjarigen (art. 8)',
+      ethics: 'Transparantie, manipulatie, oneerlijke prijzen',
+    },
+    {
+      application: 'Sportevenementen: gezichtsherkenning bij de stadioningang',
+      aiAct: 'Hoog risico (bijlage III-1); realtime identificatie door de politie in het openbaar is in principe verboden (art. 5)',
+      avg: 'Biometrische gegevens (art. 9); in Nederland alleen als het noodzakelijk is voor authenticatie of beveiliging (UAVG art. 29)',
+      ethics: 'Privacy van alle bezoekers, bias in herkenning',
+    },
   ],
   results: [
-    'Fan-personalisatie en dynamische ticketprijzen vallen onder minimaal risico, maar zijn wel profilering onder de AVG. De club heeft een grondslag nodig (art. 6), moet fans informeren (art. 13) en fans mogen bezwaar maken tegen direct marketing (art. 21). Ethisch risico: trouwe fans met minder geld kunnen worden uitgesloten.',
-    'Een fan-chatbot en AI-gegenereerde content van spelers vallen onder beperkt risico met een transparantieplicht (art. 50): fans moeten weten dat ze met AI praten en deepfakes moeten herkenbaar zijn. Voor de stem en het gezicht van een speler is toestemming nodig.',
-    'Gezichts- of emotieherkenning in het stadion is hoog risico (bijlage III) met strenge eisen. Biometrische gegevens zijn bijzondere persoonsgegevens (AVG art. 9) en in principe verboden. Grote privacy-impact en risico op bias in de herkenning.',
-    'AI die gokreclame richt op jonge of kwetsbare fans is verboden (art. 5) als de AI de kwetsbaarheid van mensen door leeftijd of sociale situatie uitbuit en daarmee ernstige schade veroorzaakt.',
+    'Prestatiesport en coaching: clubs voorspellen met AI en wearables (GPS, hartslag) de belasting en het blessurerisico van spelers. Volgens de AI-verordening is dat meestal minimaal risico, maar zodra de uitkomst meeweegt in de beoordeling, selectie of het contract van spelers in loondienst, valt het onder hoog risico (bijlage III, werkgelegenheid). Hartslag- en blessuredata zijn gezondheidsgegevens (AVG art. 9). Omdat een speler afhankelijk is van de club, is zijn toestemming zelden echt vrij. Ethisch risico: de sporter voelt zich voortdurend gecontroleerd en verliest zeggenschap over zijn eigen lichaam en data.',
+    'Talentontwikkeling: academies gebruiken AI om jeugdspelers te scouten en te selecteren. Het gaat om gegevens van kinderen (AVG art. 8), en een speler die door een geautomatiseerd besluit wordt afgewezen, heeft recht op een menselijke beoordeling (art. 22). Het grootste ethische risico is bias: AI leert van oude selecties, waarin kinderen die vroeg in het jaar zijn geboren oververtegenwoordigd zijn (het relatieve-leeftijdseffect). Zo versterkt AI een bestaande oneerlijkheid.',
+    'Sportgezondheid: apps en sportartsen gebruiken AI om blessures te beoordelen of herstelplannen te maken. Heeft de app een medisch doel, dan is het een medisch hulpmiddel en valt hij onder hoog risico (bijlage I, MDR). De gegevens zijn altijd gezondheidsgegevens, waarvoor uitdrukkelijke toestemming nodig is (art. 9). Ethisch risico: een fout advies kan een blessure verergeren, en het is onduidelijk wie dan verantwoordelijk is: de app, de maker of de sportprofessional.',
+    'Sportmarketing: clubs personaliseren aanbiedingen en prijzen, zetten chatbots in en maken AI-content van spelers. Dat is minimaal of beperkt risico, met een transparantieplicht voor chatbots en deepfakes (art. 50). AI die jonge of kwetsbare fans uitbuit, bijvoorbeeld met gerichte gokreclame, is verboden (art. 5). Onder de AVG is personalisatie profilering, met een plicht tot informeren en een recht op bezwaar. Ethisch risico: manipulatie en oneerlijke prijzen voor trouwe fans.',
+    'Sportevenementen: organisatoren willen gezichtsherkenning gebruiken om stadionverboden te handhaven. Biometrische identificatie is hoog risico (bijlage III), en realtime identificatie door de politie in de openbare ruimte is in principe verboden (art. 5). Biometrische gegevens zijn bijzondere persoonsgegevens; in Nederland mag dit alleen als het noodzakelijk is voor authenticatie of beveiliging (UAVG art. 29). Ethisch risico: álle bezoekers worden gescand, ook wie niets misdaan heeft, en herkenning werkt minder goed bij sommige groepen.',
   ],
   insightsLabel: 'Aanbevelingen',
   insights: [
-    'Transparantie: meld altijd duidelijk wanneer fans met AI praten of AI-content zien.',
-    'Privacy by design: verzamel alleen fan-data die echt nodig is, en laat fans zelf kiezen of ze gepersonaliseerde aanbiedingen willen (AVG art. 25).',
-    'Geen biometrie zonder noodzaak: gebruik geen gezichts- of emotieherkenning voor marketing. Is het toch nodig, doe dan eerst een DPIA (AVG art. 35).',
-    'Bias controleren: test of AI-modellen bepaalde groepen fans niet benadelen, bijvoorbeeld bij prijzen of aanbiedingen.',
-    'Bescherm jonge fans: geen gerichte AI-marketing voor gokken of andere risicovolle producten richting minderjarigen.',
+    'De mens beslist: gebruik AI als advies, maar laat beslissingen over selectie, contracten of gezondheid altijd door een trainer, scout of arts nemen (AVG art. 22).',
+    'Gezondheids- en biometrische gegevens minimaliseren: verzamel alleen wat echt nodig is, vraag uitdrukkelijke toestemming en doe vooraf een DPIA (AVG art. 9 en 35).',
+    'Bias controleren: test of AI bepaalde groepen benadeelt, zoals jonge spelers die laat in het jaar zijn geboren, of bezoekers met een donkere huidskleur bij gezichtsherkenning.',
+    'Transparantie: vertel sporters, fans en bezoekers wanneer AI wordt gebruikt en waarvoor, en maak AI-content herkenbaar (art. 50).',
+    'Bescherm minderjarigen: extra zorgvuldigheid bij jeugdspelers en jonge fans, en geen gerichte AI-marketing voor risicovolle producten (art. 5 en AVG art. 8).',
+    'Check of het medisch is: bepaal vooraf of een AI-toepassing een medisch doel heeft; dan gelden de strengere regels voor medische hulpmiddelen.',
   ],
   sources: [
     { id: 'src-ai-act', title: 'Verordening (EU) 2024/1689 (AI-verordening)', author: 'Europese Unie', year: '2024', url: 'https://eur-lex.europa.eu/eli/reg/2024/1689/oj' },
     { id: 'src-avg', title: 'Verordening (EU) 2016/679 (Algemene verordening gegevensbescherming)', author: 'Europese Unie', year: '2016', url: 'https://eur-lex.europa.eu/eli/reg/2016/679/oj' },
+    { id: 'src-uavg', title: 'Uitvoeringswet Algemene verordening gegevensbescherming (o.a. art. 29, biometrie)', author: 'Overheid.nl', year: '2018', url: 'https://wetten.overheid.nl/BWBR0040940/' },
     { id: 'src-ap', title: 'Informatie over AI, algoritmes en privacy', author: 'Autoriteit Persoonsgegevens', year: 'z.d.', url: 'https://www.autoriteitpersoonsgegevens.nl/' },
   ],
 }
@@ -557,7 +586,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 17,
+  version: 18,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',

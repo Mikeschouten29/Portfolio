@@ -19,7 +19,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 17
+export const DATA_VERSION = 18
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -247,9 +247,15 @@ export function migrate(data: PortfolioData): PortfolioData {
     if (story && !story.evidence.some((e) => e.url === n8nWorkflowLink.url)) story.evidence.push({ ...n8nWorkflowLink })
   }
 
-  if (oldVersion < 17 && !d.extraResearch.some((r) => r.title === aiEthicsResearch.title)) {
+  if (oldVersion < 17 && !d.extraResearch.some((r) => r.title === aiEthicsResearch.title || r.title === 'Verantwoord AI-gebruik in sportmarketing')) {
     // v17: Onderzoek 2 (verantwoord AI-gebruik in sportmarketing) als concept op de onderzoekspagina.
     d.extraResearch.push(structuredClone(aiEthicsResearch))
+  }
+
+  if (oldVersion < 18) {
+    // v18: Onderzoek 2 verbreed van sportmarketing naar de sport in het algemeen (vijf werkvelden).
+    const i = d.extraResearch.findIndex((r) => r.title === 'Verantwoord AI-gebruik in sportmarketing' && r.status === 'Concept')
+    if (i >= 0) d.extraResearch[i] = structuredClone(aiEthicsResearch)
   }
 
   d.version = DATA_VERSION
