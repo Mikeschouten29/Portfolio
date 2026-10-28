@@ -21,7 +21,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 23
+export const DATA_VERSION = 24
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -293,6 +293,17 @@ export function migrate(data: PortfolioData): PortfolioData {
     // v23: kort hulpzinnetje onder elke dia van de visuele presentatie.
     const r = d.extraResearch.find((x) => x.title === aiEthicsResearch.title)
     if (r?.visual && !r.visual.captions) r.visual.captions = structuredClone(researchVisual.captions)
+  }
+
+  if (oldVersion < 24) {
+    // v24: spiekbriefje weg, iets langere uitleg onder elke dia.
+    const r = d.extraResearch.find((x) => x.title === aiEthicsResearch.title)
+    if (r?.visual) {
+      delete (r.visual as { notes?: unknown }).notes
+      if (!r.visual.captions || r.visual.captions.vraag?.startsWith('AI zit overal in de sport.')) {
+        r.visual.captions = structuredClone(researchVisual.captions)
+      }
+    }
   }
 
   d.version = DATA_VERSION

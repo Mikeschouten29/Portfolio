@@ -690,19 +690,19 @@ export const aiEthicsResearch: Research = {
 /** Korte labels per toetsingsstap, voor de visuele versie. */
 export const caseStepLabels = ['AI-systeem', 'Verboden?', 'Hoog risico', 'Informatie', 'Gevoelige data', 'Grondslag', 'DPIA', 'Data beperkt', 'Bezwaar']
 
-/** Visuele presentatie van Onderzoek 2: weinig tekst, met spiekbriefje om het zelf uit te leggen. */
+/** Visuele presentatie van Onderzoek 2: weinig tekst, met een korte uitleg onder elke dia. */
 export const researchVisual: ResearchVisual = {
   oneLiner: 'AI in de sport kan, als de mens beslist.',
   captions: {
-    vraag: 'AI zit overal in de sport. Ik onderzoek wanneer dat eerlijk en veilig is.',
-    wetten: 'Twee Europese wetten bepalen wat mag: één voor AI, één voor persoonsgegevens.',
-    risico: 'Hoe groter het risico voor mensen, hoe strenger de regels.',
-    werkvelden: 'In elk werkveld speelt een ander ethisch probleem.',
-    casus: 'Brøndby IF herkent supporters met een stadionverbod, maar er kijkt geen mens mee.',
-    toets: 'Negen vragen uit de wet: zeven in orde, twee aandachtspunten.',
-    afweging: 'Veiligheid en privacy botsen. In Nederland zijn de regels strenger.',
-    advies: 'Vier regels maken AI in de sport verantwoord.',
-    conclusie: 'AI is een hulpmiddel. De beslissing blijft bij de mens.',
+    vraag: 'AI wordt in de hele sport gebruikt: bij training, talentselectie, blessures, marketing en evenementen. Ik onderzoek wanneer dat eerlijk en veilig is, met de focus op privacy, bias en transparantie.',
+    wetten: 'De AI-verordening deelt AI in op hoe riskant die is voor mensen. De AVG beschermt persoonsgegevens, met extra strenge regels voor gezondheid en gezichten.',
+    risico: 'Hoe groter het risico voor mensen, hoe strenger de regels. De verboden gelden al sinds februari 2025, de regels voor hoog risico vanaf 2 december 2027.',
+    werkvelden: 'In elk werkveld speelt een ander ethisch probleem. Bij talentselectie kan AI oude oneerlijkheid overnemen, en bij evenementen wordt iedereen gescand, ook wie niets fout deed.',
+    casus: 'Sinds 2019 scant Brøndby IF gezichten bij de ingang om mensen met een stadionverbod tegen te houden. De Deense toezichthouder gaf toestemming, maar er kijkt geen mens mee voordat iemand wordt geweigerd.',
+    toets: 'Ik heb het systeem getoetst met negen vragen uit de AI-verordening en de AVG. Zeven zijn in orde, de twee aandachtspunten zijn menselijke controle en een bezwaarprocedure.',
+    afweging: 'De veiligheid van iedereen staat tegenover de privacy van iedereen. In Denemarken mag het onder voorwaarden, in Nederland waarschijnlijk niet: biometrie mag hier alleen als het echt nodig is.',
+    advies: 'Een mens neemt de beslissing, je verzamelt alleen wat nodig is, je vertelt dat je AI gebruikt en je test of het voor iedereen eerlijk werkt.',
+    conclusie: 'AI is in de sport een hulpmiddel, geen beslisser. Met deze vier regels kan het verantwoord, maar de mens blijft verantwoordelijk.',
   },
   werkvelden: [
     { name: 'Prestatiesport', icon: 'activity', keyword: 'Privacy sporter', risk: 'amber' },
@@ -717,17 +717,7 @@ export const researchVisual: ResearchVisual = {
     { icon: 'eye', text: 'Vertel dat het AI is' },
     { icon: 'scale', text: 'Test op eerlijkheid' },
   ],
-  notes: {
-    vraag: ['AI wordt in de hele sport gebruikt', 'Mijn vraag: wanneer is dat eerlijk en veilig?', 'Drie thema’s: privacy, bias, transparantie'],
-    wetten: ['AI-verordening: deelt AI in op risico', 'AVG: privacywet, extra streng voor gezondheid en gezicht'],
-    risico: ['Hoe hoger het risico, hoe strenger de regels', 'Regels voor hoog risico gelden vanaf 2 december 2027'],
-    werkvelden: ['Talent: AI neemt oneerlijkheid over (geboortemaand)', 'Prestatiesport: een speler kan geen nee zeggen', 'Evenementen: iedereen wordt gescand'],
-    casus: ['Deense club, sinds 2019', 'Doel: mensen met een stadionverbod tegenhouden', 'Er kijkt geen mens mee: dat moet wel'],
-    toets: ['7 van de 9 in orde', 'Twee gaten: geen menselijke controle en geen bezwaarprocedure'],
-    afweging: ['Veiligheid van iedereen tegenover privacy van iedereen', 'Nederland is strenger: biometrie alleen als het echt nodig is', 'Gezichtsherkenning werkt niet bij iedereen even goed (NIST)'],
-    advies: ['De mens beslist, niet de computer', 'Alleen data die echt nodig is', 'Vertel dat je AI gebruikt', 'Test of het voor iedereen eerlijk werkt'],
-    conclusie: ['AI kan verantwoord zijn, maar alleen met deze vier regels', 'Daarna: mijn eigen mening'],
-  },
+
 }
 
 aiEthicsResearch.visual = researchVisual

@@ -17,7 +17,6 @@ import {
   Maximize,
   Megaphone,
   Minimize,
-  NotebookPen,
   Scale,
   ScanFace,
   Sprout,
@@ -307,13 +306,11 @@ function buildSlides(r: Research): Slide[] {
   return slides
 }
 
-/** Visuele presentatie van een onderzoek: weinig tekst, veel beeld, met spiekbriefje. */
+/** Visuele presentatie van een onderzoek: weinig tekst, veel beeld, met een korte uitleg onder elke dia. */
 export function ResearchVisual({ research }: { research: Research }) {
   const slides = buildSlides(research)
-  const notes = research.visual?.notes ?? {}
   const deckId = useId()
   const [[index, direction], setIndex] = useState<[number, number]>([0, 0])
-  const [showNotes, setShowNotes] = useState(false)
   const [fullscreen, setFullscreen] = useState(false)
   const total = slides.length
   const current = Math.min(index, total - 1)
@@ -349,7 +346,6 @@ export function ResearchVisual({ research }: { research: Research }) {
     else void document.getElementById(deckId)?.requestFullscreen()
   }
 
-  const slideNotes = notes[slide.id] ?? []
   const caption = research.visual?.captions?.[slide.id]
 
   return (
@@ -365,15 +361,6 @@ export function ResearchVisual({ research }: { research: Research }) {
           {String(current + 1).padStart(2, '0')} / {String(total).padStart(2, '0')} · {slide.label}
         </p>
         <div className="flex items-center gap-1">
-          <Button
-            size="sm"
-            variant={showNotes ? 'primary' : 'ghost'}
-            icon={NotebookPen}
-            aria-pressed={showNotes}
-            onClick={() => setShowNotes((s) => !s)}
-          >
-            Spiekbriefje
-          </Button>
           <IconButton icon={fullscreen ? Minimize : Maximize} label={fullscreen ? 'Volledig scherm sluiten' : 'Presenteren op volledig scherm'} onClick={toggleFullscreen} />
         </div>
       </div>
@@ -394,31 +381,10 @@ export function ResearchVisual({ research }: { research: Research }) {
       </div>
 
       {caption && (
-        <p className="border-t border-line/50 px-5 py-2.5 text-center text-sm text-muted" aria-live="polite">
+        <p className="mx-auto w-full max-w-3xl border-t border-line/50 px-5 py-3 text-center text-sm leading-relaxed text-muted" aria-live="polite">
           {caption}
         </p>
       )}
-
-      <AnimatePresence initial={false}>
-        {showNotes && slideNotes.length > 0 && (
-          <motion.aside
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-lime/30 bg-lime/[0.06]"
-            aria-label="Spiekbriefje"
-          >
-            <ul className="flex flex-wrap gap-x-6 gap-y-1 px-5 py-3 text-sm text-ink">
-              {slideNotes.map((n) => (
-                <li key={n} className="flex items-center gap-2">
-                  <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-lime" />
-                  {n}
-                </li>
-              ))}
-            </ul>
-          </motion.aside>
-        )}
-      </AnimatePresence>
 
       <div className="flex items-center justify-between gap-3 border-t border-line/70 px-4 py-2.5">
         <Button variant="ghost" icon={ArrowLeft} onClick={() => go(current - 1)} disabled={current === 0}>

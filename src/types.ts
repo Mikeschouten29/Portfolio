@@ -124,10 +124,8 @@ export interface ResearchVisual {
   oneLiner: string
   werkvelden: { name: string; icon: VisualIcon; keyword: string; risk: RiskLevelRow['tone'] }[]
   advice: { icon: VisualIcon; text: string }[]
-  /** Eén kort hulpzinnetje onder elke dia */
+  /** Korte uitleg (twee zinnen) onder elke dia */
   captions?: Record<string, string>
-  /** Spiekbriefje per dia: steekwoorden om het zelf uit te leggen */
-  notes: Record<string, string[]>
 }
 
 export interface Research {
