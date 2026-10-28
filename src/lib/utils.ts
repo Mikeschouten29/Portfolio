@@ -73,3 +73,15 @@ export function pageUrl(path: string): string {
 export function isSafeUrl(url: string): boolean {
   return /^(https?:|mailto:|tel:)/i.test(url.trim())
 }
+
+/** Splitst "Titel: tekst" in titel en tekst, en geeft de eerste zin als teaser. */
+export function splitTitled(text: string): { title: string; teaser: string; rest: string } {
+  const colon = text.indexOf(':')
+  const hasTitle = colon > 0 && colon < 40
+  const title = hasTitle ? text.slice(0, colon).trim() : ''
+  const body = hasTitle ? text.slice(colon + 1).trim() : text.trim()
+  const match = body.match(/^(.+?[.!?])(\s|$)/)
+  const teaser = match ? match[1] : body
+  const rest = match ? body.slice(match[1].length).trim() : ''
+  return { title, teaser, rest }
+}

@@ -22,12 +22,13 @@ import {
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { EditableList, EditableText } from '../components/editable'
+import { Expandable } from '../components/Expandable'
 import { PageHeader, SectionTitle } from '../components/PageHeader'
 import { Badge, Button, Card, IconButton, PriorityBadge, Reveal } from '../components/ui'
 import { href } from '../hooks/useHashRoute'
 import { usePortfolio } from '../hooks/usePortfolio'
-import { cn, isSafeUrl, uid } from '../lib/utils'
-import type { Research, RiskLevelRow, Source, Verdict } from '../types'
+import { cn, isSafeUrl, splitTitled, uid } from '../lib/utils'
+import type { AssessmentRow, Research, RiskLevelRow, Source, Stakeholder, Verdict } from '../types'
 
 const verdictView: Record<Verdict, { label: string; tone: 'lime' | 'flame' | 'danger' | 'data'; icon: LucideIcon }> = {
   ok: { label: 'Voldoet', tone: 'lime', icon: CircleCheck },
@@ -55,6 +56,89 @@ function VerdictSelect({ value, onChange, label }: { value: Verdict; onChange: (
         </option>
       ))}
     </select>
+  )
+}
+
+/** Telt de oordelen, bijv. "6 voldoet · 2 aandachtspunt". */
+function VerdictSummary({ verdicts }: { verdicts: Verdict[] }) {
+  const order: Verdict[] = ['ok', 'warn', 'fail']
+  return (
+    <p className="flex flex-wrap gap-1.5" aria-label="Samenvatting van de oordelen">
+      {order.map((v) => {
+        const count = verdicts.filter((x) => x === v).length
+        if (count === 0) return null
+        const view = verdictView[v]
+        return (
+          <Badge key={v} tone={view.tone}>
+            <view.icon className="size-3" aria-hidden /> {count} × {view.label.toLowerCase()}
+          </Badge>
+        )
+      })}
+    </p>
+  )
+}
+
+const thClass = 'border-b border-line px-3 py-2 font-mono text-[11px] font-medium tracking-wider text-muted uppercase'
+const tdClass = 'border-b border-line/60 px-3 py-3 text-ink/90'
+
+function AssessmentTable({ rows }: { rows: AssessmentRow[] }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[640px] border-separate border-spacing-0 text-sm">
+        <caption className="sr-only">Toetsing van AI-toepassingen aan de AI-verordening, de AVG en ethiek</caption>
+        <thead>
+          <tr className="text-left">
+            {['Toepassing', 'AI-verordening', 'Belangrijkste AVG-punt', 'Grootste ethische risico'].map((h) => (
+              <th key={h} scope="col" className={thClass}>
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.application} className="align-top">
+              <th scope="row" className="border-b border-line/60 px-3 py-3 text-left font-medium text-ink">
+                {row.application}
+              </th>
+              <td className={tdClass}>{row.aiAct}</td>
+              <td className={tdClass}>{row.avg}</td>
+              <td className={tdClass}>{row.ethics}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function StakeholderTable({ rows }: { rows: Stakeholder[] }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[520px] border-separate border-spacing-0 text-sm">
+        <caption className="sr-only">Belanghebbenden met hun belang en hun zorg</caption>
+        <thead>
+          <tr className="text-left">
+            {['Wie', 'Belang', 'Zorg'].map((h) => (
+              <th key={h} scope="col" className={thClass}>
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((s) => (
+            <tr key={s.name} className="align-top">
+              <th scope="row" className="border-b border-line/60 px-3 py-3 text-left font-medium text-ink">
+                {s.name}
+              </th>
+              <td className={tdClass}>{s.interest}</td>
+              <td className={tdClass}>{s.concern}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
@@ -180,33 +264,61 @@ export function ResearchPage({ param }: { param?: string }) {
               <p className="label">Deelvragen</p>
               <EditableList items={r.subQuestions} onChange={set('subQuestions')} label="Deelvraag" variant="numbered" addLabel="Deelvraag toevoegen" />
             </div>
-            <div>
-              <p className="label flex items-center gap-1.5">
-                <FlaskConical className="size-3.5" aria-hidden /> Methode
-              </p>
-              <EditableText value={r.method} onChange={set('method')} label="Methode" multiline className="text-ink/90" />
-            </div>
+            {hasCase ? (
+              <div className="self-start">
+                <Expandable
+                  title="Hoe heb ik dit onderzocht?"
+                  teaser="Literatuuronderzoek en één casus"
+                  forceOpen={editMode}
+                  aside={<FlaskConical className="size-4 text-muted" aria-hidden />}
+                >
+                  <EditableText value={r.method} onChange={set('method')} label="Methode" multiline className="text-sm leading-relaxed text-ink/90" />
+                </Expandable>
+              </div>
+            ) : (
+              <div>
+                <p className="label flex items-center gap-1.5">
+                  <FlaskConical className="size-3.5" aria-hidden /> Methode
+                </p>
+                <EditableText value={r.method} onChange={set('method')} label="Methode" multiline className="text-ink/90" />
+              </div>
+            )}
           </div>
         </section>
       </Reveal>
 
+      {r.tldr && r.tldr.length > 0 && (
+        <Reveal className="mb-6">
+          <section aria-labelledby="kort" className="rounded-2xl border border-line bg-surface/80 p-5 sm:p-6">
+            <p id="kort" className="kicker mb-4">In het kort</p>
+            {editMode ? (
+              <EditableList items={r.tldr} onChange={set('tldr')} label="Kernpunt" addLabel="Kernpunt toevoegen" />
+            ) : (
+              <ol className="grid gap-3 sm:grid-cols-2">
+                {r.tldr.map((point, i) => (
+                  <li key={i} className="flex gap-3 rounded-xl border border-line/70 bg-bg/40 p-4">
+                    <span className="font-display text-2xl leading-none font-extrabold text-lime">{i + 1}</span>
+                    <span className="text-sm text-ink/90">{point}</span>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </section>
+        </Reveal>
+      )}
+
       {r.note && (
         <Reveal className="mb-6">
-          <aside className="flex gap-3 rounded-2xl border border-data/40 bg-data/[0.06] p-4 text-sm sm:p-5" aria-label="Actualiteit">
-            <Info className="mt-0.5 size-5 shrink-0 text-data" aria-hidden />
+          <aside className="flex gap-3 rounded-xl border border-data/40 bg-data/[0.06] px-4 py-3 text-sm" aria-label="Actualiteit">
+            <Info className="mt-0.5 size-4 shrink-0 text-data" aria-hidden />
             <div className="min-w-0 flex-1">
-              <p className="label mb-1">Actualiteit</p>
-              <EditableText value={r.note} onChange={set('note')} label="Actualiteit" multiline rows={3} className="text-ink/90" />
+              <EditableText value={r.note} onChange={set('note')} label="Actualiteit" multiline rows={2} className="text-ink/90" />
             </div>
           </aside>
         </Reveal>
       )}
 
-      {hasCase && (
-        <PartHeading label="Deel 1" title="Vijf werkvelden van de sport">
-          Een breed overzicht: per werkveld een veelgebruikte AI-toepassing, de risicocategorie, de belangrijkste privacyregels en de ethische risico’s.
-        </PartHeading>
-      )}
+      {hasCase && <PartHeading label="Deel 1" title="Vijf werkvelden van de sport" />}
 
       {r.image?.src && (
         <Reveal className="mb-6">
@@ -219,81 +331,82 @@ export function ResearchPage({ param }: { param?: string }) {
         </Reveal>
       )}
 
-      {r.riskLevels && r.riskLevels.length > 0 && (
-        <Reveal className="mb-6">
-          <Card>
-            <SectionTitle icon={Layers}>Risiconiveaus</SectionTitle>
-            <RiskFigure rows={r.riskLevels} />
-          </Card>
-        </Reveal>
-      )}
-
-      {r.assessment && r.assessment.length > 0 && (
-        <Reveal className="mb-6">
-          <Card>
-            <SectionTitle icon={Scale}>Toetsing per werkveld</SectionTitle>
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[640px] border-separate border-spacing-0 text-sm">
-                <caption className="sr-only">Toetsing van AI-toepassingen aan de AI-verordening, de AVG en ethiek</caption>
-                <thead>
-                  <tr className="text-left">
-                    {['Toepassing', 'AI-verordening', 'Belangrijkste AVG-punt', 'Grootste ethische risico'].map((h) => (
-                      <th key={h} scope="col" className="border-b border-line px-3 py-2 font-mono text-[11px] font-medium tracking-wider text-muted uppercase">
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {r.assessment.map((row) => (
-                    <tr key={row.application} className="align-top">
-                      <th scope="row" className="border-b border-line/60 px-3 py-3 text-left font-medium text-ink">
-                        {row.application}
-                      </th>
-                      <td className="border-b border-line/60 px-3 py-3 text-ink/90">{row.aiAct}</td>
-                      <td className="border-b border-line/60 px-3 py-3 text-ink/90">{row.avg}</td>
-                      <td className="border-b border-line/60 px-3 py-3 text-ink/90">{row.ethics}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
-        </Reveal>
-      )}
-
       {hasCase ? (
-        <Reveal>
-          <Card>
-            <SectionTitle icon={ListChecks}>Resultaten per werkveld</SectionTitle>
-            <EditableList items={r.results} onChange={set('results')} label="Resultaat" emptyText="Nog geen resultaten." addLabel="Resultaat toevoegen" />
-          </Card>
-        </Reveal>
+        <>
+          <Reveal className="mb-3">
+            <ul className="grid gap-3 md:grid-cols-2" aria-label="Resultaten per werkveld">
+              {r.results.map((text, i) => {
+                const { title, teaser, rest } = splitTitled(text)
+                return (
+                  <li key={i}>
+                    <Expandable title={title || `Werkveld ${i + 1}`} teaser={teaser} forceOpen={editMode}>
+                      {editMode ? (
+                        <EditableText value={text} onChange={(v) => mutate((t) => void (t.results[i] = v))} label={`Resultaat ${i + 1}`} multiline rows={6} />
+                      ) : (
+                        <p className="text-sm leading-relaxed text-ink/90">{rest || teaser}</p>
+                      )}
+                    </Expandable>
+                  </li>
+                )
+              })}
+            </ul>
+          </Reveal>
+          <Reveal className="mb-6 grid gap-3 md:grid-cols-2">
+            {r.riskLevels && r.riskLevels.length > 0 && (
+              <Expandable title="Uitleg: de vier risiconiveaus" teaser="Wat betekent minimaal, beperkt, hoog en verboden?" aside={<Layers className="size-4 text-muted" aria-hidden />}>
+                <RiskFigure rows={r.riskLevels} />
+              </Expandable>
+            )}
+            {r.assessment && r.assessment.length > 0 && (
+              <Expandable title="Toetsingstabel per werkveld" teaser="AI-verordening, AVG en ethiek naast elkaar" aside={<Scale className="size-4 text-muted" aria-hidden />}>
+                <AssessmentTable rows={r.assessment} />
+              </Expandable>
+            )}
+          </Reveal>
+        </>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-2">
-          <Reveal>
-            <Card className="h-full">
-              <SectionTitle icon={ListChecks}>Resultaten</SectionTitle>
-              <EditableList items={r.results} onChange={set('results')} label="Resultaat" emptyText="Nog geen resultaten." addLabel="Resultaat toevoegen" />
-            </Card>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <Card className="h-full border-data/30">
-              <SectionTitle icon={Lightbulb}>{r.insightsLabel || 'Inzichten'}</SectionTitle>
-              {editMode ? (
-                <EditableList items={r.insights} onChange={set('insights')} label={r.insightsLabel || 'Inzicht'} addLabel="Toevoegen" />
-              ) : (
-                <ul className="space-y-3">
-                  {r.insights.filter(Boolean).map((insight, i) => (
-                    <li key={i} className="rounded-xl border border-data/20 bg-data/[0.06] p-4 text-ink/90">
-                      {insight}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </Card>
-          </Reveal>
-        </div>
+        <>
+          {r.riskLevels && r.riskLevels.length > 0 && (
+            <Reveal className="mb-6">
+              <Card>
+                <SectionTitle icon={Layers}>Risiconiveaus</SectionTitle>
+                <RiskFigure rows={r.riskLevels} />
+              </Card>
+            </Reveal>
+          )}
+          {r.assessment && r.assessment.length > 0 && (
+            <Reveal className="mb-6">
+              <Card>
+                <SectionTitle icon={Scale}>Toetsing</SectionTitle>
+                <AssessmentTable rows={r.assessment} />
+              </Card>
+            </Reveal>
+          )}
+          <div className="grid gap-6 lg:grid-cols-2">
+            <Reveal>
+              <Card className="h-full">
+                <SectionTitle icon={ListChecks}>Resultaten</SectionTitle>
+                <EditableList items={r.results} onChange={set('results')} label="Resultaat" emptyText="Nog geen resultaten." addLabel="Resultaat toevoegen" />
+              </Card>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <Card className="h-full border-data/30">
+                <SectionTitle icon={Lightbulb}>{r.insightsLabel || 'Inzichten'}</SectionTitle>
+                {editMode ? (
+                  <EditableList items={r.insights} onChange={set('insights')} label={r.insightsLabel || 'Inzicht'} addLabel="Toevoegen" />
+                ) : (
+                  <ul className="space-y-3">
+                    {r.insights.filter(Boolean).map((insight, i) => (
+                      <li key={i} className="rounded-xl border border-data/20 bg-data/[0.06] p-4 text-ink/90">
+                        {insight}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </Card>
+            </Reveal>
+          </div>
+        </>
       )}
 
       {r.caseStudy && (
@@ -305,42 +418,40 @@ export function ResearchPage({ param }: { param?: string }) {
           <Reveal className="mb-6">
             <Card>
               <SectionTitle icon={ClipboardList}>De feiten</SectionTitle>
-              <EditableList
-                items={r.caseStudy.facts}
-                onChange={(facts) => mutate((t) => void (t.caseStudy!.facts = facts))}
-                label="Feit"
-                addLabel="Feit toevoegen"
-              />
+              <EditableList items={r.caseStudy.facts} onChange={(facts) => mutate((t) => void (t.caseStudy!.facts = facts))} label="Feit" addLabel="Feit toevoegen" />
             </Card>
           </Reveal>
 
           <Reveal className="mb-6">
             <Card>
-              <SectionTitle icon={Gavel}>Toetsingskader in negen stappen</SectionTitle>
-              <p className="-mt-2 mb-4 text-sm text-muted">Per stap: de vraag, wat ik heb gevonden en mijn oordeel.</p>
-              <ol className="space-y-3">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <SectionTitle icon={Gavel}>Getoetst in negen stappen</SectionTitle>
+                <VerdictSummary verdicts={r.caseStudy.steps.map((s) => s.verdict)} />
+              </div>
+              <ol className="space-y-2">
                 {r.caseStudy.steps.map((step, i) => (
-                  <li key={step.question} className="rounded-xl border border-line bg-bg/40 p-4">
-                    <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
-                      <p className="font-medium text-ink">{step.question}</p>
-                      {editMode ? (
-                        <VerdictSelect
-                          value={step.verdict}
-                          label={`Oordeel stap ${i + 1}`}
-                          onChange={(verdict) => mutate((t) => void (t.caseStudy!.steps[i].verdict = verdict))}
-                        />
-                      ) : (
-                        <VerdictBadge verdict={step.verdict} />
-                      )}
-                    </div>
-                    <EditableText
-                      value={step.finding}
-                      onChange={(v) => mutate((t) => void (t.caseStudy!.steps[i].finding = v))}
-                      label={`Bevinding stap ${i + 1}`}
-                      multiline
-                      rows={3}
-                      className="text-sm text-ink/90"
-                    />
+                  <li key={step.question}>
+                    <Expandable
+                      title={step.question}
+                      teaser={step.short}
+                      forceOpen={editMode}
+                      aside={
+                        editMode ? (
+                          <VerdictSelect value={step.verdict} label={`Oordeel stap ${i + 1}`} onChange={(verdict) => mutate((t) => void (t.caseStudy!.steps[i].verdict = verdict))} />
+                        ) : (
+                          <VerdictBadge verdict={step.verdict} />
+                        )
+                      }
+                    >
+                      <EditableText
+                        value={step.finding}
+                        onChange={(v) => mutate((t) => void (t.caseStudy!.steps[i].finding = v))}
+                        label={`Uitleg stap ${i + 1}`}
+                        multiline
+                        rows={3}
+                        className="text-sm leading-relaxed text-ink/90"
+                      />
+                    </Expandable>
                   </li>
                 ))}
               </ol>
@@ -349,15 +460,15 @@ export function ResearchPage({ param }: { param?: string }) {
 
           <div className="mb-6 grid gap-6 lg:grid-cols-2">
             <Reveal>
-              <Card className="h-full">
-                <SectionTitle icon={Scale}>En in Nederland?</SectionTitle>
-                <EditableText value={r.caseStudy.comparison} onChange={(v) => mutate((t) => void (t.caseStudy!.comparison = v))} label="Vergelijking Nederland" multiline rows={5} className="text-ink/90" />
+              <Card className="h-full border-lime/40">
+                <SectionTitle icon={Target}>Mijn oordeel</SectionTitle>
+                <EditableText value={r.caseStudy.conclusion} onChange={(v) => mutate((t) => void (t.caseStudy!.conclusion = v))} label="Oordeel casus" multiline rows={4} className="text-ink/90" />
               </Card>
             </Reveal>
             <Reveal delay={0.05}>
-              <Card className="h-full border-lime/40">
-                <SectionTitle icon={Target}>Oordeel over de casus</SectionTitle>
-                <EditableText value={r.caseStudy.conclusion} onChange={(v) => mutate((t) => void (t.caseStudy!.conclusion = v))} label="Oordeel casus" multiline rows={6} className="text-ink/90" />
+              <Card className="h-full">
+                <SectionTitle icon={Scale}>En in Nederland?</SectionTitle>
+                <EditableText value={r.caseStudy.comparison} onChange={(v) => mutate((t) => void (t.caseStudy!.comparison = v))} label="Vergelijking Nederland" multiline rows={4} className="text-ink/90" />
               </Card>
             </Reveal>
           </div>
@@ -367,114 +478,97 @@ export function ResearchPage({ param }: { param?: string }) {
       {r.ethics && r.ethics.length > 0 && (
         <Reveal className="mb-6">
           <Card>
-            <SectionTitle icon={Scale}>Ethische afweging</SectionTitle>
-            {r.ethicsFramework && <p className="-mt-2 mb-4 text-sm text-muted">{r.ethicsFramework}</p>}
-            <ul className="grid gap-3 md:grid-cols-2">
-              {r.ethics.map((row, i) => (
-                <li key={row.requirement} className="rounded-xl border border-line bg-bg/40 p-4">
-                  <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
-                    <p className="font-medium text-ink">{row.requirement}</p>
-                    {editMode ? (
-                      <VerdictSelect value={row.verdict} label={`Oordeel ${row.requirement}`} onChange={(verdict) => mutate((t) => void (t.ethics![i].verdict = verdict))} />
-                    ) : (
-                      <VerdictBadge verdict={row.verdict} />
-                    )}
-                  </div>
-                  <EditableText
-                    value={row.assessment}
-                    onChange={(v) => mutate((t) => void (t.ethics![i].assessment = v))}
-                    label={`Beoordeling ${row.requirement}`}
-                    multiline
-                    rows={3}
-                    className="text-sm text-ink/90"
-                  />
-                </li>
-              ))}
-            </ul>
-          </Card>
-        </Reveal>
-      )}
-
-      {r.stakeholders && r.stakeholders.length > 0 && (
-        <Reveal className="mb-6">
-          <Card>
-            <SectionTitle icon={Users}>Wie heeft er belang bij?</SectionTitle>
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[560px] border-separate border-spacing-0 text-sm">
-                <caption className="sr-only">Belanghebbenden met hun belang en hun zorg</caption>
-                <thead>
-                  <tr className="text-left">
-                    {['Belanghebbende', 'Belang', 'Zorg'].map((h) => (
-                      <th key={h} scope="col" className="border-b border-line px-3 py-2 font-mono text-[11px] font-medium tracking-wider text-muted uppercase">
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {r.stakeholders.map((s) => (
-                    <tr key={s.name} className="align-top">
-                      <th scope="row" className="border-b border-line/60 px-3 py-3 text-left font-medium text-ink">
-                        {s.name}
-                      </th>
-                      <td className="border-b border-line/60 px-3 py-3 text-ink/90">{s.interest}</td>
-                      <td className="border-b border-line/60 px-3 py-3 text-ink/90">{s.concern}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
+              <SectionTitle icon={Scale}>Ethische afweging</SectionTitle>
+              <VerdictSummary verdicts={r.ethics.map((e) => e.verdict)} />
             </div>
+            {r.ethicsFramework && <p className="-mt-2 mb-4 text-sm text-muted">{r.ethicsFramework}</p>}
+            <ul className="grid gap-2 md:grid-cols-2">
+              {r.ethics.map((row, i) => {
+                const { teaser, rest } = splitTitled(row.assessment)
+                return (
+                  <li key={row.requirement}>
+                    <Expandable
+                      title={row.requirement}
+                      teaser={editMode ? undefined : teaser}
+                      forceOpen={editMode}
+                      aside={
+                        editMode ? (
+                          <VerdictSelect value={row.verdict} label={`Oordeel ${row.requirement}`} onChange={(verdict) => mutate((t) => void (t.ethics![i].verdict = verdict))} />
+                        ) : (
+                          <VerdictBadge verdict={row.verdict} />
+                        )
+                      }
+                    >
+                      {editMode ? (
+                        <EditableText value={row.assessment} onChange={(v) => mutate((t) => void (t.ethics![i].assessment = v))} label={`Beoordeling ${row.requirement}`} multiline rows={3} />
+                      ) : (
+                        <p className="text-sm leading-relaxed text-ink/90">{rest || 'Zie hierboven.'}</p>
+                      )}
+                    </Expandable>
+                  </li>
+                )
+              })}
+            </ul>
+            {r.stakeholders && r.stakeholders.length > 0 && (
+              <div className="mt-3">
+                <Expandable
+                  title="Wie heeft er belang bij?"
+                  teaser="Veiligheid van iedereen tegenover privacy van iedereen"
+                  aside={<Users className="size-4 text-muted" aria-hidden />}
+                >
+                  <StakeholderTable rows={r.stakeholders} />
+                </Expandable>
+              </div>
+            )}
           </Card>
         </Reveal>
       )}
 
-      {hasCase && (
-        <PartHeading label="Deel 3" title="Aanbevelingen en conclusie">
-          De aanbevelingen volgen uit de toetsing en de ethische afweging.
-        </PartHeading>
-      )}
+      {hasCase && <PartHeading label="Deel 3" title="Aanbevelingen en conclusie" />}
 
       {r.recommendations && r.recommendations.length > 0 && (
         <Reveal className="mb-6">
           <Card>
-            <SectionTitle icon={MessageSquareText}>Aanbevelingen per partij</SectionTitle>
-            <ol className="space-y-3">
+            <SectionTitle icon={MessageSquareText}>Wat moet er gebeuren?</SectionTitle>
+            <ol className="space-y-2">
               {r.recommendations.map((rec, i) => (
-                <li key={i} className="rounded-xl border border-line bg-bg/40 p-4">
-                  <div className="mb-2 flex flex-wrap items-center gap-2">
+                <li key={i} className="flex flex-col gap-2 rounded-xl border border-line bg-bg/40 p-3 sm:flex-row sm:items-start sm:gap-3">
+                  <div className="flex shrink-0 gap-1.5 sm:w-48 sm:flex-col sm:items-start">
                     <Badge tone="data">{rec.actor}</Badge>
                     <PriorityBadge priority={rec.priority} />
                   </div>
-                  <EditableText
-                    value={rec.action}
-                    onChange={(v) => mutate((t) => void (t.recommendations![i].action = v))}
-                    label={`Aanbeveling ${i + 1}`}
-                    multiline
-                    rows={2}
-                    className="font-medium text-ink"
-                  />
-                  <p className="mt-1 text-xs text-muted">Onderbouwing: {rec.basis}</p>
+                  <div className="min-w-0 flex-1">
+                    <EditableText
+                      value={rec.action}
+                      onChange={(v) => mutate((t) => void (t.recommendations![i].action = v))}
+                      label={`Aanbeveling ${i + 1}`}
+                      multiline
+                      rows={2}
+                      className="text-sm font-medium text-ink"
+                    />
+                    <p className="mt-0.5 text-xs text-muted">{rec.basis}</p>
+                  </div>
                 </li>
               ))}
             </ol>
-          </Card>
-        </Reveal>
-      )}
-
-      {hasCase && (
-        <Reveal className="mb-6">
-          <Card className="border-data/30">
-            <SectionTitle icon={Lightbulb}>{r.insightsLabel || 'Inzichten'}</SectionTitle>
-            {editMode ? (
-              <EditableList items={r.insights} onChange={set('insights')} label={r.insightsLabel || 'Inzicht'} addLabel="Toevoegen" />
-            ) : (
-              <ul className="grid gap-3 md:grid-cols-2">
-                {r.insights.filter(Boolean).map((insight, i) => (
-                  <li key={i} className="rounded-xl border border-data/20 bg-data/[0.06] p-4 text-sm text-ink/90">
-                    {insight}
-                  </li>
-                ))}
-              </ul>
+            {hasCase && r.insights.length > 0 && (
+              <div className="mt-3">
+                <Expandable title={r.insightsLabel || 'Algemene aanbevelingen'} teaser="Zes vuistregels voor elke AI-toepassing in de sport" forceOpen={editMode} aside={<Lightbulb className="size-4 text-muted" aria-hidden />}>
+                  {editMode ? (
+                    <EditableList items={r.insights} onChange={set('insights')} label="Aanbeveling" addLabel="Toevoegen" />
+                  ) : (
+                    <ul className="space-y-2">
+                      {r.insights.filter(Boolean).map((insight, i) => (
+                        <li key={i} className="flex gap-2 text-sm text-ink/90">
+                          <span aria-hidden className="mt-2 h-0.5 w-3 shrink-0 bg-lime" />
+                          <span>{insight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </Expandable>
+              </div>
             )}
           </Card>
         </Reveal>
@@ -484,38 +578,32 @@ export function ResearchPage({ param }: { param?: string }) {
         <Reveal className="mb-6">
           <section aria-labelledby="conclusie" className="rounded-3xl border border-lime/30 bg-gradient-to-br from-lime/[0.08] to-transparent p-6 sm:p-8">
             <p id="conclusie" className="kicker mb-3">Conclusie</p>
-            <EditableText value={r.conclusion} onChange={set('conclusion')} label="Conclusie" multiline rows={6} className="max-w-4xl text-lg leading-relaxed text-ink" />
+            <EditableText value={r.conclusion} onChange={set('conclusion')} label="Conclusie" multiline rows={5} className="max-w-4xl text-lg leading-relaxed text-ink" />
           </section>
         </Reveal>
       )}
 
-      {(r.limitations?.length || editMode || r.ownPosition?.trim()) && hasCase && (
-        <div className="mb-6 grid gap-6 lg:grid-cols-2">
-          {r.limitations && (
-            <Reveal>
-              <Card className="h-full">
-                <SectionTitle icon={Info}>Beperkingen van mijn onderzoek</SectionTitle>
-                <EditableList items={r.limitations} onChange={set('limitations')} label="Beperking" addLabel="Beperking toevoegen" />
-              </Card>
-            </Reveal>
-          )}
+      {hasCase && (r.limitations?.length || editMode || r.ownPosition?.trim()) && (
+        <Reveal className="mb-6 grid gap-3 md:grid-cols-2">
           {(editMode || r.ownPosition?.trim()) && (
-            <Reveal delay={0.05}>
-              <Card className="h-full border-lime/40">
-                <SectionTitle icon={Target}>Mijn standpunt</SectionTitle>
-                <EditableText
-                  value={r.ownPosition ?? ''}
-                  onChange={set('ownPosition')}
-                  label="Mijn standpunt"
-                  placeholder="Zou jij als sportprofessional gezichtsherkenning (of een andere AI-toepassing) invoeren? Waarom wel of niet? Welke risico’s vind jij het zwaarst wegen?"
-                  multiline
-                  rows={6}
-                  className="leading-relaxed text-ink/90"
-                />
-              </Card>
-            </Reveal>
+            <Expandable title="Mijn standpunt" teaser={editMode ? undefined : 'Wat ik er zelf van vind'} defaultOpen forceOpen={editMode} aside={<Target className="size-4 text-lime" aria-hidden />}>
+              <EditableText
+                value={r.ownPosition ?? ''}
+                onChange={set('ownPosition')}
+                label="Mijn standpunt"
+                placeholder="Zou jij als sportprofessional gezichtsherkenning (of een andere AI-toepassing) invoeren? Waarom wel of niet? Welke risico’s vind jij het zwaarst wegen?"
+                multiline
+                rows={6}
+                className="text-sm leading-relaxed text-ink/90"
+              />
+            </Expandable>
           )}
-        </div>
+          {r.limitations && r.limitations.length > 0 && (
+            <Expandable title="Beperkingen van mijn onderzoek" teaser={`${r.limitations.length} kanttekeningen`} forceOpen={editMode} aside={<Info className="size-4 text-muted" aria-hidden />}>
+              <EditableList items={r.limitations} onChange={set('limitations')} label="Beperking" addLabel="Beperking toevoegen" />
+            </Expandable>
+          )}
+        </Reveal>
       )}
 
       {/* Bronnen */}
@@ -543,29 +631,39 @@ export function ResearchPage({ param }: { param?: string }) {
                 </div>
               ))}
             </div>
+          ) : hasCase ? (
+            <Expandable title={`Alle ${r.sources.length} bronnen bekijken`} teaser="Wetten, wetenschappelijke artikelen en praktijkvoorbeelden">
+              <SourceList sources={r.sources} />
+            </Expandable>
           ) : (
-            <ol className="divide-y divide-line">
-              {r.sources.map((s, i) => (
-                <li key={s.id} className="flex items-start gap-4 py-3">
-                  <span className="font-mono text-sm text-muted">[{i + 1}]</span>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-ink">
-                      {s.author && <span>{s.author} </span>}
-                      {s.year && <span className="text-muted">({s.year}). </span>}
-                      <cite className="not-italic">{s.title}</cite>
-                    </p>
-                  </div>
-                  {isSafeUrl(s.url) && s.url !== 'https://' && (
-                    <a href={s.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-sm text-data hover:text-lime" aria-label={`Bron openen: ${s.title} (nieuw tabblad)`}>
-                      Openen <ExternalLink className="size-3.5" aria-hidden />
-                    </a>
-                  )}
-                </li>
-              ))}
-            </ol>
+            <SourceList sources={r.sources} />
           )}
         </Card>
       </Reveal>
     </>
+  )
+}
+
+function SourceList({ sources }: { sources: Source[] }) {
+  return (
+    <ol className="divide-y divide-line">
+      {sources.map((s, i) => (
+        <li key={s.id} className="flex items-start gap-4 py-3">
+          <span className="font-mono text-sm text-muted">[{i + 1}]</span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm text-ink">
+              {s.author && <span>{s.author} </span>}
+              {s.year && <span className="text-muted">({s.year}). </span>}
+              <cite className="not-italic">{s.title}</cite>
+            </p>
+          </div>
+          {isSafeUrl(s.url) && s.url !== 'https://' && (
+            <a href={s.url} target="_blank" rel="noopener noreferrer" className="flex shrink-0 items-center gap-1 text-sm text-data hover:text-lime" aria-label={`Bron openen: ${s.title} (nieuw tabblad)`}>
+              Openen <ExternalLink className="size-3.5" aria-hidden />
+            </a>
+          )}
+        </li>
+      ))}
+    </ol>
   )
 }

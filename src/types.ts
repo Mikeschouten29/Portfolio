@@ -77,6 +77,8 @@ export type Verdict = 'ok' | 'warn' | 'fail' | 'info'
 
 export interface CaseStep {
   question: string
+  /** Kort antwoord, zichtbaar zonder uit te klappen */
+  short?: string
   finding: string
   verdict: Verdict
 }
@@ -128,6 +130,8 @@ export interface Research {
   assessment?: AssessmentRow[]
   /** Afbeelding bij het onderzoek (pad in public/ of volledige URL) */
   image?: { src: string; alt: string; caption?: string }
+  /** Samenvatting in een paar punten ("In het kort") */
+  tldr?: string[]
   /** Actualiteit, bijv. over gewijzigde wetgeving */
   note?: string
   caseStudy?: CaseStudy
