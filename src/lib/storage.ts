@@ -21,7 +21,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 24
+export const DATA_VERSION = 25
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -303,6 +303,18 @@ export function migrate(data: PortfolioData): PortfolioData {
       if (!r.visual.captions || r.visual.captions.vraag?.startsWith('AI zit overal in de sport.')) {
         r.visual.captions = structuredClone(researchVisual.captions)
       }
+    }
+  }
+
+  if (oldVersion < 25) {
+    // v25: mijn standpunt in het verslag, bij "In het kort" en onder de conclusie-dia.
+    const r = d.extraResearch.find((x) => x.title === aiEthicsResearch.title)
+    if (r) {
+      if (!r.ownPosition?.trim()) r.ownPosition = aiEthicsResearch.ownPosition
+      const standpunt = aiEthicsResearch.tldr?.at(-1)
+      if (r.tldr && standpunt && !r.tldr.some((t) => t.startsWith('Mijn standpunt'))) r.tldr.push(standpunt)
+      const caps = r.visual?.captions
+      if (caps && caps.conclusie === 'AI is in de sport een hulpmiddel, geen beslisser. Met deze vier regels kan het verantwoord, maar de mens blijft verantwoordelijk.') caps.conclusie = researchVisual.captions?.conclusie ?? caps.conclusie
     }
   }
 

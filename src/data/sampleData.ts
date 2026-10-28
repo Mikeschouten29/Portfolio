@@ -491,6 +491,7 @@ export const aiEthicsResearch: Research = {
     'De grootste risico’s: privacy van sporters en fans, bias (oneerlijke uitkomsten) en te weinig uitleg over wat de AI doet.',
     'Casus Brøndby IF: gezichtsherkenning bij het stadion mag in Denemarken onder strenge voorwaarden, maar er moet een mens meekijken. In Nederland zou het waarschijnlijk niet mogen.',
     'Mijn advies: de mens beslist, verzamel niet meer dan nodig, vertel dat je AI gebruikt en test of het eerlijk werkt.',
+    'Mijn standpunt: ja, onder strenge voorwaarden. Privacy van alle fans weegt voor mij het zwaarst, en een mens moet altijd de beslissing nemen.',
   ],
   question:
     'Welke ethische en juridische risico’s brengt AI met zich mee in verschillende werkvelden van de sport, en hoe kunnen sportprofessionals AI verantwoord inzetten volgens de AI-verordening en de AVG?',
@@ -666,7 +667,8 @@ export const aiEthicsResearch: Research = {
     'Niet alle details van Brøndby IF zijn openbaar, zoals de inhoud van de DPIA en hoe foutieve matches worden afgehandeld.',
     'Ik heb één ethisch kader gebruikt (de zeven vereisten van de Europese Commissie); andere kaders kunnen andere accenten leggen.',
   ],
-  ownPosition: '',
+  ownPosition:
+    'Ik zou gezichtsherkenning bij een stadion invoeren, maar alleen onder strenge voorwaarden. Veiligheid is belangrijk, maar voor mij weegt de privacy van alle fans het zwaarst. Duizenden mensen die niets fout hebben gedaan, worden gescand om een paar mensen met een stadionverbod te vinden. Daarom vind ik dat het alleen mag als gewone controles echt niet genoeg zijn. De belangrijkste voorwaarde is voor mij dat een mens beslist: een steward moet altijd eerst controleren voordat iemand wordt geweigerd, omdat de AI fouten kan maken. Als ik later bij een club werk, zou ik eerst kijken of het ook zonder AI kan. Als we het toch gebruiken, zou ik zorgen dat er altijd een mens meekijkt en dat fans vooraf weten dat ze gescand worden.',
   sources: [
     { id: 'src-ai-act', title: 'Verordening (EU) 2024/1689 (AI-verordening)', author: 'Europese Unie', year: '2024', url: 'https://eur-lex.europa.eu/eli/reg/2024/1689/oj' },
     { id: 'src-avg', title: 'Verordening (EU) 2016/679 (Algemene verordening gegevensbescherming)', author: 'Europese Unie', year: '2016', url: 'https://eur-lex.europa.eu/eli/reg/2016/679/oj' },
@@ -702,7 +704,7 @@ export const researchVisual: ResearchVisual = {
     toets: 'Ik heb het systeem getoetst met negen vragen uit de AI-verordening en de AVG. Zeven zijn in orde, de twee aandachtspunten zijn menselijke controle en een bezwaarprocedure.',
     afweging: 'De veiligheid van iedereen staat tegenover de privacy van iedereen. In Denemarken mag het onder voorwaarden, in Nederland waarschijnlijk niet: biometrie mag hier alleen als het echt nodig is.',
     advies: 'Een mens neemt de beslissing, je verzamelt alleen wat nodig is, je vertelt dat je AI gebruikt en je test of het voor iedereen eerlijk werkt.',
-    conclusie: 'AI is in de sport een hulpmiddel, geen beslisser. Met deze vier regels kan het verantwoord, maar de mens blijft verantwoordelijk.',
+    conclusie: 'AI is in de sport een hulpmiddel, geen beslisser. Mijn standpunt: gezichtsherkenning mag alleen onder strenge voorwaarden, omdat privacy voor mij het zwaarst weegt en een mens moet beslissen.',
   },
   werkvelden: [
     { name: 'Prestatiesport', icon: 'activity', keyword: 'Privacy sporter', risk: 'amber' },
