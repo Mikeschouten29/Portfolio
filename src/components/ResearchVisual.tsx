@@ -350,6 +350,7 @@ export function ResearchVisual({ research }: { research: Research }) {
   }
 
   const slideNotes = notes[slide.id] ?? []
+  const caption = research.visual?.captions?.[slide.id]
 
   return (
     <section
@@ -391,6 +392,12 @@ export function ResearchVisual({ research }: { research: Research }) {
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {caption && (
+        <p className="border-t border-line/50 px-5 py-2.5 text-center text-sm text-muted" aria-live="polite">
+          {caption}
+        </p>
+      )}
 
       <AnimatePresence initial={false}>
         {showNotes && slideNotes.length > 0 && (

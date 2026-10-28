@@ -693,6 +693,17 @@ export const caseStepLabels = ['AI-systeem', 'Verboden?', 'Hoog risico', 'Inform
 /** Visuele presentatie van Onderzoek 2: weinig tekst, met spiekbriefje om het zelf uit te leggen. */
 export const researchVisual: ResearchVisual = {
   oneLiner: 'AI in de sport kan, als de mens beslist.',
+  captions: {
+    vraag: 'AI zit overal in de sport. Ik onderzoek wanneer dat eerlijk en veilig is.',
+    wetten: 'Twee Europese wetten bepalen wat mag: één voor AI, één voor persoonsgegevens.',
+    risico: 'Hoe groter het risico voor mensen, hoe strenger de regels.',
+    werkvelden: 'In elk werkveld speelt een ander ethisch probleem.',
+    casus: 'Brøndby IF herkent supporters met een stadionverbod, maar er kijkt geen mens mee.',
+    toets: 'Negen vragen uit de wet: zeven in orde, twee aandachtspunten.',
+    afweging: 'Veiligheid en privacy botsen. In Nederland zijn de regels strenger.',
+    advies: 'Vier regels maken AI in de sport verantwoord.',
+    conclusie: 'AI is een hulpmiddel. De beslissing blijft bij de mens.',
+  },
   werkvelden: [
     { name: 'Prestatiesport', icon: 'activity', keyword: 'Privacy sporter', risk: 'amber' },
     { name: 'Talent', icon: 'sprout', keyword: 'Bias', risk: 'amber' },
@@ -753,7 +764,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 22,
+  version: 23,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',
