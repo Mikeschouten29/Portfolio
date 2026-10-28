@@ -19,7 +19,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 19
+export const DATA_VERSION = 20
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -261,6 +261,12 @@ export function migrate(data: PortfolioData): PortfolioData {
   if (oldVersion < 19) {
     // v19: Onderzoek 2 in de ik-vorm, met wetenschappelijke bronnen, praktijkvoorbeelden en een infographic.
     const i = d.extraResearch.findIndex((r) => r.title === aiEthicsResearch.title && r.results[0]?.startsWith('Prestatiesport en coaching: clubs voorspellen'))
+    if (i >= 0) d.extraResearch[i] = structuredClone(aiEthicsResearch)
+  }
+
+  if (oldVersion < 20) {
+    // v20: Onderzoek 2 op niveau: casus Brøndby IF, toetsingskader, ethische afweging, aanbevelingen per partij en conclusie.
+    const i = d.extraResearch.findIndex((r) => r.title === aiEthicsResearch.title && r.method.startsWith('Ik heb een literatuuronderzoek gedaan. Eerst heb ik'))
     if (i >= 0) d.extraResearch[i] = structuredClone(aiEthicsResearch)
   }
 

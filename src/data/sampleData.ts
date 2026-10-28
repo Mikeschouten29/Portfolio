@@ -485,16 +485,18 @@ export const aiEthicsResearch: Research = {
   title: 'Verantwoord AI-gebruik in de sport',
   status: 'Concept',
   intro:
-    'Als sportprofessional krijg ik steeds vaker te maken met AI: trainers voorspellen blessures, scouts selecteren talent, apps geven gezondheidsadvies, clubs personaliseren hun marketing en stadions experimenteren met gezichtsherkenning. In mijn eerste onderzoek (sprint 1) merkte ik al dat privacy daarbij een randvoorwaarde is. In dit onderzoek ben ik daarom dieper ingegaan op de vraag wanneer AI in de sport verantwoord is, en wat de wet daarover zegt.',
+    'Als sportprofessional krijg ik steeds vaker te maken met AI: trainers voorspellen blessures, scouts selecteren talent, apps geven gezondheidsadvies, clubs personaliseren hun marketing en stadions gebruiken gezichtsherkenning. In mijn eerste onderzoek (sprint 1) merkte ik al dat privacy daarbij een randvoorwaarde is. In dit onderzoek ben ik daarom dieper ingegaan op de vraag wanneer AI in de sport verantwoord is, en wat de wet daarover zegt.',
   question:
     'Welke ethische en juridische risico’s brengt AI met zich mee in verschillende werkvelden van de sport, en hoe kunnen sportprofessionals AI verantwoord inzetten volgens de AI-verordening en de AVG?',
   subQuestions: [
-    'Welke AI-toepassingen worden gebruikt in prestatiesport, talentontwikkeling, sportgezondheid, sportmarketing en sportevenementen?',
+    'Welke AI-toepassingen worden gebruikt in prestatiesport, talentontwikkeling, sportgezondheid, sportmarketing en sportevenementen, en welke ethische vraagstukken spelen daarbij?',
     'In welke risicocategorie van de AI-verordening vallen deze toepassingen, en welke AVG-regels gelden voor de gegevens van sporters, fans en bezoekers?',
+    'Voldoet de gezichtsherkenning van Brøndby IF aan de AI-verordening en de AVG, en hoe zou dat in Nederland uitpakken?',
     'Welke aanbevelingen zorgen voor verantwoord AI-gebruik in de sport op het gebied van privacy, bias en transparantie?',
   ],
   method:
-    'Ik heb een literatuuronderzoek gedaan. Eerst heb ik de wetgeving doorgenomen: de AI-verordening, de AVG, de Nederlandse Uitvoeringswet AVG en de richtlijnen van de Europese privacytoezichthouders (EDPB) over toestemming. Daarna heb ik per werkveld een veelgebruikte AI-toepassing gekozen en gezocht naar wetenschappelijke artikelen en praktijkvoorbeelden, zoals de blessurevoorspelling van Rossi et al. (2018), het onderzoek naar talentselectie van Lovell et al. (2015) en de gezichtsherkenning bij Brøndby IF en FC Den Bosch. Tot slot heb ik elke toepassing getoetst aan de wet en aan de ethische thema’s privacy, bias en transparantie.',
+    'Ik heb een literatuuronderzoek gedaan in twee delen. In deel 1 heb ik de wetgeving doorgenomen (de AI-verordening, de AVG, de Nederlandse Uitvoeringswet AVG en de EDPB-richtlijnen over toestemming) en per werkveld van de sport een veelgebruikte AI-toepassing gekozen, onderbouwd met wetenschappelijke artikelen zoals Rossi et al. (2018) en Lovell et al. (2015). In deel 2 heb ik één echte toepassing diepgaand getoetst: de gezichtsherkenning van Brøndby IF. Daarvoor heb ik een toetsingskader van negen stappen opgesteld en de originele vergunning van de Deense toezichthouder gebruikt. De ethische kant heb ik beoordeeld met de zeven vereisten voor betrouwbare AI van de Europese Commissie en een stakeholderanalyse.',
+  note: 'Stand van zaken oktober 2026: door de Digital Omnibus (in werking sinds juli 2026) gelden de eisen voor hoog-risico-AI uit bijlage III vanaf 2 december 2027 en die uit bijlage I (bijvoorbeeld medische hulpmiddelen) vanaf 2 augustus 2028. De verboden uit artikel 5 gelden al sinds februari 2025.',
   image: {
     src: 'onderzoek/ai-in-de-sport-risico.svg',
     alt: 'Infographic: vijf werkvelden van de sport op een schaal van minimaal tot verboden risico volgens de AI-verordening. Prestatiesport, talentontwikkeling en sportgezondheid lopen van minimaal tot hoog risico, sportmarketing van minimaal tot verboden, en sportevenementen van hoog tot verboden.',
@@ -502,14 +504,14 @@ export const aiEthicsResearch: Research = {
   },
   riskLevels: [
     { level: 'Onaanvaardbaar risico', article: 'Verboden (art. 5)', example: 'AI die jonge sporters of fans manipuleert', note: 'Bijv. gerichte gokreclame', tone: 'red' },
-    { level: 'Hoog risico', article: 'Strenge eisen (bijlage I en III)', example: 'Spelersbeoordeling, gezichtsherkenning, medische AI', note: 'Werk, biometrie, medisch hulpmiddel', tone: 'amber' },
+    { level: 'Hoog risico', article: 'Strenge eisen (bijlage I en III)', example: 'Spelersmonitoring, gezichtsherkenning, medische AI', note: 'Werk, biometrie, medisch hulpmiddel', tone: 'amber' },
     { level: 'Beperkt risico', article: 'Transparantie (art. 50)', example: 'Sportchatbots en AI-content', note: 'Melden: dit is AI', tone: 'teal' },
     { level: 'Minimaal risico', article: 'Geen extra eisen', example: 'Trainingsplanning, fan-personalisatie', note: 'Wel AVG bij persoonsgegevens', tone: 'gray' },
   ],
   assessment: [
     {
       application: 'Prestatiesport en coaching: blessurevoorspelling met GPS en wearables',
-      aiAct: 'Minimaal risico; hoog risico (bijlage III-4) als het meeweegt in beoordeling of contract van spelers in loondienst',
+      aiAct: 'Hoog risico (bijlage III-4) bij het monitoren en beoordelen van prestaties van spelers in loondienst; anders minimaal',
       avg: 'Hartslag en blessuredata zijn gezondheidsgegevens (art. 9); toestemming van een werknemer is zelden vrij (EDPB)',
       ethics: 'Privacy, autonomie, gevoel van controle',
     },
@@ -539,13 +541,103 @@ export const aiEthicsResearch: Research = {
     },
   ],
   results: [
-    'Prestatiesport en coaching: Rossi et al. (2018) lieten bij een profclub zien dat AI met GPS-trainingsdata vrij nauwkeurig kan voorspellen welke speler een blessure gaat oplopen. Dat helpt trainers, maar het zijn wel gezondheidsgegevens (AVG art. 9). Wat mij opviel: een speler in loondienst kan eigenlijk geen vrije toestemming geven, omdat hij afhankelijk is van de club (EDPB, 2020). En zodra zo’n voorspelling meeweegt in de selectie of het contract van een speler, valt de AI onder hoog risico (bijlage III, werkgelegenheid). Ethisch zie ik vooral het risico dat sporters zich voortdurend gecontroleerd voelen en weinig zeggenschap hebben over hun eigen data.',
+    'Prestatiesport en coaching: Rossi et al. (2018) lieten bij een profclub zien dat AI met GPS-trainingsdata vrij nauwkeurig kan voorspellen welke speler een blessure gaat oplopen. Dat helpt trainers, maar het zijn wel gezondheidsgegevens (AVG art. 9). Wat mij opviel: een speler in loondienst kan eigenlijk geen vrije toestemming geven, omdat hij afhankelijk is van de club (EDPB, 2020). Bovendien noemt de AI-verordening AI die de prestaties en het gedrag van werknemers monitort en beoordeelt al hoog risico (bijlage III, punt 4). Bij profspelers in loondienst kan blessure- en belastingmonitoring daar dus snel onder vallen. Ethisch zie ik vooral het risico dat sporters zich voortdurend gecontroleerd voelen en weinig zeggenschap hebben over hun eigen data.',
     'Talentontwikkeling: uit het onderzoek van Lovell et al. (2015) bij 1.212 jeugdspelers van 17 Engelse clubs blijkt dat spelers die vroeg in het selectiejaar zijn geboren 5,3 keer zo vaak werden geselecteerd als spelers die laat in het jaar zijn geboren. Dit relatieve-leeftijdseffect is voor mij de duidelijkste vorm van bias: als een AI leert van oude selecties, neemt hij die oneerlijkheid over en versterkt hij die. Omdat het om kinderen gaat, gelden extra regels (AVG art. 8), en een speler die door een geautomatiseerd besluit wordt afgewezen, heeft recht op een menselijke beoordeling (art. 22).',
     'Sportgezondheid: of een AI-app een medisch hulpmiddel is, hangt af van het doel dat de maker opgeeft. Algemene welzijns- of trainingsapps vallen er meestal niet onder, maar software die helpt bij diagnose of behandeling wel (MDCG, 2025). Dan geldt de strenge medische regelgeving en is de AI hoog risico. De gegevens zijn altijd gezondheidsgegevens, waarvoor uitdrukkelijke toestemming nodig is. Ethisch vind ik vooral de vraag lastig wie verantwoordelijk is als een fout advies een blessure verergert: de app, de maker of de sportprofessional.',
     'Sportmarketing: clubs personaliseren aanbiedingen en prijzen, zetten chatbots in en maken AI-content. De AI-verordening ziet dat meestal als minimaal of beperkt risico, maar fans moeten wel weten dat ze met AI praten en AI-content moet herkenbaar zijn (art. 50). AI die jonge of kwetsbare fans uitbuit, bijvoorbeeld met gerichte gokreclame, is verboden (art. 5). Onder de AVG is personalisatie profilering, dus fans moeten worden geïnformeerd en mogen bezwaar maken.',
-    'Sportevenementen: Brøndby IF kreeg in 2019 als eerste in Denemarken toestemming om met gezichtsherkenning stadionverboden te handhaven, maar alleen onder strenge voorwaarden en op grond van een zwaarwegend algemeen belang, niet op basis van toestemming (DLA Piper, 2019). Bij FC Den Bosch hingen in 2019 al camera’s met gezichtsherkenning, terwijl dat volgens de privacyregels niet zomaar mag (Omroep Brabant, 2019). In Nederland mag biometrie alleen als het noodzakelijk is voor authenticatie of beveiliging (UAVG art. 29), en volgens de AI-verordening is dit hoog risico. Wat mij het meest raakt: álle bezoekers worden gescand, ook wie niets misdaan heeft.',
+    'Sportevenementen: clubs gebruiken gezichtsherkenning om stadionverboden te handhaven. Biometrische identificatie op afstand is hoog risico (bijlage III), en realtime identificatie door de politie in de openbare ruimte is in principe verboden (art. 5). Biometrische gegevens zijn bijzondere persoonsgegevens; in Nederland mag dit alleen als het noodzakelijk is voor authenticatie of beveiliging (UAVG art. 29). Dit werkveld heb ik in deel 2 diepgaand getoetst aan de hand van Brøndby IF.',
   ],
-  insightsLabel: 'Aanbevelingen',
+  caseStudy: {
+    title: 'Casus: gezichtsherkenning bij Brøndby IF',
+    intro:
+      'Om niet alleen in algemene termen te blijven, heb ik één echte AI-toepassing diepgaand getoetst: de automatische gezichtsherkenning van de Deense voetbalclub Brøndby IF. Omdat de AI-verordening in 2019 nog niet bestond, toets ik de vraag: zou dit systeem vandaag voldoen? Daarvoor heb ik een toetsingskader van negen stappen opgesteld, dat je op elke AI-toepassing kunt gebruiken.',
+    facts: [
+      'Op 24 mei 2019 kreeg Brøndby IF als eerste in Denemarken toestemming van de toezichthouder Datatilsynet om gezichtsherkenning te gebruiken bij de ingangen van Brøndby Stadion (Datatilsynet, 2019).',
+      'Doel: supporters met een stadionverbod herkennen voordat ze het stadion binnenkomen, door gezichten te vergelijken met de interne lijst met stadionverboden van de club.',
+      'Grondslag: geen toestemming, maar een zwaarwegend maatschappelijk belang (Deense privacywet § 7 lid 4 en AVG art. 9 lid 2 sub g).',
+      'De vergunning heeft negen voorwaarden, onder meer: gezichten zonder match mogen niet worden opgeslagen, matches worden direct na elke wedstrijd gewist, alle gegevens zijn versleuteld, de camera’s hangen op een apart netwerk zonder internet, medewerkers loggen in met tweestapsverificatie, bezoekers worden met borden geïnformeerd en elke wijziging moet worden gemeld.',
+      'Voor de aanvraag is een DPIA (effectbeoordeling) opgesteld (DLA Piper, 2019).',
+      'In 2023 is het gebruik uitgebreid naar uitwedstrijden. In 2025 kregen alle clubs uit de Superligaen toestemming, maar clubs uit de 1e divisie niet, omdat het daar volgens de toezichthouder niet in verhouding stond tot het doel (Datatilsynet, 2023; 2025).',
+    ],
+    steps: [
+      {
+        question: '1. Is het een AI-systeem?',
+        finding: 'Ja. Het systeem herkent gezichten automatisch met software die patronen herkent en een match voorspelt. Dat valt onder de definitie van een AI-systeem (AI-verordening art. 3).',
+        verdict: 'info',
+      },
+      {
+        question: '2. Is het verboden (art. 5)?',
+        finding: 'Nee, zolang de club het zelf gebruikt voor haar eigen stadionverboden. Realtime biometrische identificatie op afstand in de openbare ruimte is alleen verboden als het gebeurt voor rechtshandhaving, bijvoorbeeld door de politie (art. 5 lid 1 sub h). Als de politie het systeem zou gaan gebruiken, verandert dat.',
+        verdict: 'ok',
+      },
+      {
+        question: '3. Is het hoog risico (bijlage III)?',
+        finding: 'Ja. Iedereen voor de ingang wordt op afstand vergeleken met een lijst: dat is biometrische identificatie op afstand (bijlage III, punt 1). Vanaf 2 december 2027 moet de club als gebruiker zorgen voor menselijk toezicht, logging en gebruik volgens de instructies (art. 14 en 26), en moet de leverancier een conformiteitsbeoordeling hebben (art. 16 en 43). Een menselijke controle voordat iemand de toegang wordt geweigerd, staat niet in de voorwaarden van 2019.',
+        verdict: 'warn',
+      },
+      {
+        question: '4. Geldt een transparantieplicht?',
+        finding: 'Artikel 50 van de AI-verordening geldt hier niet: dat gaat over chatbots, deepfakes, emotieherkenning en biometrische categorisering, niet over identificatie. Wel geldt de informatieplicht uit de AVG (art. 13). Daar voldoet Brøndby aan: bezoekers moeten met borden worden geïnformeerd (voorwaarde 5).',
+        verdict: 'ok',
+      },
+      {
+        question: '5. Worden bijzondere persoonsgegevens verwerkt?',
+        finding: 'Ja. Gezichtskenmerken die worden gebruikt om iemand te identificeren, zijn biometrische gegevens: een bijzondere categorie (AVG art. 9 lid 1). Dat is in principe verboden, tenzij een uitzondering geldt.',
+        verdict: 'info',
+      },
+      {
+        question: '6. Is er een geldige grondslag?',
+        finding: 'Ja, in Denemarken. Toestemming kan niet, want wie naar de wedstrijd wil, moet langs de camera: de toestemming is dan niet vrij. Daarom is gekozen voor het zwaarwegend maatschappelijk belang (art. 9 lid 2 sub g), vastgelegd in de Deense wet en vooraf goedgekeurd door de toezichthouder.',
+        verdict: 'ok',
+      },
+      {
+        question: '7. Is een DPIA gedaan (art. 35)?',
+        finding: 'Ja. Een DPIA is verplicht bij grootschalige monitoring van openbare ruimtes en bij biometrie, en Brøndby heeft er een opgesteld (DLA Piper, 2019). Sinds 2025 is een DPIA ook een uitdrukkelijke voorwaarde voor de andere clubs (Datatilsynet, 2025).',
+        verdict: 'ok',
+      },
+      {
+        question: '8. Worden gegevens beperkt en beveiligd?',
+        finding: 'Ja. Gezichten zonder match worden niet opgeslagen, matches worden na elke wedstrijd gewist, en de gegevens zijn versleuteld, afgeschermd van internet en alleen toegankelijk voor bevoegde medewerkers met tweestapsverificatie (voorwaarden 3, 4, 6, 7 en 8). Dat sluit aan bij dataminimalisatie en beveiliging (AVG art. 5, 25 en 32).',
+        verdict: 'ok',
+      },
+      {
+        question: '9. Kan een supporter bezwaar maken bij een foutieve match?',
+        finding: 'Niet zichtbaar geregeld. Een supporter die ten onrechte wordt herkend, moet de beslissing door een mens kunnen laten beoordelen (AVG art. 22) en een klacht kunnen indienen. Uit de openbare bronnen blijkt niet hoe Brøndby dit regelt.',
+        verdict: 'warn',
+      },
+    ],
+    comparison:
+      'In Nederland zou hetzelfde systeem waarschijnlijk niet zijn toegestaan. De Uitvoeringswet AVG staat biometrie alleen toe als het noodzakelijk is voor authenticatie of beveiliging (art. 29), en volgens de Autoriteit Persoonsgegevens zijn camera’s met gezichtsherkenning alleen toegestaan bij een zwaarwegend algemeen belang (Telecompaper, 2020). Nederland heeft geen vergunningsstelsel zoals Denemarken, waarin een toezichthouder vooraf zo’n belang erkent. Toen bij FC Den Bosch in 2019 camera’s met gezichtsherkenning bleken te hangen, noemde de KNVB dat disproportioneel (Omroep Brabant, 2019).',
+    conclusion:
+      'Mijn oordeel: het systeem van Brøndby IF voldoet aan de AVG, omdat het onder strenge voorwaarden vooraf is goedgekeurd door de toezichthouder: geen opslag zonder match, snelle verwijdering, versleuteling, informatie aan bezoekers en een DPIA. Voor de AI-verordening is het een hoog-risicosysteem, en daar schiet het op twee punten tekort: er is geen verplichte menselijke controle voordat iemand de toegang wordt geweigerd, en een bezwaarprocedure bij een foutieve match is niet zichtbaar geregeld. Vanaf 2 december 2027 moet dat wel. In Nederland zou het systeem waarschijnlijk niet zijn toegestaan.',
+  },
+  ethicsFramework:
+    'Ik heb de casus beoordeeld met de zeven vereisten voor betrouwbare AI uit de Ethics Guidelines for Trustworthy AI van de Europese Commissie (2019).',
+  ethics: [
+    { requirement: 'Menselijke autonomie en toezicht', assessment: 'Het systeem geeft een match, maar nergens staat dat een steward die controleert voordat iemand wordt geweigerd. Zo beslist in feite de AI.', verdict: 'warn' },
+    { requirement: 'Technische robuustheid en veiligheid', assessment: 'De beveiliging is sterk (versleuteling, apart netwerk, tweestapsverificatie). Maar een foute match kan een onschuldige supporter de toegang kosten.', verdict: 'warn' },
+    { requirement: 'Privacy en datagovernance', assessment: 'Alle bezoekers worden gescand, ook wie niets misdaan heeft. Dat wordt wel sterk beperkt: geen opslag zonder match en snelle verwijdering.', verdict: 'warn' },
+    { requirement: 'Transparantie', assessment: 'Bezoekers worden met borden geïnformeerd. Onduidelijk is of een geweigerde supporter uitleg krijgt over waarom hij is tegengehouden.', verdict: 'warn' },
+    { requirement: 'Diversiteit, non-discriminatie en eerlijkheid', assessment: 'Volgens NIST werkt de meerderheid van de geteste gezichtsherkenningsalgoritmes niet even goed voor alle bevolkingsgroepen (Grother et al., 2019). Openbare bias-tests van dit systeem heb ik niet gevonden.', verdict: 'warn' },
+    { requirement: 'Maatschappelijk welzijn', assessment: 'Meer veiligheid en minder geweld in het stadion. Tegelijk kan het normaal worden gevonden dat je bij elk evenement gescand wordt.', verdict: 'warn' },
+    { requirement: 'Verantwoording', assessment: 'Goed geregeld: vooraf goedgekeurd door de toezichthouder, met logging en een meldplicht bij wijzigingen. Dat de toezichthouder clubs uit de 1e divisie weigerde, laat zien dat er echt wordt afgewogen.', verdict: 'ok' },
+  ],
+  stakeholders: [
+    { name: 'Brøndby IF (club)', interest: 'Veiligheid in het stadion en stadionverboden kunnen handhaven', concern: 'Kosten, imago en boetes bij incidenten' },
+    { name: 'Supporters', interest: 'Veilig en ongestoord een wedstrijd bezoeken', concern: 'Privacy en het gevoel voortdurend bekeken te worden' },
+    { name: 'Supporters met een stadionverbod', interest: 'Een eerlijke en proportionele straf', concern: 'Dat ze ook na hun straf nog in een systeem staan' },
+    { name: 'Politie en gemeente', interest: 'Openbare orde met minder inzet van agenten', concern: 'Dat toezicht steeds meer bij private partijen komt te liggen' },
+    { name: 'Leverancier van het systeem', interest: 'Een betrouwbaar en verkoopbaar product', concern: 'Aansprakelijkheid bij foute matches en nieuwe eisen uit de AI-verordening' },
+  ],
+  recommendations: [
+    { actor: 'Club', priority: 'Hoog', action: 'Laat een steward elke match controleren voordat iemand de toegang wordt geweigerd.', basis: 'AI-verordening art. 14 en 26, AVG art. 22, vereiste "menselijk toezicht"' },
+    { actor: 'Club', priority: 'Hoog', action: 'Richt een duidelijke bezwaar- en klachtenprocedure in voor supporters die ten onrechte worden herkend.', basis: 'AVG art. 22 en 77, vereiste "verantwoording"' },
+    { actor: 'Leverancier', priority: 'Hoog', action: 'Test het systeem op bias per bevolkingsgroep, maak de resultaten openbaar en regel de conformiteitsbeoordeling vóór 2 december 2027.', basis: 'AI-verordening art. 10, 16 en 43; Grother et al. (2019)' },
+    { actor: 'Club', priority: 'Middel', action: 'Herhaal de DPIA elk seizoen en toets opnieuw of het systeem nog nodig en in verhouding is, bijvoorbeeld aan de hand van het aantal incidenten.', basis: 'AVG art. 35, proportionaliteit' },
+    { actor: 'Club', priority: 'Middel', action: 'Leg een geweigerde supporter uit waarom hij is tegengehouden en welke gegevens zijn gebruikt.', basis: 'AVG art. 13 en 15, vereiste "transparantie"' },
+    { actor: 'Nederlandse clubs en KNVB', priority: 'Middel', action: 'Voer gezichtsherkenning niet in zonder duidelijke wettelijke basis, en onderzoek eerst minder ingrijpende alternatieven zoals persoonsgebonden tickets met een ID-controle.', basis: 'UAVG art. 29, AVG art. 5 (dataminimalisatie)' },
+  ],
+  insightsLabel: 'Algemene aanbevelingen voor alle werkvelden',
   insights: [
     'De mens beslist: gebruik AI als advies, maar laat beslissingen over selectie, contracten of gezondheid altijd door een trainer, scout of arts nemen (AVG art. 22).',
     'Gezondheids- en biometrische gegevens minimaliseren: verzamel alleen wat echt nodig is, gebruik bij sporters in loondienst geen toestemming als enige grondslag en doe vooraf een DPIA (AVG art. 9 en 35).',
@@ -554,17 +646,32 @@ export const aiEthicsResearch: Research = {
     'Bescherm minderjarigen: extra zorgvuldigheid bij jeugdspelers en jonge fans, en geen gerichte AI-marketing voor risicovolle producten (art. 5 en AVG art. 8).',
     'Check of het medisch is: bepaal vooraf of een AI-toepassing een medisch doel heeft, want dan gelden de strengere regels voor medische hulpmiddelen.',
   ],
+  conclusion:
+    'AI brengt in elk werkveld van de sport andere risico’s mee: bij prestatiesport vooral voor de privacy en autonomie van sporters, bij talentontwikkeling bias, bij sportgezondheid veiligheid en verantwoordelijkheid, bij sportmarketing transparantie en manipulatie, en bij sportevenementen de privacy van alle bezoekers. Juridisch loopt dit van minimaal risico tot verboden, en vaak hangt het risico af van hoe de AI wordt ingezet. De casus Brøndby IF laat zien dat zelfs een ingrijpende toepassing als gezichtsherkenning verantwoord kán worden ingezet, maar alleen met strenge voorwaarden, toezicht vooraf en een echte afweging van noodzaak en proportionaliteit. Mijn belangrijkste les: verantwoord AI-gebruik in de sport betekent dat de mens beslist, dat er niet meer gegevens worden verzameld dan nodig, dat sporters en fans weten wat er gebeurt, en dat het systeem op bias wordt getest.',
+  limitations: [
+    'Ik ben geen jurist. Mijn toetsing is een onderbouwde inschatting; een privacyjurist kan tot een andere conclusie komen.',
+    'Voor de actuele datums van de AI-verordening (Digital Omnibus) heb ik secundaire bronnen gebruikt.',
+    'Niet alle details van Brøndby IF zijn openbaar, zoals de inhoud van de DPIA en hoe foutieve matches worden afgehandeld.',
+    'Ik heb één ethisch kader gebruikt (de zeven vereisten van de Europese Commissie); andere kaders kunnen andere accenten leggen.',
+  ],
+  ownPosition: '',
   sources: [
     { id: 'src-ai-act', title: 'Verordening (EU) 2024/1689 (AI-verordening)', author: 'Europese Unie', year: '2024', url: 'https://eur-lex.europa.eu/eli/reg/2024/1689/oj' },
     { id: 'src-avg', title: 'Verordening (EU) 2016/679 (Algemene verordening gegevensbescherming)', author: 'Europese Unie', year: '2016', url: 'https://eur-lex.europa.eu/eli/reg/2016/679/oj' },
     { id: 'src-uavg', title: 'Uitvoeringswet Algemene verordening gegevensbescherming (o.a. art. 29, biometrie)', author: 'Overheid.nl', year: '2018', url: 'https://wetten.overheid.nl/BWBR0040940/' },
+    { id: 'src-omnibus', title: 'EU AI Act Omnibus Agreement: postponed high-risk deadlines and other key changes', author: 'Gibson Dunn', year: '2026', url: 'https://www.gibsondunn.com/eu-ai-act-omnibus-agreement-postponed-high-risk-deadlines/' },
     { id: 'src-edpb', title: 'Guidelines 05/2020 on consent under Regulation 2016/679', author: 'European Data Protection Board (EDPB)', year: '2020', url: 'https://www.edpb.europa.eu/our-work-tools/our-documents/guidelines/guidelines-052020-consent-under-regulation-2016679_en' },
+    { id: 'src-hleg', title: 'Ethics Guidelines for Trustworthy AI', author: 'High-Level Expert Group on AI, Europese Commissie', year: '2019', url: 'https://digital-strategy.ec.europa.eu/en/library/ethics-guidelines-trustworthy-ai' },
     { id: 'src-mdcg', title: 'MDCG 2019-11 rev.1: Qualification and classification of software (MDR/IVDR)', author: 'Medical Device Coordination Group (MDCG)', year: '2025', url: 'https://health.ec.europa.eu/document/download/b45335c5-1679-4c71-a91c-fc7a4d37f12b_en' },
     { id: 'src-rossi', title: 'Effective injury forecasting in soccer with GPS training data and machine learning. PLOS ONE, 13(7)', author: 'Rossi, A., Pappalardo, L., Cintia, P., Iaia, F. M., Fernàndez, J., & Medina, D.', year: '2018', url: 'https://doi.org/10.1371/journal.pone.0201264' },
     { id: 'src-lovell', title: 'Soccer player characteristics in English lower-league development programmes: the relationships between relative age, maturation, anthropometry and physical fitness. PLOS ONE, 10(9)', author: 'Lovell, R., Towlson, C., Parkin, G., Portas, M., Vaeyens, R., & Cobley, S.', year: '2015', url: 'https://doi.org/10.1371/journal.pone.0137238' },
+    { id: 'src-nist', title: 'Face Recognition Vendor Test (FRVT) Part 3: Demographic Effects (NISTIR 8280)', author: 'Grother, P., Ngan, M., & Hanaoka, K. (NIST)', year: '2019', url: 'https://nvlpubs.nist.gov/nistpubs/ir/2019/NIST.IR.8280.pdf' },
+    { id: 'src-dt-2019', title: 'Tilladelse til behandling af biometriske data ved brug af automatisk ansigtsgenkendelse ved indgange på Brøndby Stadion', author: 'Datatilsynet', year: '2019', url: 'https://www.datatilsynet.dk/afgoerelser/tilladelser/2019/maj/tilladelse-til-behandling-af-biometriske-data-ved-brug-af-automatisk-ansigtsgenkendelse-ved-indgange-paa-broendby-stadion' },
+    { id: 'src-dt-2023', title: 'Brøndby IF har fået lov til udvidet brug af ansigtsgenkendelse', author: 'Datatilsynet', year: '2023', url: 'https://www.datatilsynet.dk/presse-og-nyheder/nyhedsarkiv/2023/jun/broendby-if-har-faaet-lov-til-udvidet-brug-af-ansigtsgenkendelse' },
+    { id: 'src-dt-2025', title: 'Fodboldklubberne i Superligaen får tilladelse til brug af ansigtsgenkendelse', author: 'Datatilsynet', year: '2025', url: 'https://www.datatilsynet.dk/presse-og-nyheder/nyhedsarkiv/2025/sep/fodboldklubberne-i-superligaen-faar-tilladelse-til-brug-af-ansigtsgenkendelse' },
     { id: 'src-brondby', title: 'DLA Piper har bistået Brøndby IF med at opnå godkendelse til brug af automatisk ansigtsgenkendelse', author: 'DLA Piper Denmark', year: '2019', url: 'https://denmark.dlapiper.com/da/news/dla-piper-har-bistaet-brondby-if-med-opna-godkendelse-til-brug-af-automatisk' },
+    { id: 'src-ap-2020', title: 'Autoriteit Persoonsgegevens waarschuwt tegen gezichtsherkenning-camera’s', author: 'Telecompaper', year: '2020', url: 'https://www.telecompaper.com/nieuws/autoriteit-persoonsgegevens-waarschuwt-tegen-gezichtsherkenning-cameras--1362948' },
     { id: 'src-denbosch', title: 'Camera’s met gezichtsherkenning bij FC Den Bosch en in het casino: “Dit kan niet zomaar”', author: 'Omroep Brabant', year: '2019', url: 'https://www.omroepbrabant.nl/nieuws/3003082/cameras-met-gezichtsherkenning-bij-fc-den-bosch-en-in-het-casino-dit-kan-niet-zomaar' },
-    { id: 'src-ap', title: 'Informatie over AI, algoritmes en privacy', author: 'Autoriteit Persoonsgegevens', year: 'z.d.', url: 'https://www.autoriteitpersoonsgegevens.nl/' },
   ],
 }
 
@@ -597,7 +704,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 19,
+  version: 20,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',

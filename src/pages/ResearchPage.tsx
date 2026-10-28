@@ -1,11 +1,73 @@
-import { BookOpen, ExternalLink, FlaskConical, Layers, Lightbulb, ListChecks, Microscope, Plus, Scale, Trash2 } from 'lucide-react'
+import {
+  BookOpen,
+  CircleCheck,
+  CircleX,
+  ClipboardList,
+  ExternalLink,
+  FlaskConical,
+  Gavel,
+  Info,
+  Layers,
+  Lightbulb,
+  ListChecks,
+  MessageSquareText,
+  Microscope,
+  Plus,
+  Scale,
+  Target,
+  Trash2,
+  TriangleAlert,
+  Users,
+  type LucideIcon,
+} from 'lucide-react'
+import type { ReactNode } from 'react'
 import { EditableList, EditableText } from '../components/editable'
 import { PageHeader, SectionTitle } from '../components/PageHeader'
-import { Badge, Button, Card, IconButton, Reveal } from '../components/ui'
+import { Badge, Button, Card, IconButton, PriorityBadge, Reveal } from '../components/ui'
 import { href } from '../hooks/useHashRoute'
 import { usePortfolio } from '../hooks/usePortfolio'
 import { cn, isSafeUrl, uid } from '../lib/utils'
-import type { Research, RiskLevelRow, Source } from '../types'
+import type { Research, RiskLevelRow, Source, Verdict } from '../types'
+
+const verdictView: Record<Verdict, { label: string; tone: 'lime' | 'flame' | 'danger' | 'data'; icon: LucideIcon }> = {
+  ok: { label: 'Voldoet', tone: 'lime', icon: CircleCheck },
+  warn: { label: 'Aandachtspunt', tone: 'flame', icon: TriangleAlert },
+  fail: { label: 'Voldoet niet', tone: 'danger', icon: CircleX },
+  info: { label: 'Vastgesteld', tone: 'data', icon: Info },
+}
+
+function VerdictBadge({ verdict }: { verdict: Verdict }) {
+  const v = verdictView[verdict]
+  return (
+    <Badge tone={v.tone} className="shrink-0">
+      <v.icon className="size-3" aria-hidden /> {v.label}
+    </Badge>
+  )
+}
+
+/** Keuzelijst voor een oordeel in de bewerkmodus, met leesbare labels. */
+function VerdictSelect({ value, onChange, label }: { value: Verdict; onChange: (v: Verdict) => void; label: string }) {
+  return (
+    <select aria-label={label} className="field w-auto py-1 text-xs" value={value} onChange={(e) => onChange(e.target.value as Verdict)}>
+      {(Object.keys(verdictView) as Verdict[]).map((v) => (
+        <option key={v} value={v}>
+          {verdictView[v].label}
+        </option>
+      ))}
+    </select>
+  )
+}
+
+/** Kop die een groot deel van het onderzoek aankondigt. */
+function PartHeading({ label, title, children }: { label: string; title: string; children?: ReactNode }) {
+  return (
+    <div className="mt-12 mb-6 border-t border-line pt-8">
+      <p className="kicker mb-2">{label}</p>
+      <h2 className="text-3xl font-bold uppercase sm:text-4xl">{title}</h2>
+      {children && <div className="mt-3 max-w-3xl text-muted">{children}</div>}
+    </div>
+  )
+}
 
 const toneClasses: Record<RiskLevelRow['tone'], string> = {
   red: 'border-danger/40 bg-danger/10 text-danger',
@@ -32,7 +94,7 @@ function RiskFigure({ rows }: { rows: RiskLevelRow[] }) {
           </li>
         ))}
       </ol>
-      <figcaption className="mt-3 text-xs text-muted">Risiconiveaus van de Europese AI-verordening, met per niveau een voorbeeld uit de sportmarketing.</figcaption>
+      <figcaption className="mt-3 text-xs text-muted">Risiconiveaus van de Europese AI-verordening, met per niveau een voorbeeld uit de sport.</figcaption>
     </figure>
   )
 }
@@ -42,6 +104,7 @@ export function ResearchPage({ param }: { param?: string }) {
   const all = [data.research, ...(data.extraResearch ?? [])]
   const index = Math.min(Math.max(Number(param) || 1, 1), all.length) - 1
   const r = all[index]
+  const hasCase = Boolean(r.caseStudy)
 
   /** Past het geselecteerde onderzoek aan (Onderzoek 1 = research, daarna extraResearch). */
   const mutate = (fn: (target: Research) => void) =>
@@ -127,6 +190,24 @@ export function ResearchPage({ param }: { param?: string }) {
         </section>
       </Reveal>
 
+      {r.note && (
+        <Reveal className="mb-6">
+          <aside className="flex gap-3 rounded-2xl border border-data/40 bg-data/[0.06] p-4 text-sm sm:p-5" aria-label="Actualiteit">
+            <Info className="mt-0.5 size-5 shrink-0 text-data" aria-hidden />
+            <div className="min-w-0 flex-1">
+              <p className="label mb-1">Actualiteit</p>
+              <EditableText value={r.note} onChange={set('note')} label="Actualiteit" multiline rows={3} className="text-ink/90" />
+            </div>
+          </aside>
+        </Reveal>
+      )}
+
+      {hasCase && (
+        <PartHeading label="Deel 1" title="Vijf werkvelden van de sport">
+          Een breed overzicht: per werkveld een veelgebruikte AI-toepassing, de risicocategorie, de belangrijkste privacyregels en de ethische risico’s.
+        </PartHeading>
+      )}
+
       {r.image?.src && (
         <Reveal className="mb-6">
           <figure className="overflow-hidden rounded-2xl border border-line bg-surface/80 p-3 sm:p-4">
@@ -150,7 +231,7 @@ export function ResearchPage({ param }: { param?: string }) {
       {r.assessment && r.assessment.length > 0 && (
         <Reveal className="mb-6">
           <Card>
-            <SectionTitle icon={Scale}>Toetsing</SectionTitle>
+            <SectionTitle icon={Scale}>Toetsing per werkveld</SectionTitle>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[640px] border-separate border-spacing-0 text-sm">
                 <caption className="sr-only">Toetsing van AI-toepassingen aan de AI-verordening, de AVG en ethiek</caption>
@@ -181,22 +262,215 @@ export function ResearchPage({ param }: { param?: string }) {
         </Reveal>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      {hasCase ? (
         <Reveal>
-          <Card className="h-full">
-            <SectionTitle icon={ListChecks}>Resultaten</SectionTitle>
+          <Card>
+            <SectionTitle icon={ListChecks}>Resultaten per werkveld</SectionTitle>
             <EditableList items={r.results} onChange={set('results')} label="Resultaat" emptyText="Nog geen resultaten." addLabel="Resultaat toevoegen" />
           </Card>
         </Reveal>
-        <Reveal delay={0.05}>
-          <Card className="h-full border-data/30">
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Reveal>
+            <Card className="h-full">
+              <SectionTitle icon={ListChecks}>Resultaten</SectionTitle>
+              <EditableList items={r.results} onChange={set('results')} label="Resultaat" emptyText="Nog geen resultaten." addLabel="Resultaat toevoegen" />
+            </Card>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <Card className="h-full border-data/30">
+              <SectionTitle icon={Lightbulb}>{r.insightsLabel || 'Inzichten'}</SectionTitle>
+              {editMode ? (
+                <EditableList items={r.insights} onChange={set('insights')} label={r.insightsLabel || 'Inzicht'} addLabel="Toevoegen" />
+              ) : (
+                <ul className="space-y-3">
+                  {r.insights.filter(Boolean).map((insight, i) => (
+                    <li key={i} className="rounded-xl border border-data/20 bg-data/[0.06] p-4 text-ink/90">
+                      {insight}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Card>
+          </Reveal>
+        </div>
+      )}
+
+      {r.caseStudy && (
+        <>
+          <PartHeading label="Deel 2" title={r.caseStudy.title}>
+            <EditableText value={r.caseStudy.intro} onChange={(v) => mutate((t) => void (t.caseStudy!.intro = v))} label="Inleiding casus" multiline />
+          </PartHeading>
+
+          <Reveal className="mb-6">
+            <Card>
+              <SectionTitle icon={ClipboardList}>De feiten</SectionTitle>
+              <EditableList
+                items={r.caseStudy.facts}
+                onChange={(facts) => mutate((t) => void (t.caseStudy!.facts = facts))}
+                label="Feit"
+                addLabel="Feit toevoegen"
+              />
+            </Card>
+          </Reveal>
+
+          <Reveal className="mb-6">
+            <Card>
+              <SectionTitle icon={Gavel}>Toetsingskader in negen stappen</SectionTitle>
+              <p className="-mt-2 mb-4 text-sm text-muted">Per stap: de vraag, wat ik heb gevonden en mijn oordeel.</p>
+              <ol className="space-y-3">
+                {r.caseStudy.steps.map((step, i) => (
+                  <li key={step.question} className="rounded-xl border border-line bg-bg/40 p-4">
+                    <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
+                      <p className="font-medium text-ink">{step.question}</p>
+                      {editMode ? (
+                        <VerdictSelect
+                          value={step.verdict}
+                          label={`Oordeel stap ${i + 1}`}
+                          onChange={(verdict) => mutate((t) => void (t.caseStudy!.steps[i].verdict = verdict))}
+                        />
+                      ) : (
+                        <VerdictBadge verdict={step.verdict} />
+                      )}
+                    </div>
+                    <EditableText
+                      value={step.finding}
+                      onChange={(v) => mutate((t) => void (t.caseStudy!.steps[i].finding = v))}
+                      label={`Bevinding stap ${i + 1}`}
+                      multiline
+                      rows={3}
+                      className="text-sm text-ink/90"
+                    />
+                  </li>
+                ))}
+              </ol>
+            </Card>
+          </Reveal>
+
+          <div className="mb-6 grid gap-6 lg:grid-cols-2">
+            <Reveal>
+              <Card className="h-full">
+                <SectionTitle icon={Scale}>En in Nederland?</SectionTitle>
+                <EditableText value={r.caseStudy.comparison} onChange={(v) => mutate((t) => void (t.caseStudy!.comparison = v))} label="Vergelijking Nederland" multiline rows={5} className="text-ink/90" />
+              </Card>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <Card className="h-full border-lime/40">
+                <SectionTitle icon={Target}>Oordeel over de casus</SectionTitle>
+                <EditableText value={r.caseStudy.conclusion} onChange={(v) => mutate((t) => void (t.caseStudy!.conclusion = v))} label="Oordeel casus" multiline rows={6} className="text-ink/90" />
+              </Card>
+            </Reveal>
+          </div>
+        </>
+      )}
+
+      {r.ethics && r.ethics.length > 0 && (
+        <Reveal className="mb-6">
+          <Card>
+            <SectionTitle icon={Scale}>Ethische afweging</SectionTitle>
+            {r.ethicsFramework && <p className="-mt-2 mb-4 text-sm text-muted">{r.ethicsFramework}</p>}
+            <ul className="grid gap-3 md:grid-cols-2">
+              {r.ethics.map((row, i) => (
+                <li key={row.requirement} className="rounded-xl border border-line bg-bg/40 p-4">
+                  <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
+                    <p className="font-medium text-ink">{row.requirement}</p>
+                    {editMode ? (
+                      <VerdictSelect value={row.verdict} label={`Oordeel ${row.requirement}`} onChange={(verdict) => mutate((t) => void (t.ethics![i].verdict = verdict))} />
+                    ) : (
+                      <VerdictBadge verdict={row.verdict} />
+                    )}
+                  </div>
+                  <EditableText
+                    value={row.assessment}
+                    onChange={(v) => mutate((t) => void (t.ethics![i].assessment = v))}
+                    label={`Beoordeling ${row.requirement}`}
+                    multiline
+                    rows={3}
+                    className="text-sm text-ink/90"
+                  />
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </Reveal>
+      )}
+
+      {r.stakeholders && r.stakeholders.length > 0 && (
+        <Reveal className="mb-6">
+          <Card>
+            <SectionTitle icon={Users}>Wie heeft er belang bij?</SectionTitle>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[560px] border-separate border-spacing-0 text-sm">
+                <caption className="sr-only">Belanghebbenden met hun belang en hun zorg</caption>
+                <thead>
+                  <tr className="text-left">
+                    {['Belanghebbende', 'Belang', 'Zorg'].map((h) => (
+                      <th key={h} scope="col" className="border-b border-line px-3 py-2 font-mono text-[11px] font-medium tracking-wider text-muted uppercase">
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {r.stakeholders.map((s) => (
+                    <tr key={s.name} className="align-top">
+                      <th scope="row" className="border-b border-line/60 px-3 py-3 text-left font-medium text-ink">
+                        {s.name}
+                      </th>
+                      <td className="border-b border-line/60 px-3 py-3 text-ink/90">{s.interest}</td>
+                      <td className="border-b border-line/60 px-3 py-3 text-ink/90">{s.concern}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </Reveal>
+      )}
+
+      {hasCase && (
+        <PartHeading label="Deel 3" title="Aanbevelingen en conclusie">
+          De aanbevelingen volgen uit de toetsing en de ethische afweging.
+        </PartHeading>
+      )}
+
+      {r.recommendations && r.recommendations.length > 0 && (
+        <Reveal className="mb-6">
+          <Card>
+            <SectionTitle icon={MessageSquareText}>Aanbevelingen per partij</SectionTitle>
+            <ol className="space-y-3">
+              {r.recommendations.map((rec, i) => (
+                <li key={i} className="rounded-xl border border-line bg-bg/40 p-4">
+                  <div className="mb-2 flex flex-wrap items-center gap-2">
+                    <Badge tone="data">{rec.actor}</Badge>
+                    <PriorityBadge priority={rec.priority} />
+                  </div>
+                  <EditableText
+                    value={rec.action}
+                    onChange={(v) => mutate((t) => void (t.recommendations![i].action = v))}
+                    label={`Aanbeveling ${i + 1}`}
+                    multiline
+                    rows={2}
+                    className="font-medium text-ink"
+                  />
+                  <p className="mt-1 text-xs text-muted">Onderbouwing: {rec.basis}</p>
+                </li>
+              ))}
+            </ol>
+          </Card>
+        </Reveal>
+      )}
+
+      {hasCase && (
+        <Reveal className="mb-6">
+          <Card className="border-data/30">
             <SectionTitle icon={Lightbulb}>{r.insightsLabel || 'Inzichten'}</SectionTitle>
             {editMode ? (
               <EditableList items={r.insights} onChange={set('insights')} label={r.insightsLabel || 'Inzicht'} addLabel="Toevoegen" />
             ) : (
-              <ul className="space-y-3">
+              <ul className="grid gap-3 md:grid-cols-2">
                 {r.insights.filter(Boolean).map((insight, i) => (
-                  <li key={i} className="rounded-xl border border-data/20 bg-data/[0.06] p-4 text-ink/90">
+                  <li key={i} className="rounded-xl border border-data/20 bg-data/[0.06] p-4 text-sm text-ink/90">
                     {insight}
                   </li>
                 ))}
@@ -204,7 +478,45 @@ export function ResearchPage({ param }: { param?: string }) {
             )}
           </Card>
         </Reveal>
-      </div>
+      )}
+
+      {r.conclusion && (
+        <Reveal className="mb-6">
+          <section aria-labelledby="conclusie" className="rounded-3xl border border-lime/30 bg-gradient-to-br from-lime/[0.08] to-transparent p-6 sm:p-8">
+            <p id="conclusie" className="kicker mb-3">Conclusie</p>
+            <EditableText value={r.conclusion} onChange={set('conclusion')} label="Conclusie" multiline rows={6} className="max-w-4xl text-lg leading-relaxed text-ink" />
+          </section>
+        </Reveal>
+      )}
+
+      {(r.limitations?.length || editMode || r.ownPosition?.trim()) && hasCase && (
+        <div className="mb-6 grid gap-6 lg:grid-cols-2">
+          {r.limitations && (
+            <Reveal>
+              <Card className="h-full">
+                <SectionTitle icon={Info}>Beperkingen van mijn onderzoek</SectionTitle>
+                <EditableList items={r.limitations} onChange={set('limitations')} label="Beperking" addLabel="Beperking toevoegen" />
+              </Card>
+            </Reveal>
+          )}
+          {(editMode || r.ownPosition?.trim()) && (
+            <Reveal delay={0.05}>
+              <Card className="h-full border-lime/40">
+                <SectionTitle icon={Target}>Mijn standpunt</SectionTitle>
+                <EditableText
+                  value={r.ownPosition ?? ''}
+                  onChange={set('ownPosition')}
+                  label="Mijn standpunt"
+                  placeholder="Zou jij als sportprofessional gezichtsherkenning (of een andere AI-toepassing) invoeren? Waarom wel of niet? Welke risico’s vind jij het zwaarst wegen?"
+                  multiline
+                  rows={6}
+                  className="leading-relaxed text-ink/90"
+                />
+              </Card>
+            </Reveal>
+          )}
+        </div>
+      )}
 
       {/* Bronnen */}
       <Reveal className="mt-6">

@@ -72,6 +72,44 @@ export interface AssessmentRow {
   ethics: string
 }
 
+/** Oordeel bij een toetsingsstap: voldoet, aandachtspunt, voldoet niet of alleen een vaststelling. */
+export type Verdict = 'ok' | 'warn' | 'fail' | 'info'
+
+export interface CaseStep {
+  question: string
+  finding: string
+  verdict: Verdict
+}
+
+/** Een diepgaand getoetste praktijkcasus. */
+export interface CaseStudy {
+  title: string
+  intro: string
+  facts: string[]
+  steps: CaseStep[]
+  comparison: string
+  conclusion: string
+}
+
+export interface EthicsRow {
+  requirement: string
+  assessment: string
+  verdict: Verdict
+}
+
+export interface Stakeholder {
+  name: string
+  interest: string
+  concern: string
+}
+
+export interface Recommendation {
+  actor: string
+  action: string
+  basis: string
+  priority: 'Hoog' | 'Middel' | 'Laag'
+}
+
 export interface Research {
   title: string
   question: string
@@ -90,6 +128,18 @@ export interface Research {
   assessment?: AssessmentRow[]
   /** Afbeelding bij het onderzoek (pad in public/ of volledige URL) */
   image?: { src: string; alt: string; caption?: string }
+  /** Actualiteit, bijv. over gewijzigde wetgeving */
+  note?: string
+  caseStudy?: CaseStudy
+  ethicsFramework?: string
+  ethics?: EthicsRow[]
+  stakeholders?: Stakeholder[]
+  /** Concrete aanbevelingen per partij (de algemene staan in insights) */
+  recommendations?: Recommendation[]
+  conclusion?: string
+  limitations?: string[]
+  /** Eigen standpunt van de student */
+  ownPosition?: string
 }
 
 export type Priority = 'Hoog' | 'Middel' | 'Laag'
