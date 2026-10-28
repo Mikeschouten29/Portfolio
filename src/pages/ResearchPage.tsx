@@ -20,9 +20,10 @@ import {
   Users,
   type LucideIcon,
 } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { EditableList, EditableText } from '../components/editable'
 import { Expandable } from '../components/Expandable'
+import { ResearchVisual } from '../components/ResearchVisual'
 import { PageHeader, SectionTitle } from '../components/PageHeader'
 import { Badge, Button, Card, IconButton, PriorityBadge, Reveal } from '../components/ui'
 import { href } from '../hooks/useHashRoute'
@@ -189,6 +190,8 @@ export function ResearchPage({ param }: { param?: string }) {
   const index = Math.min(Math.max(Number(param) || 1, 1), all.length) - 1
   const r = all[index]
   const hasCase = Boolean(r.caseStudy)
+  const [view, setView] = useState<'visual' | 'full'>('visual')
+  const showVisual = Boolean(r.visual) && view === 'visual' && !editMode
 
   /** Past het geselecteerde onderzoek aan (Onderzoek 1 = research, daarna extraResearch). */
   const mutate = (fn: (target: Research) => void) =>
@@ -248,6 +251,42 @@ export function ResearchPage({ param }: { param?: string }) {
         </div>
       )}
 
+      {r.visual && !editMode && (
+        <div role="tablist" aria-label="Weergave" className="mb-6 inline-flex rounded-xl border border-line bg-surface p-1">
+          {([
+            ['visual', 'Visueel'],
+            ['full', 'Volledig verslag'],
+          ] as const).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={view === id}
+              onClick={() => setView(id)}
+              className={cn(
+                'rounded-lg px-4 py-1.5 text-sm transition-colors',
+                view === id ? 'bg-lime font-semibold text-lime-dark' : 'text-muted hover:text-ink',
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {showVisual ? (
+        <Reveal>
+          <ResearchVisual research={r} />
+          <p className="mt-3 text-center text-sm text-muted">
+            Alle onderbouwing, bronnen en details staan in het{' '}
+            <button type="button" onClick={() => setView('full')} className="font-medium text-lime underline-offset-4 hover:underline">
+              volledige verslag
+            </button>
+            .
+          </p>
+        </Reveal>
+      ) : (
+      <>
       {/* Onderzoeksvraag */}
       <Reveal key={`vraag-${index}`}>
         <section aria-labelledby="vraag" className="relative mb-8 overflow-hidden rounded-3xl border border-lime/30 bg-gradient-to-br from-lime/[0.08] to-transparent p-6 sm:p-10">
@@ -640,6 +679,8 @@ export function ResearchPage({ param }: { param?: string }) {
           )}
         </Card>
       </Reveal>
+      </>
+      )}
     </>
   )
 }

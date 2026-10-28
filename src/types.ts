@@ -77,6 +77,8 @@ export type Verdict = 'ok' | 'warn' | 'fail' | 'info'
 
 export interface CaseStep {
   question: string
+  /** Twee of drie woorden voor de visuele versie */
+  label?: string
   /** Kort antwoord, zichtbaar zonder uit te klappen */
   short?: string
   finding: string
@@ -112,6 +114,20 @@ export interface Recommendation {
   priority: 'Hoog' | 'Middel' | 'Laag'
 }
 
+export type VisualIcon =
+  | 'activity' | 'sprout' | 'stethoscope' | 'megaphone' | 'scan-face'
+  | 'user-check' | 'database' | 'eye' | 'scale'
+
+/** Gegevens voor de visuele presentatie van een onderzoek (weinig tekst, veel beeld). */
+export interface ResearchVisual {
+  /** De kernboodschap in één zin */
+  oneLiner: string
+  werkvelden: { name: string; icon: VisualIcon; keyword: string; risk: RiskLevelRow['tone'] }[]
+  advice: { icon: VisualIcon; text: string }[]
+  /** Spiekbriefje per dia: steekwoorden om het zelf uit te leggen */
+  notes: Record<string, string[]>
+}
+
 export interface Research {
   title: string
   question: string
@@ -144,6 +160,7 @@ export interface Research {
   limitations?: string[]
   /** Eigen standpunt van de student */
   ownPosition?: string
+  visual?: ResearchVisual
 }
 
 export type Priority = 'Hoog' | 'Middel' | 'Laag'

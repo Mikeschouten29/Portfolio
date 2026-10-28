@@ -1,4 +1,4 @@
-import type { LearningOutcome, LuId, LuProgress, PortfolioData, Prompt, Research, Sprint, SprintStatus, UserStory } from '../types'
+import type { LearningOutcome, LuId, LuProgress, PortfolioData, Prompt, Research, ResearchVisual, Sprint, SprintStatus, UserStory } from '../types'
 
 function lu(scores: [number, number, number, number, number], notes: Partial<Record<LuId, string>> = {}) {
   const ids: LuId[] = ['LU1', 'LU2', 'LU3', 'LU4', 'LU5']
@@ -687,6 +687,43 @@ export const aiEthicsResearch: Research = {
   ],
 }
 
+/** Korte labels per toetsingsstap, voor de visuele versie. */
+export const caseStepLabels = ['AI-systeem', 'Verboden?', 'Hoog risico', 'Informatie', 'Gevoelige data', 'Grondslag', 'DPIA', 'Data beperkt', 'Bezwaar']
+
+/** Visuele presentatie van Onderzoek 2: weinig tekst, met spiekbriefje om het zelf uit te leggen. */
+export const researchVisual: ResearchVisual = {
+  oneLiner: 'AI in de sport kan, als de mens beslist.',
+  werkvelden: [
+    { name: 'Prestatiesport', icon: 'activity', keyword: 'Privacy sporter', risk: 'amber' },
+    { name: 'Talent', icon: 'sprout', keyword: 'Bias', risk: 'amber' },
+    { name: 'Gezondheid', icon: 'stethoscope', keyword: 'Veiligheid', risk: 'amber' },
+    { name: 'Marketing', icon: 'megaphone', keyword: 'Manipulatie', risk: 'red' },
+    { name: 'Evenementen', icon: 'scan-face', keyword: 'Privacy iedereen', risk: 'red' },
+  ],
+  advice: [
+    { icon: 'user-check', text: 'Mens beslist' },
+    { icon: 'database', text: 'Niet te veel data' },
+    { icon: 'eye', text: 'Vertel dat het AI is' },
+    { icon: 'scale', text: 'Test op eerlijkheid' },
+  ],
+  notes: {
+    vraag: ['AI wordt in de hele sport gebruikt', 'Mijn vraag: wanneer is dat eerlijk en veilig?', 'Drie thema’s: privacy, bias, transparantie'],
+    wetten: ['AI-verordening: deelt AI in op risico', 'AVG: privacywet, extra streng voor gezondheid en gezicht'],
+    risico: ['Hoe hoger het risico, hoe strenger de regels', 'Regels voor hoog risico gelden vanaf 2 december 2027'],
+    werkvelden: ['Talent: AI neemt oneerlijkheid over (geboortemaand)', 'Prestatiesport: een speler kan geen nee zeggen', 'Evenementen: iedereen wordt gescand'],
+    casus: ['Deense club, sinds 2019', 'Doel: mensen met een stadionverbod tegenhouden', 'Er kijkt geen mens mee: dat moet wel'],
+    toets: ['7 van de 9 in orde', 'Twee gaten: geen menselijke controle en geen bezwaarprocedure'],
+    afweging: ['Veiligheid van iedereen tegenover privacy van iedereen', 'Nederland is strenger: biometrie alleen als het echt nodig is', 'Gezichtsherkenning werkt niet bij iedereen even goed (NIST)'],
+    advies: ['De mens beslist, niet de computer', 'Alleen data die echt nodig is', 'Vertel dat je AI gebruikt', 'Test of het voor iedereen eerlijk werkt'],
+    conclusie: ['AI kan verantwoord zijn, maar alleen met deze vier regels', 'Daarna: mijn eigen mening'],
+  },
+}
+
+aiEthicsResearch.visual = researchVisual
+aiEthicsResearch.caseStudy?.steps.forEach((step, i) => {
+  step.label = caseStepLabels[i]
+})
+
 /** Vervangt het verzonnen voorbeeldproject op de roadmap. */
 export const youngOnesRoadmapItem = {
   id: 'r3',
@@ -716,7 +753,7 @@ export const supabasePrompt: Prompt = {
 }
 
 export const sampleData: PortfolioData = {
-  version: 21,
+  version: 22,
   profile: {
     name: 'Mike Schouten',
     role: 'Student Sportkunde · AI-ontdekker',

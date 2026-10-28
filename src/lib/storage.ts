@@ -1,6 +1,8 @@
 import {
   aiEthicsResearch,
+  caseStepLabels,
   minorLearningOutcomes,
+  researchVisual,
   researchContent,
   sampleData,
   sprint1Content,
@@ -19,7 +21,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 21
+export const DATA_VERSION = 22
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -274,6 +276,17 @@ export function migrate(data: PortfolioData): PortfolioData {
     // v21: Onderzoek 2 korter en overzichtelijker (In het kort, korte antwoorden per stap).
     const i = d.extraResearch.findIndex((r) => r.title === aiEthicsResearch.title && r.method.startsWith('Ik heb een literatuuronderzoek gedaan in twee delen'))
     if (i >= 0) d.extraResearch[i] = structuredClone(aiEthicsResearch)
+  }
+
+  if (oldVersion < 22) {
+    // v22: visuele presentatie (weinig tekst, met spiekbriefje) voor Onderzoek 2.
+    const r = d.extraResearch.find((x) => x.title === aiEthicsResearch.title)
+    if (r && !r.visual) {
+      r.visual = structuredClone(researchVisual)
+      r.caseStudy?.steps.forEach((step, i) => {
+        step.label ??= caseStepLabels[i]
+      })
+    }
   }
 
   d.version = DATA_VERSION
