@@ -1,12 +1,12 @@
 import { motion } from 'motion/react'
-import { ChartColumn, CircleCheck, ClipboardCheck, Flag, GraduationCap, Grid3x3, LayoutDashboard, Route } from 'lucide-react'
+import { ChartColumn, CircleCheck, ClipboardCheck, Flag, GraduationCap, Grid3x3, LayoutDashboard, Microscope } from 'lucide-react'
 import { useState } from 'react'
 import { EditableText } from '../components/editable'
 import { PageHeader, SectionTitle } from '../components/PageHeader'
 import { Badge, Card, ProgressBar, Reveal } from '../components/ui'
 import { href } from '../hooks/useHashRoute'
 import { usePortfolio } from '../hooks/usePortfolio'
-import { average, isAchieved, luAchievedIn, luCount, luPct, minorProgress, sprintLuAchieved, sprintLuAverage, storyProgress } from '../lib/utils'
+import { isAchieved, luAchievedIn, luCount, luPct, minorProgress, sprintLuAchieved, sprintLuAverage, storyProgress } from '../lib/utils'
 import { LU_IDS } from '../types'
 
 function StatTile({ icon: Icon, label, value, sub }: { icon: typeof Flag; label: string; value: string; sub: string }) {
@@ -122,7 +122,7 @@ export function DashboardPage() {
         <StatTile icon={GraduationCap} label="Minor-voortgang" value={`${minor.pct}%`} sub={`${minor.done} van ${minor.required} voldoendes`} />
         <StatTile icon={Flag} label="Sprints" value={`${sprints.filter((s) => s.status === 'Afgerond').length}/${sprints.length}`} sub={`${sprints.filter((s) => s.status === 'Bezig').length} sprint(s) bezig`} />
         <StatTile icon={ClipboardCheck} label="User stories" value={`${doneStories}/${allStories.length}`} sub="Afgerond over alle sprints" />
-        <StatTile icon={Route} label="Roadmap" value={`${average(data.roadmap.map((r) => r.progress))}%`} sub="Gemiddelde voortgang doelen" />
+        <StatTile icon={Microscope} label="Onderzoeken" value={String(1 + data.extraResearch.length)} sub="Uitgewerkt in mijn portfolio" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">

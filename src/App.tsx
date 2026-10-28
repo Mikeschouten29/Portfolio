@@ -11,7 +11,6 @@ import { HomePage } from './pages/HomePage'
 import { PromptsPage } from './pages/PromptsPage'
 import { ResearchPage } from './pages/ResearchPage'
 import { ShowGrowPage } from './pages/ShowGrowPage'
-import { RoadmapPage } from './pages/RoadmapPage'
 import { SprintsPage } from './pages/SprintsPage'
 import { TimelinePage } from './pages/TimelinePage'
 
@@ -23,8 +22,6 @@ function Page({ route }: { route: Route }) {
       return <ShowGrowPage param={route.param} />
     case 'onderzoek':
       return <ResearchPage param={route.param} />
-    case 'roadmap':
-      return <RoadmapPage />
     case 'sprints':
       return <SprintsPage param={route.param} />
     case 'tijdlijn':

@@ -1,8 +1,8 @@
 import { useSyncExternalStore } from 'react'
 
-export type PageId = 'home' | 'prompts' | 'show-grow' | 'onderzoek' | 'roadmap' | 'sprints' | 'tijdlijn' | 'dashboard'
+export type PageId = 'home' | 'prompts' | 'show-grow' | 'onderzoek' | 'sprints' | 'tijdlijn' | 'dashboard'
 
-export const PAGE_IDS: PageId[] = ['home', 'prompts', 'show-grow', 'onderzoek', 'roadmap', 'sprints', 'tijdlijn', 'dashboard']
+export const PAGE_IDS: PageId[] = ['home', 'prompts', 'show-grow', 'onderzoek', 'sprints', 'tijdlijn', 'dashboard']
 
 export interface Route {
   page: PageId

@@ -6,7 +6,6 @@ import {
   Library,
   Microscope,
   Presentation,
-  Route as RouteIcon,
   type LucideIcon,
 } from 'lucide-react'
 import type { PageId } from '../hooks/useHashRoute'
@@ -22,7 +21,6 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'prompts', label: 'Prompts', icon: Library },
   { id: 'show-grow', label: 'Show & Grow', icon: Presentation },
   { id: 'onderzoek', label: 'Onderzoek', icon: Microscope },
-  { id: 'roadmap', label: 'Roadmap', icon: RouteIcon },
   { id: 'sprints', label: 'Sprints', icon: Flag },
   { id: 'tijdlijn', label: 'Tijdlijn', icon: CalendarRange },
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
