@@ -21,7 +21,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 26
+export const DATA_VERSION = 27
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -336,6 +336,33 @@ export function migrate(data: PortfolioData): PortfolioData {
       if (v.captions) {
         v.captions.standpunt ??= researchVisual.captions?.standpunt ?? ''
         if (v.captions.conclusie === 'AI is in de sport een hulpmiddel, geen beslisser. Mijn standpunt: gezichtsherkenning mag alleen onder strenge voorwaarden, omdat privacy voor mij het zwaarst weegt en een mens moet beslissen.') v.captions.conclusie = researchVisual.captions?.conclusie ?? ''
+      }
+    }
+  }
+
+  if (oldVersion < 27) {
+    // v27: correctie Brøndby IF (een medewerker controleert elke match, maar dat is geen voorwaarde)
+    // en de visuele presentatie als één doorlopend verhaal met brugvragen.
+    const r = d.extraResearch.find((x) => x.title === aiEthicsResearch.title)
+    if (r) {
+      const swap = (text: string | undefined, from: string, to: string) => (text === from ? to : text?.replace(from, to))
+      r.tldr = r.tldr?.map((t) => swap(t, "Casus Brøndby IF: gezichtsherkenning bij het stadion mag in Denemarken onder strenge voorwaarden, maar er moet een mens meekijken. In Nederland zou het waarschijnlijk niet mogen.", "Casus Brøndby IF: gezichtsherkenning bij het stadion mag in Denemarken onder strenge voorwaarden. Een medewerker controleert elke match, maar dat is geen vaste voorwaarde. In Nederland zou het waarschijnlijk niet mogen.") ?? t)
+      const step = r.caseStudy?.steps[2]
+      if (step) {
+        step.short = swap(step.short, "Ja, en er kijkt geen mens mee", "Ja, menselijke controle niet vastgelegd")
+        step.finding = swap(step.finding, "Een menselijke controle voordat iemand de toegang wordt geweigerd, staat niet in de voorwaarden van 2019.", "Volgens de leverancier controleert een medewerker in de controlekamer elke match voordat de stewards worden ingeschakeld (i-PRO, z.d.). Dat is goed, maar het staat niet als voorwaarde in de vergunning van 2019, en er zijn geen eisen gesteld tegen foute matches (EDRi, 2019). Onder de AI-verordening moet dat toezicht vastgelegd en aantoonbaar zijn.") ?? step.finding
+      }
+      if (r.caseStudy) r.caseStudy.conclusion = swap(r.caseStudy.conclusion, "Voor de AI-verordening zijn er twee aandachtspunten: er moet een mens meekijken voordat iemand wordt geweigerd, en er moet een bezwaarprocedure komen.", "Voor de AI-verordening zijn er twee aandachtspunten: de menselijke controle die in de praktijk gebeurt, moet vastgelegd en aantoonbaar worden, en er moet een bezwaarprocedure komen.") ?? r.caseStudy.conclusion
+      for (const e of r.ethics ?? []) e.assessment = swap(e.assessment, "Het systeem geeft een match, maar nergens staat dat een steward die controleert voordat iemand wordt geweigerd. Zo beslist in feite de AI.", "Volgens de leverancier controleert een medewerker elke match voordat een steward ingrijpt. Dat is goed, maar het staat niet als voorwaarde in de vergunning, dus het is niet gegarandeerd.") ?? e.assessment
+      for (const rec of r.recommendations ?? []) rec.action = swap(rec.action, "Laat een steward elke match controleren voordat iemand de toegang wordt geweigerd.", "Leg vast dat een medewerker elke match controleert voordat iemand de toegang wordt geweigerd, en laat zien dat dit ook echt gebeurt.") ?? rec.action
+      for (const src of aiEthicsResearch.sources) {
+        if (!r.sources.some((x) => x.id === src.id)) r.sources.push(structuredClone(src))
+      }
+      const v = r.visual
+      if (v) {
+        if (v.standpunt) v.standpunt.points = v.standpunt.points.map((p) => (p === "Een steward beslist altijd, niet de AI" ? "Een mens beslist altijd, niet de AI" : p))
+        if (!v.captions || v.captions.vraag?.startsWith('AI wordt in de hele sport gebruikt')) v.captions = structuredClone(researchVisual.captions)
+        v.bridges ??= structuredClone(researchVisual.bridges)
       }
     }
   }

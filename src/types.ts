@@ -128,6 +128,8 @@ export interface ResearchVisual {
   standpunt?: { answer: string; points: string[] }
   /** Korte uitleg (twee zinnen) onder elke dia */
   captions?: Record<string, string>
+  /** De vraag die naar de volgende dia leidt, zodat het één verhaal wordt */
+  bridges?: Record<string, string>
 }
 
 export interface Research {

@@ -90,7 +90,7 @@ function FlowStep({ icon: Icon, text, sub, warn }: { icon: LucideIcon; text: str
       <Icon className={cn('size-8', warn ? 'text-flame' : 'text-lime')} aria-hidden />
       <span className="text-sm font-medium text-ink">{text}</span>
       {sub && <span className="text-xs text-muted">{sub}</span>}
-      {warn && <span className="text-xs font-medium text-flame">ontbreekt nu</span>}
+      {warn && <span className="text-xs font-medium text-flame">niet vastgelegd</span>}
     </div>
   )
 }
@@ -103,6 +103,14 @@ function FlowArrow() {
     </>
   )
 }
+
+/** De vier hoofdstukken van het verhaal, met de dia's die erbij horen. */
+const acts = [
+  { name: 'Het probleem', ids: ['vraag', 'werkvelden'] },
+  { name: 'De regels', ids: ['wetten', 'risico'] },
+  { name: 'De casus', ids: ['casus', 'toets', 'afweging'] },
+  { name: 'Mijn antwoord', ids: ['advies', 'standpunt', 'conclusie'] },
+]
 
 interface Slide {
   id: string
@@ -136,6 +144,30 @@ function buildSlides(r: Research): Slide[] {
             ))}
           </div>
           <p className="mt-6 text-sm text-muted">Literatuuronderzoek · 5 werkvelden · 1 echte casus</p>
+        </div>
+      ),
+    },
+    {
+      id: 'werkvelden',
+      label: 'Vijf werkvelden',
+      render: () => (
+        <div className="flex h-full flex-col justify-center">
+          <SlideTitle kicker="Waar zit AI?">Vijf werkvelden</SlideTitle>
+          <ul className="mx-auto grid w-full max-w-5xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            {v.werkvelden.map((w) => {
+              const Icon = icons[w.icon]
+              return (
+                <li key={w.name} className={cn('flex flex-col items-center gap-2 rounded-2xl border p-4 text-center', tone[w.risk].box)}>
+                  <Icon className={cn('size-9', tone[w.risk].text)} aria-hidden />
+                  <span className="font-display text-lg leading-tight font-bold uppercase">{w.name}</span>
+                  {w.example && <span className="text-xs text-muted">{w.example}</span>}
+                  <span className={cn('mt-auto rounded-full px-2.5 py-0.5 text-xs font-semibold', tone[w.risk].text)}>{w.keyword}</span>
+                  {w.issue && <span className="text-xs leading-snug text-ink">{w.issue}</span>}
+                </li>
+              )
+            })}
+          </ul>
+          <p className="mt-4 text-center text-xs text-muted">Kleur = hoogste risico dat kan voorkomen</p>
         </div>
       ),
     },
@@ -192,35 +224,11 @@ function buildSlides(r: Research): Slide[] {
       ),
     },
     {
-      id: 'werkvelden',
-      label: 'Vijf werkvelden',
-      render: () => (
-        <div className="flex h-full flex-col justify-center">
-          <SlideTitle kicker="Deel 1">Vijf werkvelden</SlideTitle>
-          <ul className="mx-auto grid w-full max-w-5xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-            {v.werkvelden.map((w) => {
-              const Icon = icons[w.icon]
-              return (
-                <li key={w.name} className={cn('flex flex-col items-center gap-2 rounded-2xl border p-4 text-center', tone[w.risk].box)}>
-                  <Icon className={cn('size-9', tone[w.risk].text)} aria-hidden />
-                  <span className="font-display text-lg leading-tight font-bold uppercase">{w.name}</span>
-                  {w.example && <span className="text-xs text-muted">{w.example}</span>}
-                  <span className={cn('mt-auto rounded-full px-2.5 py-0.5 text-xs font-semibold', tone[w.risk].text)}>{w.keyword}</span>
-                  {w.issue && <span className="text-xs leading-snug text-ink">{w.issue}</span>}
-                </li>
-              )
-            })}
-          </ul>
-          <p className="mt-4 text-center text-xs text-muted">Kleur = hoogste risico dat kan voorkomen</p>
-        </div>
-      ),
-    },
-    {
       id: 'casus',
       label: 'Casus Brøndby IF',
       render: () => (
         <div className="flex h-full flex-col justify-center">
-          <SlideTitle kicker="Deel 2 · casus">Brøndby IF</SlideTitle>
+          <SlideTitle kicker="De casus">Brøndby IF</SlideTitle>
           <ul className="mx-auto mb-6 flex max-w-4xl flex-wrap justify-center gap-2 text-xs sm:text-sm">
             {['Deense voetbalclub', 'Sinds 2019', 'Toestemming van de toezichthouder', '9 strenge voorwaarden'].map((f) => (
               <li key={f} className="rounded-full border border-line bg-bg/50 px-3 py-1 text-ink">
@@ -233,9 +241,9 @@ function buildSlides(r: Research): Slide[] {
             <FlowArrow />
             <FlowStep icon={ListX} text="Vergelijk met lijst stadionverboden" sub="Geen match? Meteen gewist" />
             <FlowArrow />
-            <FlowStep icon={UserCheck} text="Steward controleert" sub="Verplicht vanaf 2027" warn />
+            <FlowStep icon={UserCheck} text="Medewerker controleert de match" sub="Gebeurt wel, maar is geen voorwaarde" warn />
             <FlowArrow />
-            <FlowStep icon={DoorOpen} text="Binnen of geweigerd" sub="Bezwaar? Niet geregeld" />
+            <FlowStep icon={DoorOpen} text="Binnen of geweigerd" sub="Bezwaar? Niet duidelijk geregeld" />
           </div>
         </div>
       ),
@@ -327,7 +335,7 @@ function buildSlides(r: Research): Slide[] {
       label: 'Mijn advies',
       render: () => (
         <div className="flex h-full flex-col justify-center">
-          <SlideTitle kicker="Deel 3">Mijn advies</SlideTitle>
+          <SlideTitle kicker="Wat moet er gebeuren?">Mijn advies</SlideTitle>
           <ul className="mx-auto grid w-full max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
             {v.advice.map((a) => {
               const Icon = icons[a.icon]
@@ -382,7 +390,7 @@ function buildSlides(r: Research): Slide[] {
   return slides
 }
 
-/** Visuele presentatie van een onderzoek: weinig tekst, veel beeld, met een korte uitleg onder elke dia. */
+/** Visuele presentatie van een onderzoek: weinig tekst, veel beeld, als één verhaal: elke dia eindigt met de vraag die naar de volgende leidt. */
 export function ResearchVisual({ research }: { research: Research }) {
   const slides = buildSlides(research)
   const deckId = useId()
@@ -423,6 +431,8 @@ export function ResearchVisual({ research }: { research: Research }) {
   }
 
   const caption = research.visual?.captions?.[slide.id]
+  const bridge = current < total - 1 ? research.visual?.bridges?.[slide.id] : undefined
+  const actIndex = acts.findIndex((a) => a.ids.includes(slide.id))
 
   return (
     <section
@@ -433,8 +443,28 @@ export function ResearchVisual({ research }: { research: Research }) {
     >
       <div className="lane h-1.5 w-full shrink-0" aria-hidden />
       <div className="flex items-center justify-between gap-3 border-b border-line/70 px-4 py-2.5">
-        <p className="font-mono text-xs text-muted" aria-live="polite">
-          {String(current + 1).padStart(2, '0')} / {String(total).padStart(2, '0')} · {slide.label}
+        <ol className="flex min-w-0 flex-wrap items-center gap-1 text-xs" aria-label="Hoofdstukken">
+          {acts.map((a, i) => (
+            <li key={a.name} className="flex items-center gap-1">
+              {i > 0 && <ArrowRight className="size-3 shrink-0 text-muted/60" aria-hidden />}
+              <button
+                type="button"
+                onClick={() => go(slides.findIndex((s) => s.id === a.ids[0]))}
+                aria-current={i === actIndex ? 'step' : undefined}
+                className={cn(
+                  'rounded-full px-2.5 py-1 font-medium transition-colors',
+                  i === actIndex ? 'bg-lime text-bg' : i < actIndex ? 'text-ink hover:bg-surface-2' : 'text-muted hover:bg-surface-2',
+                )}
+              >
+                <span className="sm:hidden">{i + 1}</span>
+                <span className="hidden sm:inline">{a.name}</span>
+              </button>
+            </li>
+          ))}
+        </ol>
+        <p className="ml-auto shrink-0 font-mono text-xs text-muted" aria-live="polite">
+          {String(current + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+          <span className="sr-only"> · {slide.label}</span>
         </p>
         <div className="flex items-center gap-1">
           <IconButton icon={fullscreen ? Minimize : Maximize} label={fullscreen ? 'Volledig scherm sluiten' : 'Presenteren op volledig scherm'} onClick={toggleFullscreen} />
@@ -460,6 +490,17 @@ export function ResearchVisual({ research }: { research: Research }) {
         <p className="mx-auto w-full max-w-3xl border-t border-line/50 px-5 py-3 text-center text-sm leading-relaxed text-muted" aria-live="polite">
           {caption}
         </p>
+      )}
+
+      {bridge && (
+        <button
+          type="button"
+          onClick={() => go(current + 1)}
+          className="mx-auto mb-3 flex items-center gap-2 rounded-full border border-lime/40 bg-lime/10 px-4 py-1.5 text-sm font-medium text-ink transition-colors hover:bg-lime/20"
+        >
+          <span className="text-muted">Volgende vraag:</span> {bridge}
+          <ArrowRight className="size-4 text-lime" aria-hidden />
+        </button>
       )}
 
       <div className="flex items-center justify-between gap-3 border-t border-line/70 px-4 py-2.5">
