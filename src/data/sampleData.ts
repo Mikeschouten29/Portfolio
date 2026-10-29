@@ -704,21 +704,31 @@ export const researchVisual: ResearchVisual = {
     toets: 'Ik heb het systeem getoetst met negen vragen uit de AI-verordening en de AVG. Zeven zijn in orde, de twee aandachtspunten zijn menselijke controle en een bezwaarprocedure.',
     afweging: 'De veiligheid van iedereen staat tegenover de privacy van iedereen. In Denemarken mag het onder voorwaarden, in Nederland waarschijnlijk niet: biometrie mag hier alleen als het echt nodig is.',
     advies: 'Een mens neemt de beslissing, je verzamelt alleen wat nodig is, je vertelt dat je AI gebruikt en je test of het voor iedereen eerlijk werkt.',
-    conclusie: 'AI is in de sport een hulpmiddel, geen beslisser. Mijn standpunt: gezichtsherkenning mag alleen onder strenge voorwaarden, omdat privacy voor mij het zwaarst weegt en een mens moet beslissen.',
+    standpunt: 'Ik kies voor ja, maar alleen onder strenge voorwaarden. Privacy weegt voor mij het zwaarst, daarom moet een mens altijd de beslissing nemen.',
+    conclusie: 'AI is in de sport een hulpmiddel, geen beslisser. Met deze vier regels kan het verantwoord, maar de mens blijft verantwoordelijk.',
   },
   werkvelden: [
-    { name: 'Prestatiesport', icon: 'activity', keyword: 'Privacy sporter', risk: 'amber' },
-    { name: 'Talent', icon: 'sprout', keyword: 'Bias', risk: 'amber' },
-    { name: 'Gezondheid', icon: 'stethoscope', keyword: 'Veiligheid', risk: 'amber' },
-    { name: 'Marketing', icon: 'megaphone', keyword: 'Manipulatie', risk: 'red' },
-    { name: 'Evenementen', icon: 'scan-face', keyword: 'Privacy iedereen', risk: 'red' },
+    { name: 'Prestatiesport', icon: 'activity', keyword: 'Privacy sporter', risk: 'amber', example: 'GPS en blessurevoorspelling', issue: 'Een speler kan moeilijk nee zeggen' },
+    { name: 'Talent', icon: 'sprout', keyword: 'Bias', risk: 'amber', example: 'AI selecteert jeugdspelers', issue: 'Vroeg geboren: 5,3× vaker gekozen' },
+    { name: 'Gezondheid', icon: 'stethoscope', keyword: 'Veiligheid', risk: 'amber', example: 'App beoordeelt blessures', issue: 'Wie is schuldig bij fout advies?' },
+    { name: 'Marketing', icon: 'megaphone', keyword: 'Manipulatie', risk: 'red', example: 'Persoonlijke aanbiedingen, chatbots', issue: 'Kwetsbare fans beïnvloeden' },
+    { name: 'Evenementen', icon: 'scan-face', keyword: 'Privacy iedereen', risk: 'red', example: 'Gezichtsherkenning bij de ingang', issue: 'Iedereen wordt gescand' },
   ],
   advice: [
-    { icon: 'user-check', text: 'Mens beslist' },
-    { icon: 'database', text: 'Niet te veel data' },
-    { icon: 'eye', text: 'Vertel dat het AI is' },
-    { icon: 'scale', text: 'Test op eerlijkheid' },
+    { icon: 'user-check', text: 'Mens beslist', why: 'Een steward checkt elke match', theme: 'Toezicht' },
+    { icon: 'database', text: 'Niet te veel data', why: 'Geen match? Meteen wissen', theme: 'Privacy' },
+    { icon: 'eye', text: 'Vertel dat het AI is', why: 'Borden en melding bij kaartverkoop', theme: 'Transparantie' },
+    { icon: 'scale', text: 'Test op eerlijkheid', why: 'Werkt het bij iedereen even goed?', theme: 'Bias' },
   ],
+  standpunt: {
+    answer: 'Ja, onder voorwaarden',
+    points: [
+      'Privacy van alle fans weegt voor mij het zwaarst',
+      'Alleen als gewone controles niet genoeg zijn',
+      'Een steward beslist altijd, niet de AI',
+      'Bij een club kijk ik eerst of het zonder AI kan',
+    ],
+  },
 
 }
 

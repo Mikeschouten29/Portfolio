@@ -49,6 +49,14 @@ const tone: Record<RiskLevelRow['tone'], { box: string; dot: string; text: strin
   red: { box: 'border-danger/40 bg-danger/10', dot: 'bg-danger', text: 'text-danger' },
 }
 
+/** Wat de AI-verordening per risiconiveau vraagt. */
+const riskRule: Record<RiskLevelRow['tone'], string> = {
+  red: 'Mag niet',
+  amber: 'Strenge eisen, mens kijkt mee',
+  teal: 'Melden dat het AI is',
+  gray: 'Geen extra regels',
+}
+
 const verdictIcon: Record<Verdict, { icon: LucideIcon; cls: string; label: string }> = {
   ok: { icon: CircleCheck, cls: 'text-lime', label: 'voldoet' },
   warn: { icon: TriangleAlert, cls: 'text-flame', label: 'aandachtspunt' },
@@ -71,7 +79,7 @@ function SlideTitle({ kicker, children }: { kicker?: string; children: ReactNode
 }
 
 /** Eén blok in de stroom van de casus. */
-function FlowStep({ icon: Icon, text, warn }: { icon: LucideIcon; text: string; warn?: boolean }) {
+function FlowStep({ icon: Icon, text, sub, warn }: { icon: LucideIcon; text: string; sub?: string; warn?: boolean }) {
   return (
     <div
       className={cn(
@@ -81,7 +89,8 @@ function FlowStep({ icon: Icon, text, warn }: { icon: LucideIcon; text: string; 
     >
       <Icon className={cn('size-8', warn ? 'text-flame' : 'text-lime')} aria-hidden />
       <span className="text-sm font-medium text-ink">{text}</span>
-      {warn && <span className="text-xs font-medium text-flame">ontbreekt</span>}
+      {sub && <span className="text-xs text-muted">{sub}</span>}
+      {warn && <span className="text-xs font-medium text-flame">ontbreekt nu</span>}
     </div>
   )
 }
@@ -114,13 +123,19 @@ function buildSlides(r: Research): Slide[] {
           <h2 className="max-w-3xl text-[clamp(2.2rem,6vw,4.5rem)] leading-[0.95] font-extrabold uppercase">
             Wanneer is AI in de sport <span className="text-lime">verantwoord</span>?
           </h2>
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
-            {['Privacy', 'Bias', 'Transparantie'].map((t) => (
-              <span key={t} className="rounded-full border border-line bg-bg/50 px-5 py-2 text-lg font-medium">
-                {t}
-              </span>
+          <div className="mt-10 grid w-full max-w-3xl gap-3 sm:grid-cols-3">
+            {[
+              { t: 'Privacy', q: 'Wie ziet mijn gegevens?' },
+              { t: 'Bias', q: 'Is het eerlijk voor iedereen?' },
+              { t: 'Transparantie', q: 'Weet ik dat het AI is?' },
+            ].map(({ t, q }) => (
+              <div key={t} className="rounded-2xl border border-line bg-bg/50 px-5 py-3">
+                <p className="text-lg font-semibold">{t}</p>
+                <p className="text-sm text-muted">{q}</p>
+              </div>
             ))}
           </div>
+          <p className="mt-6 text-sm text-muted">Literatuuronderzoek · 5 werkvelden · 1 echte casus</p>
         </div>
       ),
     },
@@ -132,16 +147,25 @@ function buildSlides(r: Research): Slide[] {
           <SlideTitle kicker="De regels">Twee wetten</SlideTitle>
           <div className="mx-auto grid w-full max-w-3xl gap-4 sm:grid-cols-2">
             {[
-              { icon: Cpu, name: 'AI-verordening', q: 'Hoe riskant is de AI?' },
-              { icon: Lock, name: 'AVG', q: 'Wat gebeurt er met de gegevens?' },
+              { icon: Cpu, name: 'AI-verordening', q: 'Hoe riskant is de AI?', points: ['Vier risiconiveaus', 'Hoog risico: een mens moet meekijken'] },
+              { icon: Lock, name: 'AVG', q: 'Wat gebeurt er met de gegevens?', points: ['Gezondheid en gezicht: extra streng', 'Alleen verzamelen wat nodig is'] },
             ].map((w) => (
               <div key={w.name} className="flex flex-col items-center gap-3 rounded-2xl border border-line bg-bg/50 p-6 text-center">
                 <w.icon className="size-12 text-lime" aria-hidden />
                 <p className="font-display text-3xl font-bold uppercase">{w.name}</p>
                 <p className="text-lg text-muted">{w.q}</p>
+                <ul className="mt-1 w-full space-y-1.5 border-t border-line/60 pt-3 text-sm text-ink">
+                  {w.points.map((p) => (
+                    <li key={p} className="flex items-center justify-center gap-2">
+                      <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-lime" />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
+          <p className="mt-4 text-center text-xs text-muted">Allebei Europese wetten: ze gelden ook in Nederland</p>
         </div>
       ),
     },
@@ -158,10 +182,12 @@ function buildSlides(r: Research): Slide[] {
                 <span className={cn('w-40 shrink-0 font-display text-xl font-bold uppercase sm:w-48', tone[row.tone].text)}>
                   {row.level.replace(' risico', '')}
                 </span>
-                <span className="text-sm text-ink sm:text-base">{row.example}</span>
+                <span className="flex-1 text-sm text-ink sm:text-base">{row.example}</span>
+                <span className={cn('hidden shrink-0 text-right text-xs font-medium sm:block', tone[row.tone].text)}>{riskRule[row.tone]}</span>
               </li>
             ))}
           </ol>
+          <p className="mt-4 text-center text-xs text-muted">Verboden: al sinds februari 2025 · Hoog risico: vanaf 2 december 2027</p>
         </div>
       ),
     },
@@ -171,14 +197,16 @@ function buildSlides(r: Research): Slide[] {
       render: () => (
         <div className="flex h-full flex-col justify-center">
           <SlideTitle kicker="Deel 1">Vijf werkvelden</SlideTitle>
-          <ul className="mx-auto grid w-full max-w-4xl grid-cols-2 gap-3 sm:grid-cols-5">
+          <ul className="mx-auto grid w-full max-w-5xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
             {v.werkvelden.map((w) => {
               const Icon = icons[w.icon]
               return (
                 <li key={w.name} className={cn('flex flex-col items-center gap-2 rounded-2xl border p-4 text-center', tone[w.risk].box)}>
                   <Icon className={cn('size-9', tone[w.risk].text)} aria-hidden />
                   <span className="font-display text-lg leading-tight font-bold uppercase">{w.name}</span>
-                  <span className="text-xs text-muted">{w.keyword}</span>
+                  {w.example && <span className="text-xs text-muted">{w.example}</span>}
+                  <span className={cn('mt-auto rounded-full px-2.5 py-0.5 text-xs font-semibold', tone[w.risk].text)}>{w.keyword}</span>
+                  {w.issue && <span className="text-xs leading-snug text-ink">{w.issue}</span>}
                 </li>
               )
             })}
@@ -193,14 +221,21 @@ function buildSlides(r: Research): Slide[] {
       render: () => (
         <div className="flex h-full flex-col justify-center">
           <SlideTitle kicker="Deel 2 · casus">Brøndby IF</SlideTitle>
+          <ul className="mx-auto mb-6 flex max-w-4xl flex-wrap justify-center gap-2 text-xs sm:text-sm">
+            {['Deense voetbalclub', 'Sinds 2019', 'Toestemming van de toezichthouder', '9 strenge voorwaarden'].map((f) => (
+              <li key={f} className="rounded-full border border-line bg-bg/50 px-3 py-1 text-ink">
+                {f}
+              </li>
+            ))}
+          </ul>
           <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-2 sm:flex-row sm:justify-center">
-            <FlowStep icon={Cctv} text="Camera bij de ingang" />
+            <FlowStep icon={Cctv} text="Camera bij de ingang" sub="Scant elk gezicht" />
             <FlowArrow />
-            <FlowStep icon={ListX} text="Vergelijk met lijst stadionverboden" />
+            <FlowStep icon={ListX} text="Vergelijk met lijst stadionverboden" sub="Geen match? Meteen gewist" />
             <FlowArrow />
-            <FlowStep icon={UserCheck} text="Steward controleert" warn />
+            <FlowStep icon={UserCheck} text="Steward controleert" sub="Verplicht vanaf 2027" warn />
             <FlowArrow />
-            <FlowStep icon={DoorOpen} text="Binnen of geweigerd" />
+            <FlowStep icon={DoorOpen} text="Binnen of geweigerd" sub="Bezwaar? Niet geregeld" />
           </div>
         </div>
       ),
@@ -211,14 +246,21 @@ function buildSlides(r: Research): Slide[] {
       render: () => (
         <div className="flex h-full flex-col justify-center">
           <SlideTitle kicker="Getoetst">Negen vragen</SlideTitle>
-          <ol className="mx-auto grid w-full max-w-3xl grid-cols-3 gap-2 sm:gap-3">
+          <ol className="mx-auto grid w-full max-w-4xl grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
             {steps.map((s, i) => {
               const vi = verdictIcon[s.verdict]
               return (
-                <li key={s.question} className="flex flex-col items-center gap-1.5 rounded-xl border border-line bg-bg/50 p-3 text-center">
-                  <vi.icon className={cn('size-7', vi.cls)} aria-label={vi.label} />
-                  <span className="text-xs font-medium text-ink sm:text-sm">
-                    <span className="text-muted">{i + 1}.</span> {s.label ?? s.short ?? s.question}
+                <li
+                  key={s.question}
+                  className={cn('flex items-start gap-2.5 rounded-xl border bg-bg/50 p-3 text-left', s.verdict === 'warn' ? 'border-flame/50' : 'border-line')}
+                >
+                  <vi.icon className={cn('mt-0.5 size-6 shrink-0', vi.cls)} aria-label={vi.label} />
+                  <span className="min-w-0">
+                    <span className="block text-[0.65rem] tracking-wide text-muted uppercase">{i < 4 ? 'AI-verordening' : 'AVG'}</span>
+                    <span className="block text-sm font-semibold text-ink">
+                      {i + 1}. {s.label ?? s.question}
+                    </span>
+                    {s.short && <span className="block text-xs text-muted">{s.short}</span>}
                   </span>
                 </li>
               )
@@ -250,6 +292,7 @@ function buildSlides(r: Research): Slide[] {
                 <Cctv className="size-9 text-lime" aria-hidden />
               </span>
               <span className="font-display text-2xl font-bold uppercase">Veiligheid</span>
+              <span className="max-w-[12rem] text-xs text-muted">Mensen met een stadionverbod buiten houden</span>
             </div>
             <Scale className="size-14 shrink-0 text-muted" aria-hidden />
             <div className="flex flex-col items-center gap-2 text-center">
@@ -257,16 +300,23 @@ function buildSlides(r: Research): Slide[] {
                 <Lock className="size-9 text-data" aria-hidden />
               </span>
               <span className="font-display text-2xl font-bold uppercase">Privacy</span>
+              <span className="max-w-[12rem] text-xs text-muted">Duizenden onschuldige fans gescand, en AI maakt fouten</span>
             </div>
           </div>
-          <div className="mx-auto mt-8 grid w-full max-w-md grid-cols-2 gap-3">
-            <div className="flex items-center gap-2 rounded-xl border border-lime/40 bg-lime/10 p-3">
+          <div className="mx-auto mt-8 grid w-full max-w-xl grid-cols-2 gap-3">
+            <div className="flex items-start gap-2 rounded-xl border border-lime/40 bg-lime/10 p-3">
               <CircleCheck className="size-6 shrink-0 text-lime" aria-hidden />
-              <span className="text-sm font-medium">Denemarken: mag, onder voorwaarden</span>
+              <span>
+                <span className="block text-sm font-medium">Denemarken: mag, onder voorwaarden</span>
+                <span className="block text-xs text-muted">Toezichthouder geeft vooraf toestemming</span>
+              </span>
             </div>
-            <div className="flex items-center gap-2 rounded-xl border border-danger/40 bg-danger/10 p-3">
+            <div className="flex items-start gap-2 rounded-xl border border-danger/40 bg-danger/10 p-3">
               <CircleX className="size-6 shrink-0 text-danger" aria-hidden />
-              <span className="text-sm font-medium">Nederland: waarschijnlijk niet</span>
+              <span>
+                <span className="block text-sm font-medium">Nederland: waarschijnlijk niet</span>
+                <span className="block text-xs text-muted">Biometrie alleen als het echt nodig is</span>
+              </span>
             </div>
           </div>
         </div>
@@ -282,9 +332,11 @@ function buildSlides(r: Research): Slide[] {
             {v.advice.map((a) => {
               const Icon = icons[a.icon]
               return (
-                <li key={a.text} className="flex flex-col items-center gap-3 rounded-2xl border border-line bg-bg/50 p-5 text-center">
+                <li key={a.text} className="flex flex-col items-center gap-2 rounded-2xl border border-line bg-bg/50 p-5 text-center">
+                  {a.theme && <span className="text-[0.65rem] font-semibold tracking-wide text-lime uppercase">{a.theme}</span>}
                   <Icon className="size-10 text-lime" aria-hidden />
                   <span className="font-medium text-ink">{a.text}</span>
+                  {a.why && <span className="text-xs text-muted">{a.why}</span>}
                 </li>
               )
             })}
@@ -292,6 +344,30 @@ function buildSlides(r: Research): Slide[] {
         </div>
       ),
     },
+    ...(v.standpunt
+      ? [
+          {
+            id: 'standpunt',
+            label: 'Mijn standpunt',
+            render: () => (
+              <div className="flex h-full flex-col justify-center">
+                <SlideTitle kicker="Mijn standpunt">Gezichtsherkenning in Nederland?</SlideTitle>
+                <p className="mx-auto mb-6 rounded-full border border-lime/50 bg-lime/10 px-6 py-2 font-display text-2xl font-bold text-lime uppercase">
+                  {v.standpunt!.answer}
+                </p>
+                <ul className="mx-auto grid w-full max-w-3xl gap-2 sm:grid-cols-2">
+                  {v.standpunt!.points.map((p) => (
+                    <li key={p} className="flex items-center gap-3 rounded-xl border border-line bg-bg/50 px-4 py-3 text-sm text-ink">
+                      <CircleCheck className="size-5 shrink-0 text-lime" aria-hidden />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ),
+          },
+        ]
+      : []),
     {
       id: 'conclusie',
       label: 'Conclusie',

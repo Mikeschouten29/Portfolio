@@ -122,8 +122,10 @@ export type VisualIcon =
 export interface ResearchVisual {
   /** De kernboodschap in één zin */
   oneLiner: string
-  werkvelden: { name: string; icon: VisualIcon; keyword: string; risk: RiskLevelRow['tone'] }[]
-  advice: { icon: VisualIcon; text: string }[]
+  werkvelden: { name: string; icon: VisualIcon; keyword: string; risk: RiskLevelRow['tone']; example?: string; issue?: string }[]
+  advice: { icon: VisualIcon; text: string; why?: string; theme?: string }[]
+  /** Mijn standpunt in één antwoord en een paar korte punten */
+  standpunt?: { answer: string; points: string[] }
   /** Korte uitleg (twee zinnen) onder elke dia */
   captions?: Record<string, string>
 }

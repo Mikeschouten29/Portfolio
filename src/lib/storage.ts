@@ -21,7 +21,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 25
+export const DATA_VERSION = 26
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -315,6 +315,28 @@ export function migrate(data: PortfolioData): PortfolioData {
       if (r.tldr && standpunt && !r.tldr.some((t) => t.startsWith('Mijn standpunt'))) r.tldr.push(standpunt)
       const caps = r.visual?.captions
       if (caps && caps.conclusie === 'AI is in de sport een hulpmiddel, geen beslisser. Met deze vier regels kan het verantwoord, maar de mens blijft verantwoordelijk.') caps.conclusie = researchVisual.captions?.conclusie ?? caps.conclusie
+    }
+  }
+
+  if (oldVersion < 26) {
+    // v26: visuele presentatie uitgebreid (voorbeelden, waarom per advies, dia met mijn standpunt).
+    const v = d.extraResearch.find((x) => x.title === aiEthicsResearch.title)?.visual
+    if (v) {
+      for (const w of v.werkvelden) {
+        const src = researchVisual.werkvelden.find((x) => x.name === w.name)
+        w.example ??= src?.example
+        w.issue ??= src?.issue
+      }
+      for (const a of v.advice) {
+        const src = researchVisual.advice.find((x) => x.text === a.text)
+        a.why ??= src?.why
+        a.theme ??= src?.theme
+      }
+      v.standpunt ??= structuredClone(researchVisual.standpunt)
+      if (v.captions) {
+        v.captions.standpunt ??= researchVisual.captions?.standpunt ?? ''
+        if (v.captions.conclusie === 'AI is in de sport een hulpmiddel, geen beslisser. Mijn standpunt: gezichtsherkenning mag alleen onder strenge voorwaarden, omdat privacy voor mij het zwaarst weegt en een mens moet beslissen.') v.captions.conclusie = researchVisual.captions?.conclusie ?? ''
+      }
     }
   }
 
