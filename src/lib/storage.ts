@@ -25,7 +25,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 29
+export const DATA_VERSION = 30
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -393,6 +393,19 @@ export function migrate(data: PortfolioData): PortfolioData {
     }
     add('s4-plan-us1', kloonLinks)
     add('s4-plan-us2', [playlistLink])
+  }
+
+  if (oldVersion < 30) {
+    // v30: stap 6 (grondslag) en 7 (DPIA) in makkelijke woorden, met het moeilijke woord erbij.
+    const steps = d.extraResearch.find((x) => x.title === aiEthicsResearch.title)?.caseStudy?.steps
+    const fresh = aiEthicsResearch.caseStudy?.steps
+    if (steps && fresh) {
+      for (const [i, [oldLabel, newLabel]] of [[5, ['Grondslag', 'Grondslag (goede reden)']], [6, ['DPIA', 'DPIA (risicocheck vooraf)']]] as const) {
+        if (!steps[i]) continue
+        if (steps[i].label === oldLabel) steps[i].label = newLabel
+        if (steps[i].short === (i === 5 ? 'Ja, een zwaarwegend belang' : 'Ja')) steps[i].short = fresh[i].short
+      }
+    }
   }
 
   d.version = DATA_VERSION

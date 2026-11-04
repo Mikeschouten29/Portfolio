@@ -731,13 +731,13 @@ export const aiEthicsResearch: Research = {
       },
       {
         question: '6. Is er een geldige grondslag?',
-        short: 'Ja, een zwaarwegend belang',
+        short: 'Ja: er is een goede reden, de veiligheid van iedereen. De toezichthouder keurde dat vooraf goed.',
         finding: 'Ja, in Denemarken. Toestemming kan niet, want wie naar de wedstrijd wil, moet langs de camera: de toestemming is dan niet vrij. Daarom is gekozen voor het zwaarwegend maatschappelijk belang (art. 9 lid 2 sub g), vastgelegd in de Deense wet en vooraf goedgekeurd door de toezichthouder.',
         verdict: 'ok',
       },
       {
         question: '7. Is een DPIA gedaan (art. 35)?',
-        short: 'Ja',
+        short: 'Ja: de club heeft vooraf onderzocht wat er mis kan gaan met de gegevens.',
         finding: 'Ja. Een DPIA is verplicht bij grootschalige monitoring van openbare ruimtes en bij biometrie, en Brøndby heeft er een opgesteld (DLA Piper, 2019). Sinds 2025 is een DPIA ook een uitdrukkelijke voorwaarde voor de andere clubs (Datatilsynet, 2025).',
         verdict: 'ok',
       },
@@ -826,7 +826,7 @@ export const aiEthicsResearch: Research = {
 }
 
 /** Korte labels per toetsingsstap, voor de visuele versie. */
-export const caseStepLabels = ['AI-systeem', 'Verboden?', 'Hoog risico', 'Informatie', 'Gevoelige data', 'Grondslag', 'DPIA', 'Data beperkt', 'Bezwaar']
+export const caseStepLabels = ['AI-systeem', 'Verboden?', 'Hoog risico', 'Informatie', 'Gevoelige data', 'Grondslag (goede reden)', 'DPIA (risicocheck vooraf)', 'Data beperkt', 'Bezwaar']
 
 /** Visuele presentatie van Onderzoek 2: weinig tekst, met een korte uitleg onder elke dia. */
 export const researchVisual: ResearchVisual = {
