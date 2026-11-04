@@ -13,6 +13,8 @@ import {
   sprint3Planning,
   sprint4Content,
   sprint4Planning,
+  kloonLinks,
+  playlistLink,
   storyLearned,
   supabasePrompt,
   targetCoachLink,
@@ -23,7 +25,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 28
+export const DATA_VERSION = 29
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -378,6 +380,19 @@ export function migrate(data: PortfolioData): PortfolioData {
       s4.status = 'Afgerond'
       s4.userStories = structuredClone(sprint4Planning)
     }
+  }
+
+  if (oldVersion < 29) {
+    // v29: bewijslinks van de AI-kloon en de AI-playlisttool bij sprint 4.
+    const s4 = d.sprints.find((s) => s.number === 4)
+    const add = (storyId: string, links: { id: string; label: string; url: string }[]) => {
+      const story = s4?.userStories.find((u) => u.id === storyId)
+      for (const link of links) {
+        if (story && !story.evidence.some((e) => e.url === link.url)) story.evidence.push({ ...link })
+      }
+    }
+    add('s4-plan-us1', kloonLinks)
+    add('s4-plan-us2', [playlistLink])
   }
 
   d.version = DATA_VERSION

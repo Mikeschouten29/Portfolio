@@ -464,6 +464,15 @@ export const sprint3Content = {
 /** Bewijs van de research story van sprint 4: Onderzoek 2 in het portfolio. */
 export const aiEthicsLink = { id: 's4-rs1-l1', label: 'Onderzoek 2: Verantwoord AI-gebruik in de sport', url: 'https://portfolio-mikeschouten.vercel.app/#/onderzoek/2' }
 
+/** Bewijs van de AI-kloon: de openbare chat en de beheeromgeving. */
+export const kloonLinks = [
+  { id: 's4-us1-l1', label: 'AI-kloon: chat met mij (voor bezoekers)', url: 'https://kloon-mike-schouten.vercel.app/k/mike-schouten' },
+  { id: 's4-us1-l2', label: 'AI-kloon: beheer (alleen voor mij, met inloggen)', url: 'https://kloon-mike-schouten.vercel.app' },
+]
+
+/** Bewijs van de AI-playlisttool. */
+export const playlistLink = { id: 's4-us2-l1', label: 'AI-playlisttool (Spotify)', url: 'https://claude.ai/artifact/HZLR641vCPk8n4D7MVyoNa' }
+
 /** Planning sprint 4, overgenomen uit het sprintformulier. */
 export const sprint4Planning: UserStory[] = [
   {
@@ -502,7 +511,7 @@ export const sprint4Planning: UserStory[] = [
     ],
     learned:
       'Ik heb geleerd hoe ik een AI-kloon bouw die mijn eigen documenten doorzoekt, en dat vaste bouwregels in AGENTS.md ervoor zorgen dat de AI steeds dezelfde stappen volgt.',
-    evidence: [],
+    evidence: structuredClone(kloonLinks),
     done: true,
   },
   {
@@ -521,7 +530,7 @@ export const sprint4Planning: UserStory[] = [
     ],
     learned:
       'Ik heb geleerd hoe ik een tool koppel aan de Spotify-API met een veilige login, en dat de AI pas iets mag aanmaken na mijn akkoord.',
-    evidence: [],
+    evidence: [{ ...playlistLink }],
     done: true,
   },
 ]
