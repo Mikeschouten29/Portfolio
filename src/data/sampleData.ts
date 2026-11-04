@@ -461,6 +461,131 @@ export const sprint3Content = {
   },
 }
 
+/** Bewijs van de research story van sprint 4: Onderzoek 2 in het portfolio. */
+export const aiEthicsLink = { id: 's4-rs1-l1', label: 'Onderzoek 2: Verantwoord AI-gebruik in de sport', url: 'https://portfolio-mikeschouten.vercel.app/#/onderzoek/2' }
+
+/** Planning sprint 4, overgenomen uit het sprintformulier. */
+export const sprint4Planning: UserStory[] = [
+  {
+    id: 's4-plan-rs1',
+    type: 'RS',
+    story:
+      'Als toekomstig sportprofessional wil ik weten welke ethische en juridische risico’s AI met zich meebrengt in verschillende werkvelden van de sport, zodat ik kan beoordelen wanneer AI-gebruik verantwoord is volgens de AI-verordening en de AVG.',
+    criteria: [
+      'Er is een verslag en een presentatie opgeleverd voor in het portfolio waarin de casus is getoetst aan de AI-verordening en de AVG.',
+      'Er zijn vier aanbevelingen voor verantwoord AI-gebruik in de sport.',
+    ],
+    qualityCriteria: [
+      'Het onderzoek is onderbouwd met betrouwbare bronnen.',
+      'Ik geef een onderbouwd eigen standpunt.',
+      'Er is gebruikgemaakt van meerdere bronnen en/of verschillende LLM’s.',
+    ],
+    learned:
+      'Ik heb geleerd hoe ik een AI-toepassing toets aan de AI-verordening en de AVG, met de gezichtsherkenning van Brøndby IF als voorbeeld. Zo weet ik nu dat hoe riskanter de AI is, hoe strenger de regels zijn.',
+    evidence: [aiEthicsLink],
+    done: true,
+  },
+  {
+    id: 's4-plan-us1',
+    type: 'US',
+    story:
+      'Als sportkunde student die een afstudeerstage zoekt bij een sportbedrijf, wil ik een AI-kloon van mezelf bouwen die vragen beantwoordt op basis van mijn eigen documenten, zodat ik laat zien dat ik AI praktisch kan toepassen.',
+    criteria: [
+      'De kloon beantwoordt vragen over mijn opleiding, ervaring en ambities op basis van mijn geüploade documenten.',
+      'Bezoekers kunnen zonder account via een openbare link met de kloon chatten.',
+      'Alleen ik kan documenten toevoegen, inzien en verwijderen en de persoonlijkheid van de kloon aanpassen.',
+    ],
+    qualityCriteria: [
+      'De kloon staat online, en ik kan in mijn portfolio uitleggen hoe hij werkt en wat de beperkingen zijn.',
+      'Ik heb de kloon gebouwd volgens vaste bouwregels (AGENTS.md), zodat de AI mijn documenten slim doorzoekt en mijn gegevens en sleutels veilig blijven.',
+      'In het portfolio staat duidelijk uitgelegd hoe het systeem werkt en wat de technische beperkingen zijn.',
+    ],
+    learned:
+      'Ik heb geleerd hoe ik een AI-kloon bouw die mijn eigen documenten doorzoekt, en dat vaste bouwregels in AGENTS.md ervoor zorgen dat de AI steeds dezelfde stappen volgt.',
+    evidence: [],
+    done: true,
+  },
+  {
+    id: 's4-plan-us2',
+    type: 'US',
+    story:
+      'Als student van deze minor wil ik een AI-playlisttool bouwen waarmee ik via een online formulier een Spotify-playlist kan aanvragen, en het vervolgens kan koppelen aan mijn Spotify-account.',
+    criteria: [
+      'Ik kan via een formulier op mijn laptop of telefoon een playlist aanvragen. De AI zoekt hitlijsten op en zet een voorstel met titel, artiest en reden terug in het formulier.',
+      'Ik kan nummers beluisteren en uitzetten, en pas na mijn akkoord wordt de playlist in mijn eigen Spotify-account aangemaakt.',
+      'De koppeling met Spotify werkt via een veilige login.',
+    ],
+    qualityCriteria: [
+      'De tool werkt met de actuele regels van de Spotify-API (2026).',
+      'Ik heb de tool gebouwd volgens vaste werkafspraken, zodat de AI steeds dezelfde stappen volgt en niets zonder mijn akkoord aanmaakt.',
+    ],
+    learned:
+      'Ik heb geleerd hoe ik een tool koppel aan de Spotify-API met een veilige login, en dat de AI pas iets mag aanmaken na mijn akkoord.',
+    evidence: [],
+    done: true,
+  },
+]
+
+/** Sprint 4, overgenomen uit het sprintformulier. */
+export const sprint4Content = {
+  title: 'AI-ethiek, AI-kloon & playlisttool',
+  goal: 'Onderzoeken wanneer AI in de sport verantwoord is volgens de AI-verordening en de AVG, en twee eigen AI-toepassingen bouwen: een AI-kloon van mezelf en een AI-playlisttool die met Spotify koppelt.',
+  feedback: '',
+  selfEvaluation: [
+    'LU1 · AI-impact op de beroepspraktijk: - (niet in deze sprint)',
+    'LU2 · Praktijkgerichte AI-oplossing: V. Ik heb een AI-kloon van mezelf gebouwd die vragen beantwoordt op basis van mijn eigen documenten, en een AI-playlisttool die een Spotify-playlist maakt na mijn akkoord. Bewijs: de werkende tools.',
+    'LU3 · Ethiek & verantwoord AI-gebruik: V. Ik heb de casus over Brøndby IF getoetst aan de AI-verordening en de AVG, en aanbevelingen gegeven over privacy, bias en transparantie. Bewijs: het verslag en de presentatie in mijn portfolio.',
+    'LU4 · AI-tools & technieken: V. Ik heb Claude, vaste bouwregels (AGENTS.md) en een Spotify-API-koppeling gebruikt. Bewijs: de werkende tools en AGENTS.md.',
+    'LU5 · Zelfstandig & zelfsturend werken: V. Ik heb bewust gekozen wat ik aan AI overliet en wat ik zelf deed: AI hielp met bouwen en schrijven, maar ik controleerde zelf de bronnen en mijn eigen standpunt. Bewijs: mijn sprintplanning en mijn onderzoek.',
+  ].join('\n\n'),
+  reflection: [
+    [
+      'AI toetsen aan de wet',
+      'Geleerd: hoe ik een AI-toepassing toets aan de AI-verordening en de AVG, met de gezichtsherkenning van Brøndby IF als voorbeeld. Zo weet ik nu dat hoe riskanter de AI is, hoe strenger de regels zijn.',
+      'Behoud ik: AI-uitkomsten altijd controleren met de originele bronnen.',
+      'Doe ik anders: eerder nadenken over hoe ik mijn onderzoek presenteer. Mijn verslag had eerst te veel tekst, waardoor ik het achteraf korter en visueler moest maken.',
+    ].join('\n'),
+    [
+      'Mijn AI-kloon',
+      'Geleerd: hoe ik een AI-kloon bouw die mijn eigen documenten doorzoekt, en dat vaste bouwregels in AGENTS.md ervoor zorgen dat de AI steeds dezelfde stappen volgt.',
+      'Behoud ik: veilig omgaan met privacygevoelige gegevens.',
+      'Doe ik anders: mijn kloon eerder laten testen door anderen, zodat ik weet of de antwoorden kloppen.',
+    ].join('\n'),
+    [
+      'De AI-playlisttool',
+      'Geleerd: hoe ik een tool koppel aan de Spotify-API met een veilige login, en dat de AI pas iets mag aanmaken na mijn akkoord.',
+      'Behoud ik: bij AI-tools zelf de laatste beslissing houden, zoals het akkoord voordat de playlist wordt aangemaakt.',
+      'Doe ik anders: eerst de actuele regels van een API lezen voordat ik begin met bouwen.',
+    ].join('\n'),
+  ].join('\n\n'),
+  nextSteps: [
+    '• Eerder nadenken over hoe ik mijn werk presenteer: minder tekst, meer beeld.',
+    '• Mijn tools eerder laten testen door anderen.',
+    '• Eerst de actuele regels van een API lezen voordat ik begin met bouwen.',
+  ].join('\n'),
+  showGrow:
+    'Ik bouw niet alleen AI-toepassingen, maar kan ook beoordelen of ze verantwoord zijn: ik heb een echte AI-toepassing in de sport getoetst aan de wet, en zelf een AI-kloon en een playlisttool gebouwd waarin de mens de laatste beslissing houdt.',
+  learningOutcomes: lu([0, 100, 100, 100, 100], {
+    LU2: 'V · AI-kloon en AI-playlisttool',
+    LU3: 'V · Brøndby IF getoetst aan AI-verordening en AVG',
+    LU4: 'V · Claude, AGENTS.md en Spotify-API',
+    LU5: 'V · bewust gekozen wat ik aan AI overliet',
+  }),
+  takeaways: {
+    learned: [
+      '• Hoe riskanter de AI, hoe strenger de regels (AI-verordening en AVG).',
+      '• Vaste bouwregels (AGENTS.md) laten de AI steeds dezelfde stappen volgen.',
+      '• Bij AI-tools houd ik zelf de laatste beslissing.',
+    ].join('\n'),
+    feedback: '',
+    next: [
+      '• Minder tekst, meer beeld bij het presenteren.',
+      '• Tools eerder laten testen door anderen.',
+      '• Eerst de actuele API-regels lezen.',
+    ].join('\n'),
+  },
+}
+
 /** Onderzoekspagina, gebaseerd op de research story van sprint 1. */
 export const researchContent: Research = {
   title: 'AI in sportmarketing',
@@ -916,7 +1041,15 @@ export const sampleData: PortfolioData = {
       userStories: structuredClone(sprint3Planning),
       evidence: [],
     },
-    plannedSprint(4, 'Nog te plannen', '12 – 30 okt 2026', ''),
+    {
+      id: 'sprint-4',
+      number: 4,
+      period: '12 – 30 okt 2026',
+      status: 'Afgerond',
+      ...sprint4Content,
+      userStories: structuredClone(sprint4Planning),
+      evidence: [],
+    },
     plannedSprint(5, 'Nog te plannen', '2 – 13 nov 2026', ''),
     plannedSprint(6, 'Nog te plannen', '16 – 27 nov 2026', ''),
     plannedSprint(7, 'Nog te plannen', '30 nov – 11 dec 2026', ''),

@@ -11,6 +11,8 @@ import {
   sprint2Planning,
   sprint3Content,
   sprint3Planning,
+  sprint4Content,
+  sprint4Planning,
   storyLearned,
   supabasePrompt,
   targetCoachLink,
@@ -21,7 +23,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 27
+export const DATA_VERSION = 28
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -364,6 +366,17 @@ export function migrate(data: PortfolioData): PortfolioData {
         if (!v.captions || v.captions.vraag?.startsWith('AI wordt in de hele sport gebruikt')) v.captions = structuredClone(researchVisual.captions)
         v.bridges ??= structuredClone(researchVisual.bridges)
       }
+    }
+  }
+
+  if (oldVersion < 28) {
+    // v28: sprint 4 volgens het sprintformulier, alleen als die nog leeg ("Nog te plannen") is.
+    const s4 = d.sprints.find((s) => s.number === 4)
+    const untouched = s4 && s4.title === 'Nog te plannen' && s4.userStories.every((u) => u.id === 's4-us1')
+    if (s4 && untouched) {
+      Object.assign(s4, structuredClone(sprint4Content))
+      s4.status = 'Afgerond'
+      s4.userStories = structuredClone(sprint4Planning)
     }
   }
 
