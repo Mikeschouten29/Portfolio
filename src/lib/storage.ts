@@ -21,11 +21,12 @@ import {
   n8nWorkflowLink,
   youngOnesRoadmapItem,
   youngOnesStory,
+  targetCoachToets,
 } from '../data/sampleData'
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 30
+export const DATA_VERSION = 31
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -406,6 +407,11 @@ export function migrate(data: PortfolioData): PortfolioData {
         if (steps[i].short === (i === 5 ? 'Ja, een zwaarwegend belang' : 'Ja')) steps[i].short = fresh[i].short
       }
     }
+  }
+
+  if (oldVersion < 31 && !d.extraResearch.some((r) => r.toets === 'targetcoach')) {
+    // v31: Onderzoek 3, TargetCoach getoetst aan de AI-verordening, de AVG en op bias (LU3).
+    d.extraResearch.push(structuredClone(targetCoachToets))
   }
 
   d.version = DATA_VERSION

@@ -912,6 +912,51 @@ export const supabasePrompt: Prompt = {
   tags: ['supabase', 'database', 'vercel'],
 }
 
+/** Onderzoek 3: TargetCoach getoetst aan de AI-verordening, de AVG en op bias (LU3). Eigen weergave, zie TargetCoachToets. */
+export const targetCoachToets: Research = {
+  title: 'Ethiek en regelgeving: TargetCoach getoetst',
+  toets: 'targetcoach',
+  intro:
+    'In Onderzoek 2 heb ik onderzocht hoe je AI in de sport toetst. Nu pas ik dat toe op mijn eigen AI-hardloopcoach TargetCoach: voldoet hij aan de wet, is hij eerlijk en veilig, en wat heb ik daarom aangepast?',
+  question: 'Voldoet mijn AI-hardloopcoach TargetCoach aan de AI-verordening en de AVG, en geeft hij iedere loper eerlijk en veilig advies?',
+  subQuestions: [
+    'Welke gegevens vraagt de app, welke AI gebruikt hij en waar gaan de gegevens naartoe?',
+    'In welke risicoklasse van de AI-verordening valt de app, en weet de gebruiker dat hij met AI praat?',
+    'Welke persoonsgegevens en gezondheidsgegevens worden verwerkt, en wat moet er beter volgens de AVG?',
+    'Krijgen verschillende lopers even goed en passend advies (bias)?',
+    'Verwijst de coach door bij pijn en andere risico’s (veiligheid)?',
+  ],
+  method:
+    'Ik heb de code van de app bekeken, de app getoetst aan de AI-verordening en de AVG met officiële bronnen, en de coach getest met 4 persona’s (bias) en 4 riskante vragen (veiligheid). De tests gebruiken exact dezelfde instructies en kennisbank als de app. Daarna heb ik 6 aanpassingen doorgevoerd en de zwakke punten opnieuw getest.',
+  results: [],
+  insights: [],
+  conclusion:
+    'TargetCoach valt onder beperkt risico (transparantie). De coach was al veilig: bij pijn of alarmsignalen verwijst hij door. Wel ontbraken toestemming voor gezondheidsgegevens en uitleg over de AI-dienst, en het advies was weinig afgestemd op oudere lopers en lopers met een hoger gewicht. Na mijn aanpassingen is dat verbeterd, al blijft er een spanningsveld tussen maatwerk en gelijke behandeling.',
+  limitations: [
+    'Ik ben geen jurist: dit is een toetsing door een student, geen juridisch advies.',
+    'De tests zijn niet in de app zelf gedaan, maar met dezelfde instructies en kennisbank; het AI-model kan afwijken.',
+    'Elke vraag is één keer gesteld. Een AI geeft niet elke keer hetzelfde antwoord.',
+    'Of Anthropic onder het EU-VS Data Privacy Framework valt, kon ik niet controleren.',
+  ],
+  sources: [
+    { id: 'tc-ai-act', title: 'Verordening (EU) 2024/1689 (AI-verordening), o.a. art. 2, 3, 4, 5, 6, 50 en 113', author: 'Europese Unie', year: '2024', url: 'https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32024R1689' },
+    { id: 'tc-ec', title: 'AI Act: regulatory framework for AI (risiconiveaus en Digital Omnibus)', author: 'Europese Commissie', year: '2026', url: 'https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai' },
+    { id: 'tc-do', title: 'Transparantieverplichtingen voor AI-systemen van kracht', author: 'Digitale Overheid', year: '2026', url: 'https://www.digitaleoverheid.nl/nieuws/transparantieverplichtingen-voor-ai-systemen-van-kracht/' },
+    { id: 'tc-ap-transp', title: 'Transparantie-eisen AI gelden vanaf 2 augustus', author: 'Autoriteit Persoonsgegevens', year: '2026', url: 'https://www.autoriteitpersoonsgegevens.nl/actueel/transparantie-eisen-ai-gelden-vanaf-2-augustus-ap-adviseert-praktijkcode-te-ondertekenen' },
+    { id: 'tc-mdcg', title: 'MDCG 2019-11: kwalificatie van software als medisch hulpmiddel (uitleg)', author: 'OpenRegulatory', year: 'z.d.', url: 'https://openregulatory.com/mdcg/mdcg-2019-11' },
+    { id: 'tc-avg', title: 'Verordening (EU) 2016/679 (AVG), o.a. art. 5, 9, 13, 35 en 44-46', author: 'Europese Unie', year: '2016', url: 'https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32016R0679' },
+    { id: 'tc-ap-mag', title: 'Mag u persoonsgegevens verwerken?', author: 'Autoriteit Persoonsgegevens', year: 'z.d.', url: 'https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/algemene-informatie-avg/mag-u-persoonsgegevens-verwerken' },
+    { id: 'tc-ap-toest', title: 'Grondslag toestemming', author: 'Autoriteit Persoonsgegevens', year: 'z.d.', url: 'https://www.autoriteitpersoonsgegevens.nl/en/themes/basic-gdpr/gdpr-basics/legal-basis-of-consent' },
+    { id: 'tc-wp259', title: 'Richtsnoeren inzake toestemming (WP259)', author: 'Groep gegevensbescherming artikel 29', year: '2018', url: 'https://autoriteitpersoonsgegevens.nl/uploads/imported/wp259_rev_0.1_nl.pdf' },
+    { id: 'tc-ap-dpia', title: 'Data protection impact assessment (DPIA)', author: 'Autoriteit Persoonsgegevens', year: 'z.d.', url: 'https://www.autoriteitpersoonsgegevens.nl/nl/zelf-doen/data-protection-impact-assessment-dpia' },
+    { id: 'tc-ap-dpialijst', title: 'Besluit lijst verwerkingen waarvoor een DPIA verplicht is (Staatscourant 2019, 64418)', author: 'Autoriteit Persoonsgegevens', year: '2019', url: 'https://www.autoriteitpersoonsgegevens.nl/uploads/imported/stcrt-2019-64418.pdf' },
+    { id: 'tc-anth-priv', title: 'Privacy Policy', author: 'Anthropic', year: '2026', url: 'https://www.anthropic.com/legal/privacy' },
+    { id: 'tc-anth-ret', title: 'How long do you store my data?', author: 'Anthropic', year: '2026', url: 'https://privacy.claude.com/en/articles/10023548-how-long-do-you-store-personal-data' },
+    { id: 'tc-anth-train', title: 'Is my data used for model training?', author: 'Anthropic', year: '2026', url: 'https://privacy.claude.com/en/articles/10023580-is-my-data-used-for-model-training' },
+    { id: 'tc-omnibus', title: 'EU AI Act Omnibus Agreement: postponed high-risk deadlines and other key changes', author: 'Gibson Dunn', year: '2026', url: 'https://www.gibsondunn.com/eu-ai-act-omnibus-agreement-postponed-high-risk-deadlines-and-other-key-changes/' },
+  ],
+}
+
 export const sampleData: PortfolioData = {
   version: 23,
   profile: {
@@ -991,7 +1036,7 @@ export const sampleData: PortfolioData = {
     },
   ],
   research: structuredClone(researchContent),
-  extraResearch: [structuredClone(aiEthicsResearch)],
+  extraResearch: [structuredClone(aiEthicsResearch), structuredClone(targetCoachToets)],
   roadmap: [
     {
       id: 'r1',

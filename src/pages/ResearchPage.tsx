@@ -3,7 +3,6 @@ import {
   CircleCheck,
   CircleX,
   ClipboardList,
-  ExternalLink,
   FlaskConical,
   Gavel,
   Info,
@@ -24,11 +23,13 @@ import { useState, type ReactNode } from 'react'
 import { EditableList, EditableText } from '../components/editable'
 import { Expandable } from '../components/Expandable'
 import { ResearchVisual } from '../components/ResearchVisual'
+import { SourceList } from '../components/SourceList'
+import { TargetCoachToets } from '../components/TargetCoachToets'
 import { PageHeader, SectionTitle } from '../components/PageHeader'
 import { Badge, Button, Card, IconButton, PriorityBadge, Reveal } from '../components/ui'
 import { href } from '../hooks/useHashRoute'
 import { usePortfolio } from '../hooks/usePortfolio'
-import { cn, isSafeUrl, splitTitled, uid } from '../lib/utils'
+import { cn, splitTitled, uid } from '../lib/utils'
 import type { AssessmentRow, Research, RiskLevelRow, Source, Stakeholder, Verdict } from '../types'
 
 const verdictView: Record<Verdict, { label: string; tone: 'lime' | 'flame' | 'danger' | 'data'; icon: LucideIcon }> = {
@@ -190,6 +191,9 @@ export function ResearchPage({ param }: { param?: string }) {
   const index = Math.min(Math.max(Number(param) || 1, 1), all.length) - 1
   const r = all[index]
   const hasCase = Boolean(r.caseStudy)
+  // Onderzoek 3 (TargetCoach-toets) heeft een eigen, vaste weergave.
+  const isToets = r.toets === 'targetcoach'
+  const toetsIndex = all.findIndex((x) => x.toets === 'targetcoach')
   const [view, setView] = useState<'visual' | 'full'>('visual')
   const showVisual = Boolean(r.visual) && view === 'visual' && !editMode
 
@@ -251,7 +255,19 @@ export function ResearchPage({ param }: { param?: string }) {
         </div>
       )}
 
-      {r.visual && !editMode && (
+      {hasCase && toetsIndex > 0 && (
+        <a
+          href={href('onderzoek', toetsIndex + 1)}
+          className="mb-6 flex max-w-3xl items-center gap-3 rounded-xl border border-lime/40 bg-lime/10 px-4 py-3 text-sm text-ink transition-colors hover:border-lime"
+        >
+          <FlaskConical className="size-4 shrink-0 text-lime" aria-hidden />
+          <span>
+            <strong>In de praktijk:</strong> in Onderzoek {toetsIndex + 1} toets ik mijn eigen AI-hardloopcoach TargetCoach op dezelfde manier.
+          </span>
+        </a>
+      )}
+
+      {!isToets && r.visual && !editMode && (
         <div role="tablist" aria-label="Weergave" className="mb-6 inline-flex rounded-xl border border-line bg-surface p-1">
           {([
             ['visual', 'Visueel'],
@@ -274,7 +290,9 @@ export function ResearchPage({ param }: { param?: string }) {
         </div>
       )}
 
-      {showVisual ? (
+      {isToets ? (
+        <TargetCoachToets research={r} />
+      ) : showVisual ? (
         <Reveal>
           <ResearchVisual research={r} />
           <p className="mt-3 text-center text-sm text-muted">
@@ -682,29 +700,5 @@ export function ResearchPage({ param }: { param?: string }) {
       </>
       )}
     </>
-  )
-}
-
-function SourceList({ sources }: { sources: Source[] }) {
-  return (
-    <ol className="divide-y divide-line">
-      {sources.map((s, i) => (
-        <li key={s.id} className="flex items-start gap-4 py-3">
-          <span className="font-mono text-sm text-muted">[{i + 1}]</span>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm text-ink">
-              {s.author && <span>{s.author} </span>}
-              {s.year && <span className="text-muted">({s.year}). </span>}
-              <cite className="not-italic">{s.title}</cite>
-            </p>
-          </div>
-          {isSafeUrl(s.url) && s.url !== 'https://' && (
-            <a href={s.url} target="_blank" rel="noopener noreferrer" className="flex shrink-0 items-center gap-1 text-sm text-data hover:text-lime" aria-label={`Bron openen: ${s.title} (nieuw tabblad)`}>
-              Openen <ExternalLink className="size-3.5" aria-hidden />
-            </a>
-          )}
-        </li>
-      ))}
-    </ol>
   )
 }

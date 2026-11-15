@@ -165,6 +165,8 @@ export interface Research {
   /** Eigen standpunt van de student */
   ownPosition?: string
   visual?: ResearchVisual
+  /** Eigen weergave in plaats van de standaardopbouw (Onderzoek 3: de TargetCoach-toets) */
+  toets?: 'targetcoach'
 }
 
 export type Priority = 'Hoog' | 'Middel' | 'Laag'
