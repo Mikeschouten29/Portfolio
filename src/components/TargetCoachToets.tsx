@@ -19,13 +19,13 @@ import {
   TriangleAlert,
   Users,
   Wrench,
+  X,
   type LucideIcon,
 } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { cn } from '../lib/utils'
 import type { Research } from '../types'
 import { Expandable } from './Expandable'
-import { SectionTitle } from './PageHeader'
 import { SourceList } from './SourceList'
 import { Badge, Card, Reveal } from './ui'
 
@@ -430,50 +430,111 @@ function Aanbevelingen() {
   )
 }
 
-/* ---------- Pagina ---------- */
+/* ---------- Pop-up ---------- */
 
-function Blok({ id, icon, titel, kicker, children }: { id: string; icon: LucideIcon; titel: string; kicker: string; children: ReactNode }) {
+function Popup({ open, onClose, icon: Icon, kicker, titel, children }: { open: boolean; onClose: () => void; icon: LucideIcon; kicker: string; titel: string; children: ReactNode }) {
+  const ref = useRef<HTMLDialogElement>(null)
+  const titelId = useId()
+
+  useEffect(() => {
+    const dialog = ref.current
+    if (!dialog) return
+    if (open && !dialog.open) dialog.showModal()
+    if (!open && dialog.open) dialog.close()
+  }, [open])
+
   return (
-    <Reveal>
-      <section aria-labelledby={id} className="mb-12">
-        <p className="kicker mb-2">{kicker}</p>
-        <SectionTitle icon={icon} id={id}>
-          {titel}
-        </SectionTitle>
-        {children}
-      </section>
-    </Reveal>
+    <dialog
+      ref={ref}
+      onCancel={(e) => {
+        e.preventDefault()
+        onClose()
+      }}
+      // Klik naast de pop-up (op de achtergrond) sluit hem.
+      onClick={(e) => {
+        if (e.target === ref.current) onClose()
+      }}
+      aria-labelledby={titelId}
+      className="m-auto max-h-[90dvh] w-[calc(100%-1.5rem)] max-w-5xl overflow-y-auto rounded-2xl border border-line bg-bg p-0 text-ink backdrop:bg-black/70 backdrop:backdrop-blur-sm"
+    >
+      <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-line bg-bg/95 px-5 py-4 backdrop-blur sm:px-7">
+        <div className="min-w-0">
+          <p className="kicker mb-1">{kicker}</p>
+          <h2 id={titelId} className="flex items-center gap-2.5 text-2xl font-bold uppercase sm:text-3xl">
+            <Icon className="size-5 shrink-0 text-lime" aria-hidden /> {titel}
+          </h2>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Sluiten"
+          className="shrink-0 rounded-lg border border-line p-2 text-muted transition-colors hover:border-lime/50 hover:text-ink"
+        >
+          <X className="size-5" aria-hidden />
+        </button>
+      </div>
+      <div className="px-5 py-6 sm:px-7">{open && children}</div>
+    </dialog>
+  )
+}
+
+/* ---------- Pagina: overzicht met tegels, details in pop-ups ---------- */
+
+type TegelId = 'app' | 'data' | 'wet' | 'bias' | 'veilig' | 'aangepast' | 'advies' | 'conclusie'
+
+function tel(stand: 'voor' | 'na') {
+  return (['groen', 'oranje', 'rood'] as Kleur[]).map((k) => ({ k, n: punten.filter((p) => p[stand] === k).length }))
+}
+
+function Telling({ stand }: { stand: 'voor' | 'na' }) {
+  return (
+    <span className="inline-flex flex-wrap items-center gap-2">
+      {tel(stand).map(({ k, n }) => (
+        <span key={k} className="inline-flex items-center gap-1 font-mono text-sm">
+          <Stip kleur={k} className="size-3.5" /> {n}
+        </span>
+      ))}
+    </span>
+  )
+}
+
+function Tegel({ icon: Icon, kicker, titel, onOpen, children }: { icon: LucideIcon; kicker: string; titel: string; onOpen: () => void; children: ReactNode }) {
+  return (
+    <li>
+      <button
+        type="button"
+        onClick={onOpen}
+        aria-haspopup="dialog"
+        className="group flex h-full w-full flex-col gap-3 rounded-2xl border border-line bg-surface p-5 text-left transition-colors hover:border-lime/50 focus-visible:border-lime"
+      >
+        <span className="flex items-center justify-between gap-2">
+          <span className="font-mono text-[11px] tracking-wider text-muted uppercase">{kicker}</span>
+          <Icon className="size-5 text-lime" aria-hidden />
+        </span>
+        <span className="font-display text-2xl leading-tight font-bold uppercase">{titel}</span>
+        <span className="flex-1 text-sm text-ink/85">{children}</span>
+        <span className="inline-flex items-center gap-1 text-sm font-medium text-lime">
+          Bekijk <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+        </span>
+      </button>
+    </li>
   )
 }
 
 export function TargetCoachToets({ research: r }: { research: Research }) {
-  return (
-    <>
-      <Reveal>
-        <section aria-labelledby="tc-vraag" className="relative mb-10 overflow-hidden rounded-3xl border border-lime/30 bg-gradient-to-br from-lime/[0.08] to-transparent p-6 sm:p-10">
-          <p id="tc-vraag" className="kicker mb-4">Hoofdvraag</p>
-          <p className="max-w-4xl font-display text-3xl leading-tight font-bold sm:text-4xl">{r.question}</p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            {[
-              { icon: Gavel, k: 'AI-verordening', v: 'Beperkt risico' },
-              { icon: Lock, k: 'AVG', v: '2 rood → groen' },
-              { icon: Users, k: 'Bias & veiligheid', v: 'Veilig, meer maatwerk' },
-            ].map((x) => (
-              <div key={x.k} className="rounded-xl border border-line bg-surface/70 p-3">
-                <p className="flex items-center gap-1.5 font-mono text-[11px] tracking-wider text-muted uppercase">
-                  <x.icon className="size-3.5 text-lime" aria-hidden /> {x.k}
-                </p>
-                <p className="font-display text-xl font-bold uppercase">{x.v}</p>
-              </div>
-            ))}
-          </div>
-          <p className="mt-5 flex items-start gap-2 text-sm text-muted">
-            <Info className="mt-0.5 size-4 shrink-0" aria-hidden /> Toetsing door een student (minor Future-proof met AI!), geen juridisch advies. Stand: november 2026.
-          </p>
-        </section>
-      </Reveal>
+  const [open, setOpen] = useState<TegelId | null>(null)
+  const sluit = () => setOpen(null)
+  const verbeterd = punten.filter((p) => p.voor !== p.na).length
+  const advies = aanbevelingen.flatMap((a) => a.items)
 
-      <Blok id="tc-app" icon={Smartphone} kicker="Stap 1" titel="Wat is TargetCoach?">
+  const tegels: { id: TegelId; icon: LucideIcon; kicker: string; titel: string; samenvatting: ReactNode; inhoud: ReactNode }[] = [
+    {
+      id: 'app',
+      icon: Smartphone,
+      kicker: 'Stap 1',
+      titel: 'Wat is TargetCoach?',
+      samenvatting: 'Mijn AI-hardloopcoach: gezondheidscheck, doel en een plan per week, op basis van 13 bronnen.',
+      inhoud: (
         <div className="grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-start">
           <div className="space-y-3 text-ink/90">
             <p>Een AI-hardloopcoach die ik met Claude heb gebouwd. De coach doet eerst een gezondheidscheck, kiest samen met de loper een doel en maakt een plan per week, gebaseerd op 13 gecontroleerde bronnen.</p>
@@ -487,39 +548,120 @@ export function TargetCoachToets({ research: r }: { research: Research }) {
               </a>
             </div>
           </div>
-          <img src={`${IMG}/na-chat.jpg`} alt="De chat van TargetCoach op een telefoon." loading="lazy" className="mx-auto w-48 rounded-2xl border border-line shadow-sm md:w-56" />
+          <img src={`${IMG}/na-chat.jpg`} alt="De chat van TargetCoach op een telefoon." className="mx-auto w-48 rounded-2xl border border-line shadow-sm md:w-56" />
         </div>
-      </Blok>
-
-      <Blok id="tc-data" icon={Database} kicker="Stap 1" titel="De reis van je gegevens">
-        <DataFlow />
-      </Blok>
-
-      <Blok id="tc-wet" icon={ShieldCheck} kicker="Stap 2 en 3" titel="Toetsing aan de wet">
-        <Checklist />
-      </Blok>
-
-      <Blok id="tc-bias" icon={Users} kicker="Stap 4" titel="Bias-test: zelfde vraag, vier lopers">
-        <BiasTest />
-      </Blok>
-
-      <Blok id="tc-veilig" icon={MessageSquareText} kicker="Stap 5" titel="Veiligheidstest">
-        <Veiligheid />
-      </Blok>
-
-      <Blok id="tc-aangepast" icon={Wrench} kicker="Stap 6" titel="Wat ik heb aangepast">
-        <VoorNa />
-      </Blok>
-
-      <Blok id="tc-advies" icon={Lightbulb} kicker="Stap 6" titel="Mijn aanbevelingen">
-        <Aanbevelingen />
-      </Blok>
-
-      <Reveal>
-        <section aria-labelledby="tc-conclusie" className="mb-10 rounded-3xl border border-line bg-surface p-6 sm:p-8">
-          <p id="tc-conclusie" className="kicker mb-3">Conclusie</p>
+      ),
+    },
+    {
+      id: 'data',
+      icon: Database,
+      kicker: 'Stap 1',
+      titel: 'De reis van je gegevens',
+      samenvatting: (
+        <span className="flex flex-wrap gap-1.5">
+          <Badge tone="danger">Gezondheid</Badge>
+          <Badge tone="flame">Locatie</Badge>
+          <Badge tone="data">Gewoon</Badge>
+          <span className="w-full pt-1">Wat de loper invult en waar het naartoe gaat.</span>
+        </span>
+      ),
+      inhoud: <DataFlow />,
+    },
+    {
+      id: 'wet',
+      icon: ShieldCheck,
+      kicker: 'Stap 2 en 3',
+      titel: 'Toetsing aan de wet',
+      samenvatting: (
+        <span className="space-y-1.5">
+          <span className="flex flex-wrap items-center gap-2">
+            <span className="w-10 font-mono text-[11px] text-muted uppercase">Voor</span> <Telling stand="voor" />
+          </span>
+          <span className="flex flex-wrap items-center gap-2">
+            <span className="w-10 font-mono text-[11px] text-muted uppercase">Na</span> <Telling stand="na" />
+          </span>
+          <span className="block pt-1">AI-verordening en AVG: {verbeterd} punten verbeterd.</span>
+        </span>
+      ),
+      inhoud: <Checklist />,
+    },
+    {
+      id: 'bias',
+      icon: Users,
+      kicker: 'Stap 4',
+      titel: 'Bias-test',
+      samenvatting: (
+        <span className="space-y-1.5">
+          <span className="flex flex-wrap gap-x-3 gap-y-1">
+            {personas.map((p) => (
+              <span key={p.wie} className="inline-flex items-center gap-1 text-xs">
+                <Stip kleur={p.voor.kleur} className="size-3.5" />
+                {p.na && (
+                  <>
+                    <ArrowRight className="size-3 text-muted" aria-label="wordt" />
+                    <Stip kleur={p.na.kleur} className="size-3.5" />
+                  </>
+                )}
+                {p.wie}
+              </span>
+            ))}
+          </span>
+          <span className="block pt-1">Zelfde vraag, vier lopers. Geen nadelige toon, wel te weinig maatwerk.</span>
+        </span>
+      ),
+      inhoud: <BiasTest />,
+    },
+    {
+      id: 'veilig',
+      icon: MessageSquareText,
+      kicker: 'Stap 5',
+      titel: 'Veiligheidstest',
+      samenvatting: (
+        <span>
+          <span className="font-display text-3xl font-bold text-lime">4/4</span> riskante vragen: geen diagnose, wel een doorverwijzing.
+        </span>
+      ),
+      inhoud: <Veiligheid />,
+    },
+    {
+      id: 'aangepast',
+      icon: Wrench,
+      kicker: 'Stap 6',
+      titel: 'Wat ik heb aangepast',
+      samenvatting: (
+        <span className="space-y-2">
+          <span className="flex gap-2" aria-hidden>
+            {['voor-chat', 'na-chat', 'na-toestemming'].map((n) => (
+              <img key={n} src={`${IMG}/${n}.jpg`} alt="" loading="lazy" className="h-16 w-auto rounded-md border border-line object-cover object-top" />
+            ))}
+          </span>
+          <span className="block">{aanpassingen.length} aanpassingen in de app, met schermafbeeldingen voor en na.</span>
+        </span>
+      ),
+      inhoud: <VoorNa />,
+    },
+    {
+      id: 'advies',
+      icon: Lightbulb,
+      kicker: 'Stap 6',
+      titel: 'Mijn aanbevelingen',
+      samenvatting: (
+        <span>
+          Privacy, bias en transparantie: <strong className="text-ink">{advies.filter((a) => a.klaar).length} gedaan</strong>, {advies.filter((a) => !a.klaar).length} nog open.
+        </span>
+      ),
+      inhoud: <Aanbevelingen />,
+    },
+    {
+      id: 'conclusie',
+      icon: BookOpen,
+      kicker: 'Afsluiting',
+      titel: 'Conclusie en bronnen',
+      samenvatting: `Wat ik concludeer, hoe ik het heb onderzocht, de beperkingen en ${r.sources.length} bronnen.`,
+      inhoud: (
+        <div className="space-y-4">
           <p className="max-w-4xl text-lg leading-relaxed text-ink">{r.conclusion}</p>
-          <div className="mt-6 grid gap-3 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-2">
             <Expandable title="Hoe heb ik dit onderzocht?" teaser="Code bekeken, wet getoetst, getest en opnieuw getest" aside={<BookOpen className="size-4 text-muted" aria-hidden />}>
               <p className="text-sm leading-relaxed text-ink/90">{r.method}</p>
               <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm text-ink/90">
@@ -536,17 +678,67 @@ export function TargetCoachToets({ research: r }: { research: Research }) {
               </ul>
             </Expandable>
           </div>
+          <Card className="p-5">
+            <p className="kicker mb-2">Bronnen</p>
+            <SourceList sources={r.sources} />
+          </Card>
+        </div>
+      ),
+    },
+  ]
+  const actief = tegels.find((t) => t.id === open)
+
+  return (
+    <>
+      <Reveal>
+        <section aria-labelledby="tc-vraag" className="relative mb-8 overflow-hidden rounded-3xl border border-lime/30 bg-gradient-to-br from-lime/[0.08] to-transparent p-6 sm:p-10">
+          <p id="tc-vraag" className="kicker mb-4">Hoofdvraag</p>
+          <p className="max-w-4xl font-display text-3xl leading-tight font-bold sm:text-4xl">{r.question}</p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            {[
+              { icon: Gavel, k: 'AI-verordening', v: 'Beperkt risico', id: 'wet' as TegelId },
+              { icon: Lock, k: 'AVG', v: '2 rood → groen', id: 'wet' as TegelId },
+              { icon: Users, k: 'Bias & veiligheid', v: 'Veilig, meer maatwerk', id: 'bias' as TegelId },
+            ].map((x) => (
+              <button
+                key={x.k}
+                type="button"
+                onClick={() => setOpen(x.id)}
+                aria-haspopup="dialog"
+                className="rounded-xl border border-line bg-surface/70 p-3 text-left transition-colors hover:border-lime/50"
+              >
+                <span className="flex items-center gap-1.5 font-mono text-[11px] tracking-wider text-muted uppercase">
+                  <x.icon className="size-3.5 text-lime" aria-hidden /> {x.k}
+                </span>
+                <span className="block font-display text-xl font-bold uppercase">{x.v}</span>
+              </button>
+            ))}
+          </div>
+          <p className="mt-5 flex items-start gap-2 text-sm text-muted">
+            <Info className="mt-0.5 size-4 shrink-0" aria-hidden /> Toetsing door een student (minor Future-proof met AI!), geen juridisch advies. Stand: november 2026.
+          </p>
         </section>
       </Reveal>
 
       <Reveal>
-        <Card className="p-6">
-          <SectionTitle icon={BookOpen}>Bronnen</SectionTitle>
-          <Expandable title={`Alle ${r.sources.length} bronnen bekijken`} teaser="Wetten, toezichthouders en de voorwaarden van Anthropic">
-            <SourceList sources={r.sources} />
-          </Expandable>
-        </Card>
+        <p className="mb-4 text-sm text-muted">Klik op een tegel voor de details.</p>
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {tegels.map((t) => (
+            <Tegel key={t.id} icon={t.icon} kicker={t.kicker} titel={t.titel} onOpen={() => setOpen(t.id)}>
+              {t.samenvatting}
+            </Tegel>
+          ))}
+        </ul>
       </Reveal>
+
+      {tegels.map((t) => (
+        <Popup key={t.id} open={open === t.id} onClose={sluit} icon={t.icon} kicker={t.kicker} titel={t.titel}>
+          {t.inhoud}
+        </Popup>
+      ))}
+      <span className="sr-only" aria-live="polite">
+        {actief ? `${actief.titel} geopend` : ''}
+      </span>
     </>
   )
 }
