@@ -1,6 +1,6 @@
 import { Download, ExternalLink, X } from 'lucide-react'
-import { useEffect, useRef } from 'react'
-import { isPdfUrl } from '../lib/utils'
+import { useEffect, useRef, useState } from 'react'
+import { cn, isPdfUrl } from '../lib/utils'
 import { IconButton } from './ui'
 
 interface PreviewDialogProps {
@@ -12,6 +12,23 @@ interface PreviewDialogProps {
 
 const actionClass =
   'inline-flex h-9 items-center gap-1.5 rounded-lg border border-transparent px-2.5 text-sm text-muted transition-colors hover:border-line hover:bg-surface-2 hover:text-lime'
+
+/** Afbeelding die eerst helemaal in beeld past; een klik zoomt in op de volle breedte. */
+function ImageViewer({ url, title }: { url: string; title: string }) {
+  const [zoomed, setZoomed] = useState(false)
+  return (
+    <div className={cn('size-full overflow-auto', !zoomed && 'flex items-center justify-center')}>
+      <button
+        type="button"
+        onClick={() => setZoomed((z) => !z)}
+        aria-label={zoomed ? 'Uitzoomen: hele afbeelding in beeld' : 'Inzoomen op de afbeelding'}
+        className={cn('block', zoomed ? 'w-full cursor-zoom-out' : 'h-full cursor-zoom-in')}
+      >
+        <img src={url} alt={title} className={zoomed ? 'h-auto w-full' : 'mx-auto h-full w-auto max-w-full object-contain'} />
+      </button>
+    </div>
+  )
+}
 
 /** Groot venster om een pdf of afbeelding (zoals een poster) in de site te bekijken. */
 export function PreviewDialog({ open, title, url, onClose }: PreviewDialogProps) {
@@ -59,11 +76,13 @@ export function PreviewDialog({ open, title, url, onClose }: PreviewDialogProps)
             {isPdfUrl(url) ? (
               <iframe title={title} src={`${url}#page=1&view=FitH,0&navpanes=0`} className="size-full border-0" />
             ) : (
-              <img src={url} alt={title} className="size-full object-contain" />
+              <ImageViewer url={url} title={title} />
             )}
           </div>
           <p className="border-t border-line/70 px-4 py-2 text-center text-xs text-muted">
-            Zie je niets? Open het bestand dan in een nieuw tabblad of download het.
+            {isPdfUrl(url)
+              ? 'Zie je niets? Open het bestand dan in een nieuw tabblad of download het.'
+              : 'Klik op de afbeelding om in of uit te zoomen.'}
           </p>
         </div>
       )}

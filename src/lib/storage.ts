@@ -3,6 +3,7 @@ import {
   caseStepLabels,
   minorLearningOutcomes,
   posterLink,
+  posterPdfLink,
   researchVisual,
   researchContent,
   sampleData,
@@ -29,7 +30,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 33
+export const DATA_VERSION = 34
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -435,6 +436,17 @@ export function migrate(data: PortfolioData): PortfolioData {
     if (story && fresh) {
       if (!story.learned.trim()) story.learned = fresh.learned
       if (!story.evidence.some((e) => e.url === posterLink.url)) story.evidence.push({ ...posterLink })
+    }
+  }
+
+  if (oldVersion < 34) {
+    // v34: de poster opent als afbeelding (werkt op elk apparaat); de pdf blijft erbij om te printen.
+    const story = d.sprints.find((s) => s.number === 5)?.userStories.find((u) => u.id === 's5-plan-ls2')
+    if (story) {
+      const first = story.evidence.find((e) => e.id === posterLink.id)
+      if (!first) story.evidence.unshift({ ...posterLink })
+      else if (first.url === posterPdfLink.url) Object.assign(first, posterLink)
+      if (!story.evidence.some((e) => e.url === posterPdfLink.url)) story.evidence.push({ ...posterPdfLink })
     }
   }
 
