@@ -595,6 +595,150 @@ export const sprint4Content = {
   },
 }
 
+/** Bewijs van de recepten-app (sprint 5). */
+export const receptenLink = { id: 's5-us1-l1', label: 'Recepten-app (Vercel)', url: 'https://recepten-liv.vercel.app' }
+
+/** Bewijs van de interactieve website over de AI-specialist (sprint 5). */
+export const aiSpecialistLink = { id: 's5-ls1-l1', label: 'Interactieve website: AI-specialist bij een sportmarketingbureau', url: 'https://claude.ai/artifact/N6TTGBca9oAV8V59izHSZ6' }
+
+/** Planning sprint 5, overgenomen uit het sprintformulier. */
+export const sprint5Planning: UserStory[] = [
+  {
+    id: 's5-plan-us1',
+    type: 'US',
+    story:
+      'Als student van deze minor, wil ik een foto, screenshot of gekopieerde tekst van een recept kunnen uploaden/plakken, zodat de app automatisch de receptgegevens voor mij invult en ik tijd bespaar.',
+    criteria: [
+      'De gebruiker kan een afbeelding, foto/screenshot uploaden of tekst plakken.',
+      'De AI haalt automatisch de titel, bereidingstijd, ingrediënten en bereidingsstappen eruit en vult deze in.',
+      'De gebruiker krijgt een overzicht te zien om de ingevulde gegevens te controleren en eventueel aan te passen voordat het recept wordt opgeslagen.',
+    ],
+    qualityCriteria: [
+      'De importfunctie is succesvol getest met een vaste testset van 10 verschillende bronnen (kookboekfoto’s, TikTok-teksten, screenshots).',
+      'Nieuwe wijzigingen worden eerst lokaal getest voordat ze online gaan.',
+    ],
+    learned: 'Ik heb geleerd hoe ik een AI-app bouw die foto’s, screenshots en teksten omzet naar receptgegevens.',
+    evidence: [receptenLink],
+    done: true,
+  },
+  {
+    id: 's5-plan-ls1',
+    type: 'LS',
+    story:
+      'Als student van deze minor, wil ik onderzoeken hoe AI het werk van een AI-specialist bij een sportmarketingbureau verandert, zodat ik inzicht heb in de impact van AI op mijn toekomstige werkveld en dit visueel kan presenteren.',
+    criteria: [
+      'De website bevat de beroepsrol, de takenkaart, de experimenten, wat het werkveld zegt, het toekomstige werkveld en een conclusie.',
+      'De bezoeker kan door de onderdelen navigeren, taken openklikken en tussen de experimenten wisselen.',
+      'De website is online te bekijken via een deelbare link en staat in mijn portfolio.',
+    ],
+    qualityCriteria: [
+      'De website werkt goed op zowel laptop als telefoon.',
+      'Alle gebruikte bronnen zijn op de website vermeld en de links werken.',
+      'De inzichten over het werkveld zijn onderbouwd met meerdere kwalitatieve bronnen of ervaringen uit de praktijk.',
+    ],
+    learned:
+      'Ik heb geleerd hoe AI de takenkaart van een AI-specialist bij een sportmarketingbureau verandert en hoe ik dit visueel presenteer op een interactieve website.',
+    evidence: [aiSpecialistLink],
+    done: true,
+  },
+  {
+    id: 's5-plan-ls2',
+    type: 'LS',
+    story:
+      'Als student van de minor Future Proof met AI, wil ik een poster maken en presenteren over mijn voortgang, zodat ik kan reflecteren op mijn leerproces van 0 programmeerkennis naar eigen tools bouwen en mijn resultaten kan delen met anderen.',
+    criteria: [
+      'De poster behandelt de drie vragen: Wat heb ik het meest geleerd?, Waar ben ik het meest trots op? en Hoe ben ik anders gaan kijken en werken?',
+      'De poster is gemaakt en de posterpresentatie is ook uitgevoerd.',
+    ],
+    qualityCriteria: [
+      'De poster heeft een overzichtelijke indeling met heldere koppen, iconen en een duidelijke visualisatie van de groeilijn.',
+      'Bij elk project staat kort en technisch onderbouwd welke technologie is ingezet.',
+    ],
+    learned: '',
+    evidence: [],
+    done: true,
+  },
+  {
+    id: 's5-plan-rs1',
+    type: 'RS',
+    story:
+      'Als student van deze minor, wil ik leren hoe ik een AI-toepassing toets aan de AI-verordening, AVG, bias en veiligheid, zodat ik deze kennis kan toepassen op mijn app TargetCoach.',
+    criteria: [
+      'Een stoplicht-beoordeling (groen/oranje/rood) opgesteld voor de AI-verordening en AVG.',
+      'Test uitgevoerd met 4 verschillende lopers en 4 risicovolle scenario’s.',
+      'Het resultaat staat als Onderzoek 3 op mijn portfolio.',
+    ],
+    qualityCriteria: [
+      'Het portfolio-item is goed leesbaar op laptop en telefoon.',
+      'Alle conclusies en toetsingen zijn onderbouwd met betrouwbare bronnen.',
+    ],
+    learned:
+      'Ik heb geleerd hoe ik mijn eigen hardloopapp TargetCoach toets aan de AI-verordening, AVG en bias met een stoplicht-beoordeling en risicovolle testscenario’s.',
+    evidence: [{ id: 's5-rs1-l1', label: 'Onderzoek 3: TargetCoach getoetst aan ethiek en regelgeving', url: 'https://portfolio-mikeschouten.vercel.app/#/onderzoek/3' }],
+    done: true,
+  },
+]
+
+/** Sprint 5, overgenomen uit het sprintformulier. */
+export const sprint5Content = {
+  title: 'Recepten-app, AI-specialist & TargetCoach toetsen',
+  goal: 'Een recepten-app bouwen die recepten uit foto’s en tekst invult, onderzoeken hoe AI het werk van een AI-specialist bij een sportmarketingbureau verandert, mijn voortgang presenteren op een poster en TargetCoach toetsen aan de AI-verordening, AVG, bias en veiligheid.',
+  feedback: '',
+  selfEvaluation: [
+    'LU1 · AI-impact op de beroepspraktijk: V. Ik heb onderzocht hoe AI de rol en takenkaart van een AI-specialist bij een sportmarketingbureau verandert en wat dit betekent voor het toekomstige werkveld. Bewijs: de interactieve website https://claude.ai/artifact/N6TTGBca9oAV8V59izHSZ6',
+    'LU2 · Praktijkgerichte AI-oplossing: V. Ik heb een recepten-app gebouwd waarmee foto’s, screenshots en teksten automatisch worden uitgelezen naar receptgegevens, met validatie van 10 bronnen. Bewijs: de werkende recepten-app en testresultaten. https://recepten-liv.vercel.app',
+    'LU3 · Ethiek & verantwoord AI-gebruik: V. Ik heb mijn eigen hardloopapp TargetCoach getoetst aan de Europese AI-verordening, AVG, bias en veiligheid. Bewijs: Onderzoek 3 in mijn portfolio. https://portfolio-mikeschouten.vercel.app/#/onderzoek/3',
+    'LU4 · AI-tools & technieken: - (niet in deze sprint)',
+    'LU5 · Zelfstandig & zelfsturend werken: V. Ik heb zelfstandig mijn stories opgesteld en uitgevoerd, en mijn groeiproces van nul programmeerkennis naar eigen werkende tools gepresenteerd.',
+  ].join('\n\n'),
+  reflection: [
+    [
+      'TargetCoach toetsen',
+      'Geleerd: hoe ik mijn eigen hardloopapp TargetCoach toets aan de AI-verordening, AVG en bias met een stoplicht-beoordeling en risicovolle testscenario’s.',
+      'Behoud ik: mijn eigen AI-oplossingen altijd testen met verschillende gebruikers en risicovolle scenario’s om knelpunten op tijd te zien.',
+      'Doe ik anders: naast mijn onderzoek kijken naar transparantie en het uitvoeren met verschillende onderzoeken.',
+    ].join('\n'),
+    [
+      'AI-specialist onderzoeken',
+      'Geleerd: hoe AI de takenkaart van een AI-specialist bij een sportmarketingbureau verandert en hoe ik dit visueel presenteer op een interactieve website.',
+      'Behoud ik: complexe onderzoeksresultaten direct visueel en interactief maken in plaats van alleen lappen tekst.',
+      'Doe ik anders: voortaan niet meer lappen tekst gebruiken om mijn onderzoek te laten zien, maar een interactieve website of vergelijkbare oplossing.',
+    ].join('\n'),
+    [
+      'Recepten-app',
+      'Geleerd: hoe ik een AI-app bouw die foto’s, screenshots en teksten omzet naar receptgegevens.',
+      'Behoud ik: bij AI-tools de gebruiker altijd zelf laten controleren en akkoord geven voordat gegevens definitief worden opgeslagen.',
+      'Doe ik anders: mijn gebouwde app altijd extra controleren of gegevens op de juiste manier gehanteerd worden.',
+    ].join('\n'),
+  ].join('\n\n'),
+  nextSteps: [
+    '• Naast mijn onderzoek kijken naar transparantie.',
+    '• Onderzoeksresultaten visueel en interactief presenteren in plaats van met lappen tekst.',
+    '• Mijn gebouwde app altijd extra controleren of gegevens op de juiste manier gehanteerd worden.',
+  ].join('\n'),
+  showGrow:
+    'Ik ben gegroeid van nul programmeerkennis naar eigen werkende tools: een recepten-app die recepten uit foto’s invult, een interactieve website over het werk van een AI-specialist, en een toetsing van TargetCoach aan de AI-verordening en AVG.',
+  learningOutcomes: lu([100, 100, 100, 0, 100], {
+    LU1: 'V · AI-specialist bij een sportmarketingbureau',
+    LU2: 'V · recepten-app met validatie van 10 bronnen',
+    LU3: 'V · TargetCoach getoetst aan AI-verordening en AVG',
+    LU5: 'V · groei van nul programmeerkennis naar eigen tools',
+  }),
+  takeaways: {
+    learned: [
+      '• Een AI-app kan foto’s, screenshots en teksten omzetten naar receptgegevens.',
+      '• Onderzoek presenteren werkt het best visueel en interactief.',
+      '• Mijn eigen app toetsen met een stoplicht-beoordeling en risicovolle scenario’s.',
+    ].join('\n'),
+    feedback: '',
+    next: [
+      '• Naast mijn onderzoek kijken naar transparantie.',
+      '• Resultaten visueel en interactief presenteren.',
+      '• Mijn app extra controleren op de omgang met gegevens.',
+    ].join('\n'),
+  },
+}
+
 /** Onderzoekspagina, gebaseerd op de research story van sprint 1. */
 export const researchContent: Research = {
   title: 'AI in sportmarketing',
@@ -1104,7 +1248,15 @@ export const sampleData: PortfolioData = {
       userStories: structuredClone(sprint4Planning),
       evidence: [],
     },
-    plannedSprint(5, 'Nog te plannen', '2 – 13 nov 2026', ''),
+    {
+      id: 'sprint-5',
+      number: 5,
+      period: '2 – 13 nov 2026',
+      status: 'Afgerond',
+      ...sprint5Content,
+      userStories: structuredClone(sprint5Planning),
+      evidence: [],
+    },
     plannedSprint(6, 'Nog te plannen', '16 – 27 nov 2026', ''),
     plannedSprint(7, 'Nog te plannen', '30 nov – 11 dec 2026', ''),
     plannedSprint(8, 'Nog te plannen', '14 dec 2026 – 22 jan 2027', ''),

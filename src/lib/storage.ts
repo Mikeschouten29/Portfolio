@@ -13,6 +13,8 @@ import {
   sprint3Planning,
   sprint4Content,
   sprint4Planning,
+  sprint5Content,
+  sprint5Planning,
   kloonLinks,
   playlistLink,
   storyLearned,
@@ -26,7 +28,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 31
+export const DATA_VERSION = 32
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -412,6 +414,17 @@ export function migrate(data: PortfolioData): PortfolioData {
   if (oldVersion < 31 && !d.extraResearch.some((r) => r.toets === 'targetcoach')) {
     // v31: Onderzoek 3, TargetCoach getoetst aan de AI-verordening, de AVG en op bias (LU3).
     d.extraResearch.push(structuredClone(targetCoachToets))
+  }
+
+  if (oldVersion < 32) {
+    // v32: sprint 5 volgens het sprintformulier, alleen als die nog leeg ("Nog te plannen") is.
+    const s5 = d.sprints.find((s) => s.number === 5)
+    const untouched = s5 && s5.title === 'Nog te plannen' && s5.userStories.every((u) => u.id === 's5-us1')
+    if (s5 && untouched) {
+      Object.assign(s5, structuredClone(sprint5Content))
+      s5.status = 'Afgerond'
+      s5.userStories = structuredClone(sprint5Planning)
+    }
   }
 
   d.version = DATA_VERSION
