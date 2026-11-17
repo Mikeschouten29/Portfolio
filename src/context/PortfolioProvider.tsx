@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { sampleData } from '../data/sampleData'
-import { isPortfolioData, loadData, migrate, saveData } from '../lib/storage'
+import { DATA_VERSION, isPortfolioData, loadData, migrate, saveData } from '../lib/storage'
 import { cloudEnabled, fetchRemote, saveRemote, supabase } from '../lib/supabase'
 import type { PortfolioData } from '../types'
 import { PortfolioContext, type SyncState } from './portfolioContext'
@@ -41,7 +41,9 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
         if (cancelled) return
         if (remote && isPortfolioData(remote)) {
           const next = migrate(remote)
-          lastSynced.current = JSON.stringify(next)
+          // Is de online versie ouder dan deze site? Dan blijft hij "niet gesynchroniseerd", zodat de
+          // bijgewerkte versie automatisch wordt opgeslagen zodra de eigenaar is ingelogd.
+          lastSynced.current = JSON.stringify((remote.version ?? 1) < DATA_VERSION ? remote : next)
           setData(next)
         }
         setSync({ status: 'synced' })
