@@ -57,7 +57,7 @@ export function PreviewDialog({ open, title, url, onClose }: PreviewDialogProps)
           </header>
           <div className="min-h-0 flex-1 bg-bg">
             {isPdfUrl(url) ? (
-              <iframe title={title} src={`${url}#view=FitH`} className="size-full border-0" />
+              <iframe title={title} src={`${url}#view=FitH&navpanes=0`} className="size-full border-0" />
             ) : (
               <img src={url} alt={title} className="size-full object-contain" />
             )}
