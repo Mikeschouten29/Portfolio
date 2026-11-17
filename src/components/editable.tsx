@@ -1,9 +1,10 @@
-import { Copy, ExternalLink, Link2, Plus, Trash2 } from 'lucide-react'
-import { useId, type ReactNode } from 'react'
+import { Copy, ExternalLink, Link2, Maximize2, Plus, Trash2 } from 'lucide-react'
+import { useId, useState, type ReactNode } from 'react'
 import { useCopy } from '../hooks/useCopy'
 import { usePortfolio } from '../hooks/usePortfolio'
-import { clamp, cn, isSafeUrl, uid } from '../lib/utils'
+import { clamp, cn, isPreviewUrl, isSafeUrl, uid } from '../lib/utils'
 import type { Link } from '../types'
+import { PreviewDialog } from './PreviewDialog'
 import { Button, IconButton } from './ui'
 
 type TextTag = 'p' | 'span' | 'h1' | 'h2' | 'h3' | 'div'
@@ -224,6 +225,7 @@ interface LinkListProps {
 export function LinkList({ links, onChange, label, emptyText = 'Nog geen links toegevoegd.' }: LinkListProps) {
   const { editMode } = usePortfolio()
   const copy = useCopy()
+  const [preview, setPreview] = useState<Link | null>(null)
 
   const patch = (id: string, changes: Partial<Link>) =>
     onChange(links.map((l) => (l.id === id ? { ...l, ...changes } : l)))
@@ -271,24 +273,48 @@ export function LinkList({ links, onChange, label, emptyText = 'Nog geen links t
   const visible = links.filter((l) => l.url.trim() && isSafeUrl(l.url))
   if (visible.length === 0) return <p className="text-sm text-muted/80 italic">{emptyText}</p>
 
+  const linkClass =
+    'group inline-flex min-w-0 items-center gap-1.5 text-left text-sm text-ink underline decoration-line underline-offset-4 hover:text-lime hover:decoration-lime'
+
   return (
-    <ul className="space-y-2" aria-label={label}>
-      {visible.map((link) => (
-        <li key={link.id} className="flex items-center gap-2">
-          <Link2 className="size-4 shrink-0 text-data" aria-hidden />
-          <a
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex min-w-0 items-center gap-1.5 text-sm text-ink underline decoration-line underline-offset-4 hover:text-lime hover:decoration-lime"
-          >
-            <span className="truncate">{link.label || link.url}</span>
-            <ExternalLink className="size-3.5 shrink-0 opacity-60 group-hover:opacity-100" aria-hidden />
-            <span className="sr-only">(opent in nieuw tabblad)</span>
-          </a>
-          <IconButton icon={Copy} label={`Link "${link.label || link.url}" kopiëren`} onClick={() => copy(link.url, 'Link gekopieerd')} className="size-8" />
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul className="space-y-2" aria-label={label}>
+        {visible.map((link) => {
+          const name = link.label || link.url
+          return (
+            <li key={link.id} className="flex items-center gap-2">
+              <Link2 className="size-4 shrink-0 text-data" aria-hidden />
+              {isPreviewUrl(link.url) ? (
+                <>
+                  <button type="button" className={linkClass} onClick={() => setPreview(link)}>
+                    <span className="truncate">{name}</span>
+                    <Maximize2 className="size-3.5 shrink-0 opacity-60 group-hover:opacity-100" aria-hidden />
+                    <span className="sr-only">(opent groot in beeld)</span>
+                  </button>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`"${name}" openen in nieuw tabblad`}
+                    title="Openen in nieuw tabblad"
+                    className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-transparent text-muted transition-colors hover:border-line hover:bg-surface-2 hover:text-lime"
+                  >
+                    <ExternalLink className="size-4" aria-hidden />
+                  </a>
+                </>
+              ) : (
+                <a href={link.url} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  <span className="truncate">{name}</span>
+                  <ExternalLink className="size-3.5 shrink-0 opacity-60 group-hover:opacity-100" aria-hidden />
+                  <span className="sr-only">(opent in nieuw tabblad)</span>
+                </a>
+              )}
+              <IconButton icon={Copy} label={`Link "${name}" kopiëren`} onClick={() => copy(link.url, 'Link gekopieerd')} className="size-8" />
+            </li>
+          )
+        })}
+      </ul>
+      <PreviewDialog open={preview !== null} title={preview?.label || preview?.url || ''} url={preview?.url ?? ''} onClose={() => setPreview(null)} />
+    </>
   )
 }

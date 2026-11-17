@@ -74,6 +74,15 @@ export function isSafeUrl(url: string): boolean {
   return /^(https?:|mailto:|tel:)/i.test(url.trim())
 }
 
+export function isPdfUrl(url: string): boolean {
+  return /\.pdf([?#]|$)/i.test(url.trim())
+}
+
+/** Een pdf of afbeelding: die laten we in een groot venster in de site zien. */
+export function isPreviewUrl(url: string): boolean {
+  return /\.(pdf|png|jpe?g|webp|gif)([?#]|$)/i.test(url.trim())
+}
+
 /** Splitst "Titel: tekst" in titel en tekst, en geeft de eerste zin als teaser. */
 export function splitTitled(text: string): { title: string; teaser: string; rest: string } {
   const colon = text.indexOf(':')
