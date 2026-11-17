@@ -601,6 +601,9 @@ export const receptenLink = { id: 's5-us1-l1', label: 'Recepten-app (Vercel)', u
 /** Bewijs van de interactieve website over de AI-specialist (sprint 5). */
 export const aiSpecialistLink = { id: 's5-ls1-l1', label: 'Interactieve website: AI-specialist bij een sportmarketingbureau', url: 'https://claude.ai/artifact/N6TTGBca9oAV8V59izHSZ6' }
 
+/** Bewijs van de poster over mijn voortgang halverwege de minor (sprint 5). */
+export const posterLink = { id: 's5-ls2-l1', label: 'Poster: halverwege de minor (A3, pdf)', url: 'https://portfolio-mikeschouten.vercel.app/bewijs/poster-halverwege-minor.pdf' }
+
 /** Planning sprint 5, overgenomen uit het sprintformulier. */
 export const sprint5Planning: UserStory[] = [
   {
@@ -654,8 +657,9 @@ export const sprint5Planning: UserStory[] = [
       'De poster heeft een overzichtelijke indeling met heldere koppen, iconen en een duidelijke visualisatie van de groeilijn.',
       'Bij elk project staat kort en technisch onderbouwd welke technologie is ingezet.',
     ],
-    learned: '',
-    evidence: [],
+    learned:
+      'Ik heb een poster gemaakt en gepresenteerd over mijn voortgang: van nul programmeerkennis naar tools die ik echt gebruik. Ik heb geleerd dat ik een idee stap voor stap kan omzetten in iets dat écht werkt, en ik vraag me nu niet meer af “welke app bestaat hiervoor?” maar “kan ik dit zelf bouwen?”.',
+    evidence: [posterLink],
     done: true,
   },
   {

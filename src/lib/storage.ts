@@ -2,6 +2,7 @@ import {
   aiEthicsResearch,
   caseStepLabels,
   minorLearningOutcomes,
+  posterLink,
   researchVisual,
   researchContent,
   sampleData,
@@ -28,7 +29,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 32
+export const DATA_VERSION = 33
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -424,6 +425,16 @@ export function migrate(data: PortfolioData): PortfolioData {
       Object.assign(s5, structuredClone(sprint5Content))
       s5.status = 'Afgerond'
       s5.userStories = structuredClone(sprint5Planning)
+    }
+  }
+
+  if (oldVersion < 33) {
+    // v33: poster als bewijs en "wat ik heb geleerd" bij de poster-story van sprint 5.
+    const story = d.sprints.find((s) => s.number === 5)?.userStories.find((u) => u.id === 's5-plan-ls2')
+    const fresh = sprint5Planning.find((u) => u.id === 's5-plan-ls2')
+    if (story && fresh) {
+      if (!story.learned.trim()) story.learned = fresh.learned
+      if (!story.evidence.some((e) => e.url === posterLink.url)) story.evidence.push({ ...posterLink })
     }
   }
 
