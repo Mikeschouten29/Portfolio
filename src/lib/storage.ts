@@ -30,7 +30,7 @@ import {
 import type { PortfolioData, UserStory } from '../types'
 
 export const STORAGE_KEY = 'portfolio-mike-schouten:v1'
-export const DATA_VERSION = 34
+export const DATA_VERSION = 35
 
 export function isPortfolioData(value: unknown): value is PortfolioData {
   if (!value || typeof value !== 'object') return false
@@ -447,6 +447,18 @@ export function migrate(data: PortfolioData): PortfolioData {
       if (!first) story.evidence.unshift({ ...posterLink })
       else if (first.url === posterPdfLink.url) Object.assign(first, posterLink)
       if (!story.evidence.some((e) => e.url === posterPdfLink.url)) story.evidence.push({ ...posterPdfLink })
+    }
+  }
+
+  if (oldVersion < 35) {
+    // v35: sprint 5 haalt ook LU4 (AI-tools en technieken) behaald, met argumentatie.
+    const s5 = d.sprints.find((s) => s.number === 5)
+    const fresh = sprint5Content
+    if (s5 && s5.learningOutcomes.LU4.score < 100) {
+      s5.learningOutcomes.LU4 = { ...fresh.learningOutcomes.LU4 }
+      const oud = 'LU4 · AI-tools & technieken: - (niet in deze sprint)'
+      const nieuw = fresh.selfEvaluation.split('\n\n').find((r) => r.startsWith('LU4 ·'))
+      if (nieuw && s5.selfEvaluation.includes(oud)) s5.selfEvaluation = s5.selfEvaluation.replace(oud, nieuw)
     }
   }
 

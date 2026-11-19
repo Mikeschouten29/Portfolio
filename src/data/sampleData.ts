@@ -695,7 +695,7 @@ export const sprint5Content = {
     'LU1 · AI-impact op de beroepspraktijk: V. Ik heb onderzocht hoe AI de rol en takenkaart van een AI-specialist bij een sportmarketingbureau verandert en wat dit betekent voor het toekomstige werkveld. Bewijs: de interactieve website https://claude.ai/artifact/N6TTGBca9oAV8V59izHSZ6',
     'LU2 · Praktijkgerichte AI-oplossing: V. Ik heb een recepten-app gebouwd waarmee foto’s, screenshots en teksten automatisch worden uitgelezen naar receptgegevens, met validatie van 10 bronnen. Bewijs: de werkende recepten-app en testresultaten. https://recepten-liv.vercel.app',
     'LU3 · Ethiek & verantwoord AI-gebruik: V. Ik heb mijn eigen hardloopapp TargetCoach getoetst aan de Europese AI-verordening, AVG, bias en veiligheid. Bewijs: Onderzoek 3 in mijn portfolio. https://portfolio-mikeschouten.vercel.app/#/onderzoek/3',
-    'LU4 · AI-tools & technieken: - (niet in deze sprint)',
+    'LU4 · AI-tools & technieken: V. Ik heb AI toegepast om foto’s, screenshots en teksten van recepten automatisch uit te lezen en om te zetten naar receptgegevens, en dit getest met 10 verschillende bronnen. Ik laat de gebruiker de gegevens altijd zelf controleren voordat ze worden opgeslagen. Bewijs: de werkende recepten-app en de testresultaten. https://recepten-liv.vercel.app',
     'LU5 · Zelfstandig & zelfsturend werken: V. Ik heb zelfstandig mijn stories opgesteld en uitgevoerd, en mijn groeiproces van nul programmeerkennis naar eigen werkende tools gepresenteerd.',
   ].join('\n\n'),
   reflection: [
@@ -725,10 +725,11 @@ export const sprint5Content = {
   ].join('\n'),
   showGrow:
     'Ik ben gegroeid van nul programmeerkennis naar eigen werkende tools: een recepten-app die recepten uit foto’s invult, een interactieve website over het werk van een AI-specialist, en een toetsing van TargetCoach aan de AI-verordening en AVG.',
-  learningOutcomes: lu([100, 100, 100, 0, 100], {
+  learningOutcomes: lu([100, 100, 100, 100, 100], {
     LU1: 'V · AI-specialist bij een sportmarketingbureau',
     LU2: 'V · recepten-app met validatie van 10 bronnen',
     LU3: 'V · TargetCoach getoetst aan AI-verordening en AVG',
+    LU4: 'V · AI leest recepten uit foto’s en tekst, getest met 10 bronnen',
     LU5: 'V · groei van nul programmeerkennis naar eigen tools',
   }),
   takeaways: {
